@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getCloudConfig } from "@/lib/app/auth/config";
 import { getSupabaseBrowserClient } from "@/lib/app/auth/client";
 import { AUTH_COPY } from "@/lib/app/auth/copy";
+import { parseAuthCallbackUrl } from "@/lib/app/auth/callback";
 
 /**
  * OAuth / email confirmation callback.
@@ -20,6 +21,11 @@ export default function AuthCallbackPage() {
     let cancelled = false;
 
     async function complete() {
+      const callback = parseAuthCallbackUrl(window.location.href);
+      if (callback.containsSensitiveParameters) {
+        window.history.replaceState({}, "", callback.sanitizedPath);
+      }
+
       const config = getCloudConfig();
       if (!config.configured) {
         if (!cancelled) {
@@ -38,14 +44,7 @@ export default function AuthCallbackPage() {
         return;
       }
 
-      const url = new URL(window.location.href);
-      const code = url.searchParams.get("code");
-      const oauthError =
-        url.searchParams.get("error_description") ||
-        url.searchParams.get("error");
-      const isRecovery = url.searchParams.get("recovery") === "1";
-
-      if (oauthError) {
+      if (callback.oauthError) {
         if (!cancelled) {
           setFailed(true);
           setMessage(
@@ -55,8 +54,10 @@ export default function AuthCallbackPage() {
         return;
       }
 
-      if (code) {
-        const { error } = await client.auth.exchangeCodeForSession(code);
+      if (callback.code) {
+        const { error } = await client.auth.exchangeCodeForSession(
+          callback.code,
+        );
         if (error) {
           if (!cancelled) {
             setFailed(true);
@@ -91,11 +92,11 @@ export default function AuthCallbackPage() {
 
       if (!cancelled) {
         setMessage(
-          isRecovery
+          callback.isRecovery
             ? "Opening password recovery…"
             : "Signed in. Opening your library…",
         );
-        router.replace(isRecovery ? "/app?recovery=1" : "/app");
+        router.replace(callback.isRecovery ? "/app?recovery=1" : "/app");
       }
     }
 
