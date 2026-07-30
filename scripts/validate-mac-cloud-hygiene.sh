@@ -7,10 +7,20 @@ ACCOUNT_VIEW="${IOS_ROOT}/PhrasaMac/Cloud/MacCloudAccountView.swift"
 ENTITLEMENTS="${IOS_ROOT}/PhrasaMac/PhrasaMac.entitlements"
 PROJECT_YML="${IOS_ROOT}/project.yml"
 
+fixed_text_present() {
+  local file="$1"
+  local text="$2"
+  if command -v rg >/dev/null 2>&1; then
+    rg -F -q -- "${text}" "${file}"
+  else
+    grep -F -q -- "${text}" "${file}"
+  fi
+}
+
 require_text() {
   local file="$1"
   local text="$2"
-  if ! rg -F -q -- "${text}" "${file}"; then
+  if ! fixed_text_present "${file}" "${text}"; then
     echo "Missing required Mac cloud hygiene text in ${file}: ${text}" >&2
     exit 1
   fi
@@ -19,7 +29,7 @@ require_text() {
 forbid_text() {
   local file="$1"
   local text="$2"
-  if rg -F -q -- "${text}" "${file}"; then
+  if fixed_text_present "${file}" "${text}"; then
     echo "Forbidden Mac cloud hygiene text in ${file}: ${text}" >&2
     exit 1
   fi
@@ -47,27 +57,49 @@ require_text "${PROJECT_YML}" "com.phrasa.mac.auth"
 require_text "${PROJECT_YML}" "phrasa"
 require_text "${PROJECT_YML}" 'PHRASA_SUPABASE_PUBLISHABLE_KEY: ""'
 
-RAW_MATCHES="$(
-  rg -n \
-    -e "SUPABASE_SERVICE_ROLE" \
-    -e "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\\." \
-    -e "service_role" \
-    -e "sb_secret_" \
-    "${IOS_ROOT}/PhrasaMac" \
-    "${IOS_ROOT}/Phrasa/Cloud" \
-    "${IOS_ROOT}/Packages/PhrasaSync" \
-    "${PROJECT_YML}" \
-    --glob '!**/*Tests*/**' \
-    --glob '!**/*Hygiene*' \
-    || true
-)"
+if command -v rg >/dev/null 2>&1; then
+  RAW_MATCHES="$(
+    rg -n \
+      -e "SUPABASE_SERVICE_ROLE" \
+      -e "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\\." \
+      -e "service_role" \
+      -e "sb_secret_" \
+      "${IOS_ROOT}/PhrasaMac" \
+      "${IOS_ROOT}/Phrasa/Cloud" \
+      "${IOS_ROOT}/Packages/PhrasaSync" \
+      "${PROJECT_YML}" \
+      --glob '!**/*Tests*/**' \
+      --glob '!**/*Hygiene*' \
+      || true
+  )"
 
-UNSAFE_MATCHES="$(
-  printf '%s\n' "${RAW_MATCHES}" \
-    | rg -v 'CloudConfiguration\.swift:.*(service_role|sb_secret_)' \
-    | rg -v 'project\.yml:.*eyJhbGci' \
-    || true
-)"
+  UNSAFE_MATCHES="$(
+    printf '%s\n' "${RAW_MATCHES}" \
+      | rg -v 'CloudConfiguration\.swift:.*(service_role|sb_secret_)' \
+      | rg -v 'project\.yml:.*eyJhbGci' \
+      || true
+  )"
+else
+  RAW_MATCHES="$(
+    grep -R -I -n -E \
+      'SUPABASE_SERVICE_ROLE|eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.|service_role|sb_secret_' \
+      --exclude-dir='.build' \
+      --exclude-dir='*Tests*' \
+      --exclude='*Hygiene*' \
+      "${IOS_ROOT}/PhrasaMac" \
+      "${IOS_ROOT}/Phrasa/Cloud" \
+      "${IOS_ROOT}/Packages/PhrasaSync" \
+      "${PROJECT_YML}" \
+      || true
+  )"
+
+  UNSAFE_MATCHES="$(
+    printf '%s\n' "${RAW_MATCHES}" \
+      | grep -E -v 'CloudConfiguration\.swift:.*(service_role|sb_secret_)' \
+      | grep -E -v 'project\.yml:.*eyJhbGci' \
+      || true
+  )"
+fi
 
 if [[ -n "${UNSAFE_MATCHES}" ]]; then
   echo "Potential committed privileged credential material found:" >&2
