@@ -1,6 +1,21 @@
 import SwiftUI
 import PhrasaDomain
 
+enum MacEditorOpenDecision: Equatable {
+    case proceed
+    case stayOnCurrent(UUID?)
+}
+
+@MainActor
+enum MacEditorOpenGate {
+    static func resolve(
+        currentScriptID: UUID?,
+        flush: @MainActor () async -> Bool
+    ) async -> MacEditorOpenDecision {
+        await flush() ? .proceed : .stayOnCurrent(currentScriptID)
+    }
+}
+
 struct MacEditorView: View {
     @Environment(MacLibraryStore.self) private var library
     @Environment(MacAppModel.self) private var appModel
@@ -306,11 +321,19 @@ struct MacEditorView: View {
 
     private func openDocument() async {
         let requestedScriptID = scriptID
-        if let autosave, !(await autosave.flush()) {
-            // Keep the failed draft and its Retry control visible. Also return
-            // list selection to that document so chrome and editor identity agree.
-            appModel.selectedScriptID = draft?.id
-            return
+        if let autosave {
+            switch await MacEditorOpenGate.resolve(
+                currentScriptID: draft?.id,
+                flush: { await autosave.flush() }
+            ) {
+            case .proceed:
+                break
+            case .stayOnCurrent(let currentScriptID):
+                // Keep the failed draft and its Retry control visible. Also return
+                // list selection to that document so chrome and editor identity agree.
+                appModel.selectedScriptID = currentScriptID
+                return
+            }
         }
         guard !Task.isCancelled, requestedScriptID == scriptID else { return }
         guard let script = library.script(id: scriptID) else {

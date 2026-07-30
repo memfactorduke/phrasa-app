@@ -259,6 +259,39 @@ struct EditorOpenTransitionState: Equatable {
     }
 }
 
+enum EditorPresentationDestination: Equatable {
+    case reader
+    case outline
+}
+
+struct EditorPresentationRequest: Identifiable, Equatable {
+    let id: UUID
+    let destination: EditorPresentationDestination
+    let script: ScriptDocument
+
+    init(
+        id: UUID = UUID(),
+        destination: EditorPresentationDestination,
+        script: ScriptDocument
+    ) {
+        self.id = id
+        self.destination = destination
+        self.script = script
+    }
+}
+
+@MainActor
+enum EditorPresentationGate {
+    static func makeRequest(
+        destination: EditorPresentationDestination,
+        flush: @MainActor () async -> Bool,
+        snapshot: @MainActor () -> ScriptDocument?
+    ) async -> EditorPresentationRequest? {
+        guard await flush(), let script = snapshot() else { return nil }
+        return EditorPresentationRequest(destination: destination, script: script)
+    }
+}
+
 struct EditorView: View {
     enum Tab: String, CaseIterable, Identifiable {
         case script = "Script"
@@ -522,13 +555,6 @@ struct EditorView: View {
         UIAccessibility.post(notification: .announcement, argument: outcome.announcement)
     }
 
-    private enum PresentationDestination { case reader, outline }
-
-    private struct EditorPresentationRequest: Identifiable {
-        let id = UUID()
-        let script: ScriptDocument
-    }
-
     private func makeAutosave(initial: ScriptDocument) -> EditorAutosaveController {
         let originID = editorOriginID
         return EditorAutosaveController(initial: initial) { document in
@@ -567,19 +593,31 @@ struct EditorView: View {
         autosave = replacement.map { makeAutosave(initial: $0) }
     }
 
-    private func presentAfterSaving(_ destination: PresentationDestination) {
+    private func presentAfterSaving(_ destination: EditorPresentationDestination) {
         Task { @MainActor in
-            if let autosave, !(await autosave.flush()) {
+            let presentingAutosave = autosave
+            guard let request = await EditorPresentationGate.makeRequest(
+                destination: destination,
+                flush: {
+                    guard let presentingAutosave else { return true }
+                    return await presentingAutosave.flush()
+                },
+                snapshot: {
+                    // An external replacement installs a new controller. Never
+                    // present that replacement as the result of an older tap.
+                    guard self.autosave === presentingAutosave else { return nil }
+                    return draft
+                }
+            ) else {
                 // The save-status control remains actionable; presenting a stale
                 // durable copy would make the editor look as if the edit succeeded.
                 return
             }
-            guard let snapshot = draft else { return }
-            switch destination {
+            switch request.destination {
             case .reader:
-                readerRequest = EditorPresentationRequest(script: snapshot)
+                readerRequest = request
             case .outline:
-                outlineRequest = EditorPresentationRequest(script: snapshot)
+                outlineRequest = request
             }
         }
     }

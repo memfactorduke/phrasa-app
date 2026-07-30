@@ -7,7 +7,7 @@ struct MacReaderWindowHost: View {
     @Environment(MacLibraryStore.self) private var library
     @Environment(MacAppModel.self) private var appModel
     @Environment(\.dismiss) private var dismiss
-    @State private var snapshot: MacReaderRequestSnapshot?
+    @State private var snapshot: MacPresentationSnapshot?
 
     var body: some View {
         Group {
@@ -48,7 +48,7 @@ struct MacReaderWindowHost: View {
             }
             // Freeze content for this active run. Cloud/editor replacement of
             // the same row must not mutate tokenizer/session state mid-speech.
-            snapshot = MacReaderRequestSnapshot(
+            snapshot = MacPresentationSnapshot(
                 requestID: request.id,
                 script: script
             )
@@ -58,11 +58,6 @@ struct MacReaderWindowHost: View {
             appModel.closeReader()
         }
     }
-}
-
-private struct MacReaderRequestSnapshot {
-    let requestID: UUID
-    let script: ScriptDocument
 }
 
 enum MacPacingPresentation {

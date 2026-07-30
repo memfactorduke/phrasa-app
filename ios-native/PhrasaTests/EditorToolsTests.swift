@@ -3,6 +3,69 @@ import XCTest
 
 final class EditorToolsTests: XCTestCase {
     @MainActor
+    func testFailedFlushBlocksPresentationAndSuccessfulRequestFreezesItsSnapshot() async {
+        let initial = ScriptDocument(title: "Current", body: "Durable body")
+        var visibleDraft = initial
+        visibleDraft.body = "Unsaved presentation body"
+        var attempts = 0
+        let autosave = EditorAutosaveController(
+            initial: initial,
+            debounceDelay: .seconds(60)
+        ) { _ in
+            attempts += 1
+            return attempts > 1
+        }
+        autosave.record(visibleDraft)
+
+        let blocked = await EditorPresentationGate.makeRequest(
+            destination: .reader,
+            flush: { await autosave.flush() },
+            snapshot: { visibleDraft }
+        )
+        XCTAssertNil(blocked)
+        XCTAssertEqual(autosave.state, .failed)
+
+        autosave.retry()
+        let request = await EditorPresentationGate.makeRequest(
+            destination: .outline,
+            flush: { await autosave.flush() },
+            snapshot: { visibleDraft }
+        )
+        XCTAssertEqual(request?.destination, .outline)
+        XCTAssertEqual(request?.script.body, "Unsaved presentation body")
+
+        // Models an external cloud/editor replacement after presentation began.
+        visibleDraft.body = "External replacement"
+        XCTAssertEqual(
+            request?.script.body,
+            "Unsaved presentation body",
+            "An active reader/outline run must own an immutable document value."
+        )
+    }
+
+    @MainActor
+    func testExternalReplacementDuringFlushCancelsTheOlderPresentationTap() async {
+        let draft = ScriptDocument(title: "Current", body: "Original")
+        var controllerIsCurrent = true
+
+        let request = await EditorPresentationGate.makeRequest(
+            destination: .reader,
+            flush: {
+                controllerIsCurrent = false
+                return true
+            },
+            snapshot: {
+                controllerIsCurrent ? draft : nil
+            }
+        )
+
+        XCTAssertNil(
+            request,
+            "A tap bound to a superseded autosave controller must not present replacement content."
+        )
+    }
+
+    @MainActor
     func testFailedOpenRollsBackVisibleSelectionAndRetryResumesDeferredScript() async {
         let current = ScriptDocument(title: "Current", body: "Original")
         let requestedID = UUID()

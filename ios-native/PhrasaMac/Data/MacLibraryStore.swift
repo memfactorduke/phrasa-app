@@ -393,9 +393,22 @@ final class MacLibraryStore {
         guard folderID == nil || folders.contains(where: { $0.id == folderID }) else { return false }
         guard var script = scripts.first(where: { $0.id == id }) else { return false }
         guard script.folderID != folderID else { return true }
+        let sourceLocation = folderLocationDescription(script.folderID)
+        let destinationLocation = folderLocationDescription(folderID)
         script.folderID = folderID
         let revised = revisedEditorDocument(script, changedAt: .now)
-        guard await saveScriptCatching(revised) else { return false }
+        guard await saveScriptCatching(revised) else {
+            let underlyingFailure = errorMessage
+            errorMessage = [
+                "Couldn’t move “\(script.title)” to \(destinationLocation).",
+                "It remains in \(sourceLocation); no saved data changed.",
+                "Try moving it again.",
+                underlyingFailure
+            ]
+            .compactMap { $0 }
+            .joined(separator: " ")
+            return false
+        }
         guard let currentIndex = scripts.firstIndex(where: { $0.id == id }) else { return false }
         scripts[currentIndex].folderID = folderID
         scripts[currentIndex].updatedAt = max(scripts[currentIndex].updatedAt, revised.updatedAt)
@@ -829,6 +842,14 @@ final class MacLibraryStore {
     private func normalizedEditorTitle(_ title: String) -> String {
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? "Untitled script" : trimmed
+    }
+
+    private func folderLocationDescription(_ folderID: UUID?) -> String {
+        guard let folderID,
+              let folder = folders.first(where: { $0.id == folderID }) else {
+            return "No Folder"
+        }
+        return "“\(folder.name)”"
     }
 
     private func snapshot() -> LibrarySnapshot {

@@ -42,6 +42,40 @@ final class MacOutlineReaderTests: XCTestCase {
         model.closeOutline()
         XCTAssertNil(model.outlineScriptID)
     }
+
+    @MainActor
+    func testFailedEditorFlushBlocksReaderAndOutlinePresentation() async {
+        let model = MacAppModel()
+        let id = UUID()
+        model.registerEditorFlush(scriptID: id) { false }
+
+        let readerRequested = await model.requestReader(scriptID: id)
+        XCTAssertFalse(readerRequested)
+        XCTAssertNil(model.readerRequest)
+        let outlineRequested = await model.requestOutline(scriptID: id)
+        XCTAssertFalse(outlineRequested)
+        XCTAssertNil(model.outlineRequest)
+        XCTAssertEqual(
+            model.statusMessage,
+            "Save failed. Retry the save before presenting."
+        )
+    }
+
+    func testPresentationSnapshotStaysFrozenAcrossExternalDocumentReplacement() {
+        let request = MacPresentationRequest(scriptID: UUID())
+        var libraryDocument = ScriptDocument(title: "Opening", body: "Frozen words")
+        let snapshot = MacPresentationSnapshot(
+            requestID: request.id,
+            script: libraryDocument
+        )
+
+        libraryDocument.title = "External title"
+        libraryDocument.body = "External replacement"
+
+        XCTAssertEqual(snapshot.requestID, request.id)
+        XCTAssertEqual(snapshot.script.title, "Opening")
+        XCTAssertEqual(snapshot.script.body, "Frozen words")
+    }
 }
 
 extension MacOutlineReaderCommand {

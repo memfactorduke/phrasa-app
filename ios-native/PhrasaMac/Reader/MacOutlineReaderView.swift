@@ -285,7 +285,7 @@ struct MacOutlineWindowHost: View {
     @Environment(MacLibraryStore.self) private var library
     @Environment(MacAppModel.self) private var appModel
     @Environment(\.dismiss) private var dismiss
-    @State private var snapshot: MacOutlineRequestSnapshot?
+    @State private var snapshot: MacPresentationSnapshot?
 
     var body: some View {
         Group {
@@ -310,7 +310,7 @@ struct MacOutlineWindowHost: View {
                 snapshot = nil
                 return
             }
-            snapshot = MacOutlineRequestSnapshot(
+            snapshot = MacPresentationSnapshot(
                 requestID: request.id,
                 script: script
             )
@@ -319,9 +319,4 @@ struct MacOutlineWindowHost: View {
             appModel.closeOutline()
         }
     }
-}
-
-private struct MacOutlineRequestSnapshot {
-    let requestID: UUID
-    let script: ScriptDocument
 }

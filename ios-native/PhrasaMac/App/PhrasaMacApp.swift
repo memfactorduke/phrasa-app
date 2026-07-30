@@ -132,3 +132,8 @@ struct MacPresentationRequest: Identifiable, Equatable {
     let id = UUID()
     let scriptID: UUID
 }
+
+struct MacPresentationSnapshot: Equatable {
+    let requestID: UUID
+    let script: ScriptDocument
+}

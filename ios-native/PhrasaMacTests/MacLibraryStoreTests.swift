@@ -70,6 +70,74 @@ final class MacLibraryStoreTests: XCTestCase {
         XCTAssertTrue(outside.isEmpty)
     }
 
+    func testFailedFolderMovePreservesVisibleAndDurableStateAndOffersRecovery() async {
+        let sourceFolder = ScriptFolder(name: "Current")
+        let targetFolder = ScriptFolder(name: "Talks")
+        let script = ScriptDocument(
+            title: "Stage",
+            body: "Lines",
+            folderID: sourceFolder.id
+        )
+        let snapshot = LibrarySnapshot(
+            scripts: [script],
+            folders: [sourceFolder, targetFolder],
+            settings: ReaderSettings(),
+            seeded: true
+        )
+        let persistence = FailableMacMovePersistence(snapshot: snapshot)
+        let failingStore = MacLibraryStore(persistence: persistence)
+        await failingStore.load()
+        await persistence.failNextUpsert()
+        let revisionBefore = failingStore.editorDocumentChange(id: script.id)?.revision
+
+        let moved = await failingStore.moveScript(script.id, to: targetFolder.id)
+        let durableAfterFailure = await persistence.currentSnapshot()
+
+        XCTAssertFalse(moved)
+        XCTAssertEqual(failingStore.script(id: script.id)?.folderID, sourceFolder.id)
+        XCTAssertEqual(
+            durableAfterFailure.scripts.first?.folderID,
+            sourceFolder.id
+        )
+        XCTAssertEqual(
+            failingStore.editorDocumentChange(id: script.id)?.revision,
+            revisionBefore,
+            "A failed durable move must not publish a false metadata change."
+        )
+        XCTAssertTrue(failingStore.errorMessage?.contains("Couldn’t move “Stage”") == true)
+        XCTAssertTrue(failingStore.errorMessage?.contains("remains in “Current”") == true)
+        XCTAssertTrue(failingStore.errorMessage?.contains("Try moving it again") == true)
+
+        failingStore.clearError()
+        let retryMoved = await failingStore.moveScript(script.id, to: targetFolder.id)
+        let durableAfterRetry = await persistence.currentSnapshot()
+        XCTAssertTrue(retryMoved)
+        XCTAssertEqual(failingStore.script(id: script.id)?.folderID, targetFolder.id)
+        XCTAssertEqual(
+            durableAfterRetry.scripts.first?.folderID,
+            targetFolder.id
+        )
+    }
+
+    func testFailedEditorFlushBlocksMacNavigationAndKeepsCurrentSelection() async {
+        let current = ScriptDocument(title: "Current", body: "Original")
+        let controller = MacEditorAutosaveController(
+            initial: current,
+            debounceDelay: .seconds(60)
+        ) { _ in false }
+        var edited = current
+        edited.body = "Unsaved draft"
+        controller.record(edited)
+
+        let decision = await MacEditorOpenGate.resolve(
+            currentScriptID: current.id,
+            flush: { await controller.flush() }
+        )
+
+        XCTAssertEqual(decision, .stayOnCurrent(current.id))
+        XCTAssertEqual(controller.state, .failed)
+    }
+
     func testAutosaveControllerCoalescesAndFlushes() async {
         let initial = ScriptDocument(title: "Draft", body: "One")
         var writes: [ScriptDocument] = []
@@ -255,5 +323,83 @@ final class MacLibraryStoreTests: XCTestCase {
             MacEditorExternalChangePolicy.decision(for: external, editorOriginID: origin),
             .replace(script)
         )
+    }
+}
+
+private actor FailableMacMovePersistence: LibraryPersistence {
+    private struct InjectedFailure: LocalizedError {
+        var errorDescription: String? { "Simulated durable move failure." }
+    }
+
+    private var snapshot: LibrarySnapshot
+    private var shouldFailNextUpsert = false
+
+    init(snapshot: LibrarySnapshot) {
+        self.snapshot = snapshot
+    }
+
+    func failNextUpsert() {
+        shouldFailNextUpsert = true
+    }
+
+    func currentSnapshot() -> LibrarySnapshot {
+        snapshot
+    }
+
+    func load() async throws -> LibrarySnapshot {
+        snapshot
+    }
+
+    func replace(with snapshot: LibrarySnapshot) async throws {
+        self.snapshot = snapshot
+    }
+
+    func upsert(_ script: ScriptDocument) async throws {
+        if shouldFailNextUpsert {
+            shouldFailNextUpsert = false
+            throw InjectedFailure()
+        }
+        if let index = snapshot.scripts.firstIndex(where: { $0.id == script.id }) {
+            snapshot.scripts[index] = script
+        } else {
+            snapshot.scripts.append(script)
+        }
+    }
+
+    func deleteScript(id: UUID) async throws {
+        snapshot.scripts.removeAll { $0.id == id }
+    }
+
+    func deleteFolder(id: UUID, updatedScripts: [ScriptDocument]) async throws {
+        snapshot.folders.removeAll { $0.id == id }
+        for script in updatedScripts {
+            if let index = snapshot.scripts.firstIndex(where: { $0.id == script.id }) {
+                snapshot.scripts[index] = script
+            }
+        }
+    }
+
+    func saveSettings(_ settings: ReaderSettings, seeded: Bool) async throws {
+        snapshot.settings = settings
+        snapshot.seeded = seeded
+    }
+
+    func saveFolders(_ folders: [ScriptFolder]) async throws {
+        snapshot.folders = folders
+    }
+
+    func prepareCloudSync(
+        accountID: UUID,
+        localScriptIDs: Set<UUID>,
+        localFolderIDs: Set<UUID>
+    ) async throws -> CloudLocalSyncState {
+        .empty(accountID: accountID)
+    }
+
+    func applyCloudSync(
+        snapshot: LibrarySnapshot,
+        update: CloudSyncPersistenceUpdate
+    ) async throws {
+        self.snapshot = snapshot
     }
 }
