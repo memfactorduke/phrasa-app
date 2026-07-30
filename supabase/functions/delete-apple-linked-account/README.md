@@ -60,18 +60,18 @@ interchangeable on Apple’s token/revoke endpoints. Operators must allowlist
 
 ## Fail-closed order
 
-1. Require configured secrets (including a non-empty client id allowlist)  
-2. Validate body (`confirmation=DELETE`, UUID, authorization_code, client_id shape)  
-3. Require caller JWT `sub` == `expected_user_id`  
-4. Resolve request `client_id` against server allowlist  
-5. Load stored Apple identities for the user (admin read; no mutation)  
-6. Exchange `authorization_code` → tokens with that allowlisted client_id  
+1. Require configured secrets (including a non-empty client id allowlist)
+2. Validate body (`confirmation=DELETE`, UUID, authorization_code, client_id shape)
+3. Require caller JWT `sub` == `expected_user_id`
+4. Resolve request `client_id` against server allowlist
+5. Load stored Apple identities for the user (admin read; no mutation)
+6. Exchange `authorization_code` → tokens with that allowlisted client_id
 7. Verify Apple-returned `id_token` signature, validate claims, and match `sub`
-8. **Revoke** with Apple (must succeed)  
-9. **Then** delete Supabase user via service role  
+8. **Revoke** with Apple (must succeed)
+9. **Then** delete Supabase user via service role
 
-If steps 4–7 fail → stop; **nothing deleted**.  
-If step 8 fails → HTTP 502, **nothing deleted**.  
+If steps 4–7 fail → stop; **nothing deleted**.
+If step 8 fails → HTTP 502, **nothing deleted**.
 If step 9 fails after 8 → HTTP 500 `APPLE_REVOKED_ACCOUNT_DELETE_FAILED` (partial).
 
 ## Required secrets
@@ -109,11 +109,11 @@ supabase functions deploy delete-apple-linked-account --project-ref <project-ref
 After deployment or any secret/code change, live-test with disposable Apple
 sandbox accounts on **both** platforms:
 
-1. Sign in with Apple in Phrasa (iOS and Mac)  
-2. Delete account → type DELETE → Continue with Apple  
-3. Confirm Apple ID → Sign in with Apple no longer lists Phrasa (or shows revoked)  
-4. Confirm Supabase user and synced rows are gone  
-5. Confirm email/password deletion path still works without this function  
+1. Sign in with Apple in Phrasa (iOS and Mac)
+2. Delete account → type DELETE → Continue with Apple
+3. Confirm Apple ID → Sign in with Apple no longer lists Phrasa (or shows revoked)
+4. Confirm Supabase user and synced rows are gone
+5. Confirm email/password deletion path still works without this function
 
 ## Client contract
 
@@ -138,9 +138,9 @@ Stable error `code` values: see `contract.ts` (`AppleLinkedDeletionErrorCode`).
 
 ## Residual blockers (do not clear without evidence)
 
-- `APPLE_CLIENT_IDS` must include every shipping platform’s SIWA client id  
-- No live sandbox revoke + delete evidence recorded on iOS and Mac  
+- `APPLE_CLIENT_IDS` must include every shipping platform’s SIWA client id
+- No live sandbox revoke + delete evidence recorded on iOS and Mac
 - SIWA provider enabled in Supabase Auth and Apple capability/profiles still
-  required for the whole auth product  
+  required for the whole auth product
 - Deploy the reviewed JWKS-verification update before claiming it is active in
   production; this repository change alone does not alter the live function
