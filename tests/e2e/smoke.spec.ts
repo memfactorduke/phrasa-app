@@ -29,7 +29,7 @@ test.describe("public Phrasa site", () => {
     ).toBeVisible();
     await expect(
       page.getByText(
-        /Phrasa and developer servers never receive audio or transcripts/i,
+        /Phrasa’s developer-operated servers never receive microphone audio or speech recognition text/i,
       ),
     ).toBeVisible();
     await expect(
@@ -87,7 +87,7 @@ test.describe("public Phrasa site", () => {
     await expect(
       page
         .getByText(
-          /Phrasa and developer servers never receive audio or transcripts/i,
+          /Phrasa’s developer-operated servers and Supabase never receive microphone audio or speech recognition text/i,
         )
         .first(),
     ).toBeVisible();

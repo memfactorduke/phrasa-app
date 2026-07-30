@@ -2,14 +2,15 @@
 
 bundle_id: com.phrasa.app
 apple_id: "6780259086"
-# Live Connect audit 2026-07-18: iOS version 1.0 status Prepare for Submission;
-# no build selected yet. See connect-audit.yaml.
+# Live Connect evidence through 2026-07-29: iOS version 1.0 build 14 was
+# archived, exported, uploaded, processed, selected, and submitted. The version
+# is WAITING_FOR_REVIEW. See connect-audit.yaml and connect-evidence.yaml.
 
 marketing_version: "1.0"
 build_number: "14"
 display: "1.0 (14)"
-connect_version_status: Prepare for Submission
-connect_build_selected: none
+connect_version_status: WAITING_FOR_REVIEW
+connect_build_selected: "1.0 (14)"
 
 # Repo evidence
 sources:
@@ -32,13 +33,17 @@ devices: [iPhone, iPad]
 targeted_device_family: "1,2"
 minimum_ios: "17.0"
 
-archive_status: not_archived
-upload_status: not_uploaded
-# Do not archive/export/upload until:
-#   1) voice-gate.yaml status is passed (with evidence), and
-#   2) ./validate.sh --mode release-ready PASSES.
-# Signing / upload-path readiness is recorded in release-prerequisites.yaml.
-# Post-upload processed-build selection is recorded in connect-evidence.yaml.
+archive_status: archived
+export_status: exported
+upload_status: uploaded
+processing_status: processed
+review_submission_status: submitted
+review_submission_date: "2026-07-29"
+
+# Important binary boundary: the Fable adversarial hardening commits were made
+# after build 14 was submitted. They are source improvements for a later build,
+# not claims about the binary currently waiting for review.
+post_submission_source_hardening_in_build_14: false
 
 do_not_reuse_builds:
   - "9"   # legacy Expo

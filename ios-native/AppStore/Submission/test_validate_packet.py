@@ -628,6 +628,50 @@ class PacketCorruptionTests(FixtureBase):
         proc = run_mode("packet", self.sub)
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
 
+    def test_submitted_release_rejects_stale_build_identity(self) -> None:
+        path = self.sub / "build-identity.yaml"
+        text = path.read_text(encoding="utf-8")
+        text = text.replace(
+            "upload_status: uploaded",
+            "upload_status: not_uploaded",
+            1,
+        )
+        write_text(path, text)
+        proc = run_mode("packet", self.sub)
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn(
+            "build-identity.upload_status must be 'uploaded'",
+            proc.stdout,
+        )
+
+    def test_submitted_release_rejects_stale_packet_status(self) -> None:
+        path = self.sub / "packet.json"
+        packet = json.loads(path.read_text(encoding="utf-8"))
+        packet["connect_audit"]["status"] = "Prepare for Submission"
+        write_text(path, json.dumps(packet, indent=2) + "\n")
+        proc = run_mode("packet", self.sub)
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn(
+            "packet.connect_audit.status must match submitted state",
+            proc.stdout,
+        )
+
+    def test_submitted_build_cannot_claim_later_source_hardening(self) -> None:
+        path = self.sub / "build-identity.yaml"
+        text = path.read_text(encoding="utf-8")
+        text = text.replace(
+            "post_submission_source_hardening_in_build_14: false",
+            "post_submission_source_hardening_in_build_14: true",
+            1,
+        )
+        write_text(path, text)
+        proc = run_mode("packet", self.sub)
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn(
+            "build 14 must not claim post-submission source hardening",
+            proc.stdout,
+        )
+
 
 class YamlParseUnitTests(unittest.TestCase):
     def test_parse_simple_yaml_nested(self) -> None:

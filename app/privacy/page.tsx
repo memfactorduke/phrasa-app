@@ -38,9 +38,11 @@ export default function PrivacyPage() {
           no ads, tracking, analytics products, or sale of your data for
           marketing. When you use optional voice following on native apps,
           recognition stays on device when Apple Speech supports it; otherwise
-          Apple services may process the audio. Phrasa and Supabase never receive
-          microphone audio or speech recognition text. Voice Follow is offered
-          on iPhone and iPad, not on Mac or web today.
+          Apple services may process the audio. The Phrasa app uses recognized
+          words in the moment to follow your place, but Phrasa&rsquo;s
+          developer-operated servers and Supabase never receive microphone
+          audio or speech recognition text. Voice Follow is offered on iPhone
+          and iPad, not on Mac or web today.
         </p>
       </LegalSection>
 
@@ -119,7 +121,7 @@ export default function PrivacyPage() {
           That account and library data is linked to your account. Phrasa does
           not use it for tracking, advertising, analytics products, or marketing,
           and does not sell it. Microphone audio and speech recognition text are
-          never sent to Phrasa or Supabase.
+          never sent to Phrasa&rsquo;s developer-operated servers or Supabase.
         </p>
       </LegalSection>
 
@@ -132,9 +134,10 @@ export default function PrivacyPage() {
         <p>
           Recognition uses Apple Speech frameworks. Recognition stays on device
           when Apple Speech supports it; otherwise Apple services may process the
-          audio under Apple&rsquo;s terms and privacy practices. Phrasa and
-          developer servers never receive audio or transcripts. Supabase never
-          receives microphone audio or speech recognition text.
+          audio under Apple&rsquo;s terms and privacy practices. The Phrasa app
+          uses recognized words in the moment to follow your place.
+          Phrasa&rsquo;s developer-operated servers and Supabase never receive
+          microphone audio or speech recognition text.
         </p>
         <p>
           Phrasa uses recognized words only in the moment to follow your place
@@ -167,7 +170,7 @@ export default function PrivacyPage() {
             "Ship third-party advertising or analytics trackers in the app.",
             "Train third-party AI models on your scripts via this product.",
             "Upload guest browser scripts unless you explicitly sign in and choose optional sync.",
-            "Send microphone audio or speech recognition text to Phrasa or Supabase.",
+            "Send microphone audio or speech recognition text to Phrasa’s developer-operated servers or Supabase.",
           ]}
         />
       </LegalSection>

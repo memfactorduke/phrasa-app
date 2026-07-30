@@ -1066,10 +1066,17 @@ def check_connect_audit(report: Report, root: Path, packet: dict[str, Any]) -> N
     else:
         report.ok("connect-audit.yaml contains Apple ID")
 
-    if "Prepare for Submission" not in text and "prepare for submission" not in text.lower():
+    status_context_present = any(
+        marker in text.lower()
+        for marker in (
+            "prepare for submission",
+            "waiting_for_review",
+            "waiting for review",
+        )
+    )
+    if not status_context_present:
         report.warn(
-            "connect-audit.yaml does not mention Prepare for Submission "
-            "(ok if audit was refreshed after status change)"
+            "connect-audit.yaml does not contain a recognized version status"
         )
     else:
         report.ok("connect-audit.yaml status context present")
@@ -1123,6 +1130,110 @@ def check_connect_audit(report: Report, root: Path, packet: dict[str, Any]) -> N
         report.err("release-mode.yaml must recommend manual release")
     else:
         report.ok("release-mode.yaml documents manual release target")
+
+
+def check_current_release_state_consistency(
+    report: Report, root: Path, packet: dict[str, Any]
+) -> None:
+    """Fail closed when post-submission release records contradict one another.
+
+    Release-ready artifacts intentionally describe an earlier gate. The
+    current-state artifacts must agree once review submission is recorded, and
+    later source hardening must never be attributed to the submitted binary.
+    """
+    evidence_path = root / packet.get(
+        "connect_evidence_file", "connect-evidence.yaml"
+    )
+    audit_path = root / packet.get("connect_audit_file", "connect-audit.yaml")
+    identity_path = root / "build-identity.yaml"
+    if not all(
+        path.is_file() for path in (evidence_path, audit_path, identity_path)
+    ):
+        return
+
+    evidence = parse_simple_yaml(evidence_path)
+    review = evidence.get("review_submission") or {}
+    if not is_true(review.get("submitted")):
+        report.ok(
+            "release records are pre-submission; post-submit consistency not required"
+        )
+        return
+
+    prefix = "CURRENT-RELEASE"
+    audit_packet = packet.get("connect_audit") or {}
+    audit_file = parse_simple_yaml(audit_path)
+    audit_app = audit_file.get("app") or {}
+    audit_version = audit_file.get("version_page") or {}
+    identity = parse_simple_yaml(identity_path)
+
+    expected_state = str(review.get("app_store_state") or "")
+    if expected_state != "WAITING_FOR_REVIEW":
+        report.err(
+            f"{prefix}: submitted review app_store_state must be "
+            f"'WAITING_FOR_REVIEW', got {expected_state!r}"
+        )
+    else:
+        report.ok(f"{prefix}: review state = WAITING_FOR_REVIEW")
+
+    for label, value in (
+        ("packet.connect_audit.status", audit_packet.get("status")),
+        ("connect-audit.app.status", audit_app.get("status")),
+        (
+            "build-identity.connect_version_status",
+            identity.get("connect_version_status"),
+        ),
+    ):
+        if str(value) != expected_state:
+            report.err(
+                f"{prefix}: {label} must match submitted state "
+                f"{expected_state!r}, got {value!r}"
+            )
+        else:
+            report.ok(f"{prefix}: {label} matches review state")
+
+    for label, value in (
+        ("packet.connect_audit.build_selected", audit_packet.get("build_selected")),
+        (
+            "connect-audit.version_page.build_selected",
+            audit_version.get("build_selected"),
+        ),
+        (
+            "build-identity.connect_build_selected",
+            identity.get("connect_build_selected"),
+        ),
+    ):
+        if str(value) != EXPECTED_DISPLAY:
+            report.err(
+                f"{prefix}: {label} must be {EXPECTED_DISPLAY!r}, got {value!r}"
+            )
+        else:
+            report.ok(f"{prefix}: {label} = {EXPECTED_DISPLAY}")
+
+    required_identity = {
+        "archive_status": "archived",
+        "export_status": "exported",
+        "upload_status": "uploaded",
+        "processing_status": "processed",
+        "review_submission_status": "submitted",
+    }
+    for key, expected in required_identity.items():
+        value = identity.get(key)
+        if str(value) != expected:
+            report.err(
+                f"{prefix}: build-identity.{key} must be {expected!r}, "
+                f"got {value!r}"
+            )
+        else:
+            report.ok(f"{prefix}: build-identity.{key} = {expected}")
+
+    if identity.get("post_submission_source_hardening_in_build_14") is not False:
+        report.err(
+            f"{prefix}: build 14 must not claim post-submission source hardening"
+        )
+    else:
+        report.ok(
+            f"{prefix}: post-submission source hardening excluded from build 14"
+        )
 
 
 def check_screenshots(report: Report, root: Path, packet: dict[str, Any]) -> None:
@@ -1899,6 +2010,7 @@ def run_packet_checks(report: Report, root: Path, packet: dict[str, Any]) -> Non
     check_prohibited_claims(report, root, packet)
     check_build_identity(report, root, packet)
     check_connect_audit(report, root, packet)
+    check_current_release_state_consistency(report, root, packet)
     check_privacy_age(report, root, packet)
     check_screenshots(report, root, packet)
     check_voice_gate_packet_mode(report, root, packet)

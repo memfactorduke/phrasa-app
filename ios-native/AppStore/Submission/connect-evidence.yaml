@@ -27,6 +27,17 @@ version_metadata:
   marketing_url_saved: true
   privacy_policy_url_saved: true
   whats_new_omitted: true
+  saved_revision_note: >-
+    These booleans describe the listing revision submitted on 2026-07-29.
+    They do not prove that later local copy edits are live in Connect.
+
+# The open-source advertising copy was prepared after the review submission.
+# Flip a field only after the exact current local text is visibly saved in
+# App Store Connect; do not infer it from the older booleans above.
+current_local_open_source_copy:
+  promotional_text_live_verified: false
+  description_live_verified: false
+  last_live_verification: null
 
 # App Privacy questionnaire completed and privacy details published.
 privacy:

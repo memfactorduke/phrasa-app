@@ -14,7 +14,7 @@ Use smooth continuous motion or line-by-line stepping, scrub through a script, a
 
 VOICE FOLLOWING
 
-Let the prompt follow along as you speak using the microphone and Apple Speech Recognition. On-device recognition is required when the device supports it; otherwise Apple Speech may process audio using Apple services and an internet connection may be required. Phrasa does not receive or store microphone audio or transcript history on developer servers.
+Let the prompt follow along as you speak using the microphone and Apple Speech Recognition. On-device recognition is required when the device supports it; otherwise Apple Speech may process audio using Apple services and an internet connection may be required. The Phrasa app uses recognized words in the moment to follow your place; Phrasa’s developer-operated servers do not receive or store microphone audio or speech recognition text.
 
 OUTLINE PRESENTER
 

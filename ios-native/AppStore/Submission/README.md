@@ -25,9 +25,9 @@ Accessibility labels are **optional**. Do not claim or require them without proo
 
 ---
 
-## Historical App Store Connect audit (read-only, 2026-07-18)
+## App Store Connect release-state audit (read-only, through 2026-07-29)
 
-Authoritative *snapshot* of Connect at audit time:
+Current recorded *snapshot* of Connect after review submission:
 [`connect-audit.yaml`](./connect-audit.yaml) (mirrored under `packet.json` →
 `connect_audit`). The validator does **not** re-fetch Connect.
 
@@ -35,26 +35,24 @@ Progressive **save proof** belongs in
 [`connect-evidence.yaml`](./connect-evidence.yaml) and is checked only in
 **submission-ready**.
 
-| Fact | Current Connect value (audit) | Operator action |
+| Fact | Recorded Connect value | Operator action |
 | --- | --- | --- |
 | Apple ID | **6780259086** | Documented |
-| iOS version | **1.0** — **Prepare for Submission** | Aligns with marketing version 1.0 |
-| Version store metadata | **Blank** | Paste from `en-US/` |
-| Screenshots in Connect | **0** | Upload local assets to correct slots only |
-| Build selected | **None** | Select processed **1.0 (14)** after upload |
+| iOS version | **1.0** — **Waiting for Review** | Preserve the submitted review state |
+| Version store metadata | **Saved** | Later local copy edits require separate live verification |
+| Screenshots in Connect | **10** | Complete: five iPhone 6.9-inch and five iPad 13-inch |
+| Build selected | **1.0 (14)** | Submitted binary; do not attribute later source changes to it |
 | Sign-in required | **OFF** | Saved target state |
 | Release mode | **Manual** | Saved target state |
 | App Review contact | **Saved** | Owner-supplied private values |
 | DSA | **Saved**, U.S.-only decision | No remaining banner |
 | Age rating Social Media answer | **No** | Saved; all Social/UGC **No/None** |
 
-That table is the immutable July 18 baseline, not current live state. By
-2026-07-28, the public name, version metadata, ten screenshots, privacy, age
-rating, categories, content rights, pricing/availability, review information,
-and manual release mode were saved. Current progressive proof is in
-[`connect-evidence.yaml`](./connect-evidence.yaml). Build **1.0 (14)** was
-processed and selected, export compliance was saved, and review submission
-completed on 2026-07-29.
+Field-level proof is in [`connect-evidence.yaml`](./connect-evidence.yaml).
+The older July 18 empty-listing baseline remains documented in
+[`../METADATA.md`](../METADATA.md), rather than being presented as current.
+Build **1.0 (14)** was processed and selected, export compliance was saved, and
+review submission completed on 2026-07-29.
 
 ---
 

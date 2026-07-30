@@ -24,8 +24,10 @@ data_collection:
     library content go to the dedicated Phrasa Supabase project solely for App
     Functionality and cross-device sync. No third-party advertising or analytics
     SDK is integrated for product telemetry. User-initiated import/export/backup
-    uses system share/Files destinations chosen by the user. Microphone audio
-    and speech recognition text are never sent to Phrasa or Supabase.
+    uses system share/Files destinations chosen by the user. The Phrasa app
+    uses recognized words in the moment to follow the user's place, but
+    microphone audio and speech recognition text are never sent to Phrasa's
+    developer-operated servers or Supabase.
 
 tracking:
   # "Do you or your third-party partners use data for tracking?"
@@ -78,9 +80,10 @@ apple_speech_disclosure:
     permission. When the device supports on-device recognition, the app sets
     requiresOnDeviceRecognition. When on-device recognition is unavailable,
     Apple Speech may process audio via Apple services (internet may be
-    required). Phrasa does not receive or store audio or transcripts on
-    developer-controlled servers. Supabase never receives microphone audio or
-    speech recognition text. Apple’s processing is not Phrasa developer data
+    required). The Phrasa app uses recognized words in the moment to follow the
+    user's place. Phrasa's developer-controlled servers and Supabase never
+    receive microphone audio or speech recognition text. Apple's processing is
+    not Phrasa developer data
     collection for the types above, but it is explained in the privacy policy,
     usage descriptions, and App Review notes.
 
@@ -126,7 +129,7 @@ account_and_deletion:
     Apple-returned id_token (iss/aud/exp/sub) against stored Apple identity,
     revoke, then delete. Never trust a client identity_token. APPLE_CLIENT_IDS
     must include both platform client ids (not interchangeable). The function
-    is deployed ACTIVE in the production Phrasa Supabase project with JWT
-    verification enabled and the required Apple/Supabase secrets configured.
-    Do not claim end-to-end Apple revocation acceptance complete until sandbox
-    evidence exists on both iOS and Mac.
+    is implemented in this source tree but is not yet live-verified in the
+    production Phrasa Supabase project. Do not claim deployment, required-secret
+    configuration, or end-to-end Apple revocation acceptance complete until
+    production deployment plus sandbox evidence exists on both iOS and Mac.

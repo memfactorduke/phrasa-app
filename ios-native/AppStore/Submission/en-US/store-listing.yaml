@@ -1,10 +1,14 @@
 # App Store Connect store listing — locale en-US
 # Machine-ready fields for operator copy/paste or later automation.
 # Source of truth for limits: Apple App Store Connect field rules (stable limits).
-# Status: local packet complete; NOT saved in App Store Connect.
+# Status: the 2026-07-29 listing revision was saved in App Store Connect.
+# Later local copy edits must be live-verified separately before they are
+# represented as saved.
 
 locale: en-US
 locale_display_name: English (U.S.)
+connect_saved_revision: "2026-07-29-submitted-copy"
+current_local_open_source_copy_live_verified: false
 
 # Public marketing name saved in App Store Connect.
 name: Phrasa Free Teleprompter

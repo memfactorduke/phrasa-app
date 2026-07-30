@@ -15,7 +15,7 @@ const pillars = [
   },
   {
     title: "Speed and voice",
-    body: "Scroll at a steady pace you control on every surface. On iPhone and iPad you can also let the prompter follow your speech. Recognition stays on device when Apple Speech supports it; otherwise Apple services may process the audio. Phrasa and developer servers never receive audio or transcripts. Mac and web prompting are speed-only today.",
+    body: "Scroll at a steady pace you control on every surface. On iPhone and iPad you can also let the prompter follow your speech. Recognition stays on device when Apple Speech supports it; otherwise Apple services may process the audio. Phrasa uses recognized words in the app only to follow your place; Phrasa’s developer-operated servers never receive microphone audio or speech recognition text. Mac and web prompting are speed-only today.",
   },
   {
     title: "Local first, optional sync",

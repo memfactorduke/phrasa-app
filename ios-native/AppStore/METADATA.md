@@ -208,11 +208,15 @@ aligned with the validator.
 
 ---
 
-## Proposed App Store copy (not saved in Connect)
+## Current App Store copy packet and verification status
+
+The base 2026-07-29 listing was saved before review submission. The open-source
+promotional text and description below were prepared afterward, so each must be
+live-verified separately before this document represents it as saved.
 
 ### App name
 
-**Phrasa**
+**Phrasa Free Teleprompter**
 
 ### Subtitle
 
@@ -221,6 +225,8 @@ aligned with the validator.
 26 characters; 30-character limit.
 
 ### Promotional text
+
+Current local open-source revision; not yet live-verified in Connect:
 
 > A calm, open-source teleprompter for iPhone and iPad. Write or import
 > scripts, use speed or Voice Follow, and work without an account or
@@ -232,7 +238,8 @@ aligned with the validator.
 
 Prefer `Submission/en-US/description.txt` as the paste source. Summary:
 
-Phrasa is a native teleprompter for speakers who need a dependable stage, not
+Current local open-source revision; not yet live-verified in Connect. Phrasa is
+a native teleprompter for speakers who need a dependable stage, not
 another account dashboard. Local library features work offline without an
 account. Optional Sign in with Apple (primary) or email opts the user into
 cross-device sync of scripts, folders, tags, and outlines for App Functionality
@@ -240,7 +247,8 @@ only. After sign-in, that content synchronizes automatically on launch,
 foreground, and shortly after saved library changes; Sync now is also
 available. Unsaved drafts are not uploaded. Reader settings stay on each
 device. No ads, tracking, or subscription. Microphone audio and speech
-recognition text are never sent to Phrasa or Supabase.
+recognition text are never sent to Phrasa's developer-operated servers or
+Supabase.
 
 The final description also identifies Phrasa as open source under the Apache
 License 2.0 and links the clean public repository at
@@ -271,8 +279,10 @@ Prefer `Submission/en-US/review-notes.txt` as the paste source.
   ID, Other User Content; linked to user; App Functionality; **not** tracking.
 - In-app Supabase account deletion exists; **do not** claim Apple token
   revocation is complete (server-side release blocker).
-- Microphone audio and speech recognition text are never sent to Phrasa or
-  Supabase; keep the Apple Speech on-device / Apple-services disclosure.
+- The Phrasa app uses recognized words only to follow the user's place.
+  Microphone audio and speech recognition text are never sent to Phrasa's
+  developer-operated servers or Supabase; keep the Apple Speech on-device /
+  Apple-services disclosure.
 
 Use the owner’s real App Review contact in Connect. Do not paste a fabricated
 name, phone number, or email from this document.
@@ -315,8 +325,10 @@ Declare these types as **linked to the user**, purpose **App Functionality**,
 | **Other User Content** | Scripts, folders, tags, and outlines (reader settings stay local) |
 
 Local library, editing, prompting, export, and backup work without an account.
-No third-party analytics or advertising SDK is integrated. Microphone audio and
-speech recognition text are **never** sent to Phrasa or Supabase.
+No third-party analytics or advertising SDK is integrated. The Phrasa app uses
+recognized words only to follow the user's place. Microphone audio and speech
+recognition text are **never** sent to Phrasa's developer-operated servers or
+Supabase.
 
 Voice mode still requests optional Microphone and Speech Recognition access.
 When on-device recognition is unavailable, Apple Speech may process audio

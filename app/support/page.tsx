@@ -115,8 +115,9 @@ export default function SupportPage() {
         />
         <p>
           Recognition stays on device when Apple Speech supports it; otherwise
-          Apple services may process the audio. Phrasa and developer servers
-          never receive audio or transcripts.
+          Apple services may process the audio. Phrasa uses recognized words in
+          the app only to follow your place; Phrasa&rsquo;s developer-operated
+          servers never receive microphone audio or speech recognition text.
         </p>
       </LegalSection>
 

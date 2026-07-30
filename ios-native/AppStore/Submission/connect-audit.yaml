@@ -2,7 +2,7 @@
 # Sources: App Store Connect public API plus authenticated Connect UI.
 # This is current state, not desired end state.
 
-audit_date: "2026-07-28"
+audit_date: "2026-07-29"
 source: live_app_store_connect_api_and_ui
 authoritative: true
 
@@ -11,7 +11,7 @@ app:
   bundle_id: com.phrasa.app
   platform: iOS
   version: "1.0"
-  status: Prepare for Submission
+  status: WAITING_FOR_REVIEW
   saved_name: "Phrasa Free Teleprompter"
   desired_public_name: "Phrasa Free Teleprompter"
   name_note: >-
@@ -29,7 +29,7 @@ version_page:
   privacy_policy_url: https://phrasa.app/privacy
   screenshots_uploaded_count: 10
   screenshots_status: complete
-  build_selected: none
+  build_selected: "1.0 (14)"
 
 app_review:
   contact: saved
@@ -106,5 +106,4 @@ privacy:
   published_live_verified_at: "2026-07-28"
   remaining_action: null
 
-operator_must_fix_in_connect_before_submit:
-  - Upload/process/select native build 1.0 (14)
+operator_must_fix_in_connect_before_submit: []

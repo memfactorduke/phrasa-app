@@ -113,8 +113,11 @@ describe("privacy and support truth constraints", () => {
       );
       expect(src).toMatch(/Apple services may process the audio/i);
       expect(src).toMatch(
-        /Phrasa and developer servers never receive audio or transcripts/i,
+        /Phrasa(?:&rsquo;|’)s developer-operated servers(?: and Supabase)? never receive microphone audio or speech recognition text/i,
       );
+      expect(src).toMatch(/uses recognized words in the (?:app|moment)/i);
+      expect(src).not.toMatch(/Phrasa and developer servers never receive/i);
+      expect(src).not.toMatch(/never sent to Phrasa or Supabase/i);
     }
   });
 
@@ -156,7 +159,7 @@ describe("privacy and support truth constraints", () => {
     expect(privacyFlat).toMatch(/in-app purchases|payment/i);
     expect(privacyFlat).toMatch(/advertising/i);
     expect(privacyFlat).toMatch(
-      /microphone audio or speech recognition text are never sent to Phrasa or Supabase|never receive microphone audio or speech recognition text/i,
+      /microphone audio or speech recognition text are never sent to Phrasa(?:&rsquo;|’)s developer-operated servers or Supabase|developer-operated servers and Supabase never receive microphone audio or speech recognition text/i,
     );
     // Must not falsely claim there is no account/sync product surface.
     expect(privacyFlat).not.toMatch(
