@@ -3,6 +3,58 @@ import XCTest
 
 final class EditorToolsTests: XCTestCase {
     @MainActor
+    func testFailedOpenRollsBackVisibleSelectionAndRetryResumesDeferredScript() async {
+        let current = ScriptDocument(title: "Current", body: "Original")
+        let requestedID = UUID()
+        var transition = EditorOpenTransitionState()
+        var attempts = 0
+        let autosave = EditorAutosaveController(
+            initial: current,
+            debounceDelay: .seconds(60)
+        ) { _ in
+            attempts += 1
+            return attempts > 1
+        }
+        var edited = current
+        edited.body = "Unsaved draft"
+        autosave.record(edited)
+
+        XCTAssertTrue(
+            transition.shouldAttemptOpen(
+                currentScriptID: current.id,
+                requestedScriptID: requestedID
+            )
+        )
+        let firstFlush = await autosave.flush()
+        XCTAssertFalse(firstFlush)
+        XCTAssertEqual(
+            transition.registerFailedFlush(
+                currentScriptID: current.id,
+                requestedScriptID: requestedID
+            ),
+            current.id,
+            "The split-view selection must match the draft that remains visible."
+        )
+        XCTAssertEqual(transition.deferredScriptID, requestedID)
+        XCTAssertFalse(
+            transition.shouldAttemptOpen(
+                currentScriptID: current.id,
+                requestedScriptID: current.id
+            ),
+            "Rolling selection back must not immediately retry the failed flush."
+        )
+        autosave.retry()
+        let retryFlush = await autosave.flush()
+        XCTAssertTrue(retryFlush)
+        XCTAssertEqual(
+            transition.consumeDeferredOpenAfterSuccessfulRetry(),
+            requestedID,
+            "A successful explicit retry must continue to the originally requested script."
+        )
+        XCTAssertNil(transition.deferredScriptID)
+    }
+
+    @MainActor
     func testAutosaveDoesNotWriteAnUnchangedOpenedDocument() async {
         let initial = ScriptDocument(title: "Opening should not edit", body: "Original")
         var saved: [ScriptDocument] = []

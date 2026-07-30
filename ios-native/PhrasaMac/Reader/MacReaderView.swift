@@ -65,6 +65,22 @@ private struct MacReaderRequestSnapshot {
     let script: ScriptDocument
 }
 
+enum MacPacingPresentation {
+    static func remainingLabel(
+        wordCount: Int,
+        progress: Double,
+        speedWPM: Double
+    ) -> String {
+        let remaining = max(0, 1 - progress)
+        let remainingWords = Double(wordCount) * remaining
+        guard speedWPM > 0 else { return "" }
+        let seconds = Int((remainingWords / speedWPM * 60).rounded())
+        let minutes = seconds / 60
+        let remainder = seconds % 60
+        return minutes > 0 ? "~\(minutes)m \(remainder)s left" : "~\(remainder)s left"
+    }
+}
+
 struct MacReaderView: View {
     @Environment(MacLibraryStore.self) private var library
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -474,14 +490,11 @@ struct MacReaderView: View {
     }
 
     private var pacingLabel: String {
-        let words = TextMetrics.wordCount(script.body)
-        let remaining = max(0, 1 - session.progress)
-        let remainingWords = Double(words) * remaining
-        guard session.speedWPM > 0 else { return "" }
-        let seconds = Int((remainingWords / session.speedWPM * 60).rounded())
-        let minutes = seconds / 60
-        let rem = seconds % 60
-        return minutes > 0 ? "~\(minutes)m \(rem)s left" : "~\(rem)s left"
+        MacPacingPresentation.remainingLabel(
+            wordCount: session.wordCount,
+            progress: session.progress,
+            speedWPM: session.speedWPM
+        )
     }
 
     private func wireSessionCallbacks() {

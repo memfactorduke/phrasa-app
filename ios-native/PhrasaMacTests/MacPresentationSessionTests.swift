@@ -516,6 +516,37 @@ final class MacPresentationSessionTests: XCTestCase {
         XCTAssertEqual(session.progress, 0.5, accuracy: 0.001)
     }
 
+    func testPacingLabelUsesSessionCachedWordCountAcrossDisplayTicks() {
+        let clock = MacPlaybackClock()
+        let session = MacPresentationSession(clock: clock)
+        let body = Array(repeating: "word", count: 2_000).joined(separator: " ")
+        session.configure(scriptBody: body, speedWPM: 120)
+
+        XCTAssertEqual(session.wordCount, 2_000)
+        XCTAssertEqual(
+            MacPacingPresentation.remainingLabel(
+                wordCount: session.wordCount,
+                progress: 0.5,
+                speedWPM: session.speedWPM
+            ),
+            "~8m 20s left"
+        )
+
+        session.play(withPreRoll: false)
+        for _ in 0..<120 {
+            clock.tick(delta: 1.0 / 120.0)
+            _ = MacPacingPresentation.remainingLabel(
+                wordCount: session.wordCount,
+                progress: session.progress,
+                speedWPM: session.speedWPM
+            )
+        }
+
+        XCTAssertEqual(session.wordCount, 2_000)
+        XCTAssertGreaterThan(session.progress, 0)
+        session.teardown()
+    }
+
     // MARK: Sleep policy
 
     func testOutputAwareSleepPolicy() {

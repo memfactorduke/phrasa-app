@@ -231,6 +231,34 @@ enum EditorDraftObservationPolicy {
     }
 }
 
+struct EditorOpenTransitionState: Equatable {
+    private(set) var deferredScriptID: UUID?
+
+    func shouldAttemptOpen(currentScriptID: UUID?, requestedScriptID: UUID) -> Bool {
+        currentScriptID != requestedScriptID
+    }
+
+    mutating func registerFailedFlush(
+        currentScriptID: UUID?,
+        requestedScriptID: UUID
+    ) -> UUID? {
+        guard let currentScriptID, currentScriptID != requestedScriptID else {
+            return nil
+        }
+        deferredScriptID = requestedScriptID
+        return currentScriptID
+    }
+
+    mutating func consumeDeferredOpenAfterSuccessfulRetry() -> UUID? {
+        defer { deferredScriptID = nil }
+        return deferredScriptID
+    }
+
+    mutating func completedOpen() {
+        deferredScriptID = nil
+    }
+}
+
 struct EditorView: View {
     enum Tab: String, CaseIterable, Identifiable {
         case script = "Script"
@@ -241,6 +269,7 @@ struct EditorView: View {
     @Environment(LibraryStore.self) private var library
     @Environment(\.scenePhase) private var scenePhase
     let scriptID: UUID
+    let requestSelection: (UUID) -> Void
     @State private var draft: ScriptDocument?
     @State private var autosave: EditorAutosaveController?
     @State private var tab: Tab = .script
@@ -256,8 +285,17 @@ struct EditorView: View {
     @State private var editorOriginID = UUID()
     @State private var suppressNextDraftChange = false
     @State private var openGeneration = UUID()
+    @State private var openTransition = EditorOpenTransitionState()
     @State private var readerRequest: EditorPresentationRequest?
     @State private var outlineRequest: EditorPresentationRequest?
+
+    init(
+        scriptID: UUID,
+        requestSelection: @escaping (UUID) -> Void = { _ in }
+    ) {
+        self.scriptID = scriptID
+        self.requestSelection = requestSelection
+    }
 
     var body: some View {
         Group {
@@ -271,14 +309,28 @@ struct EditorView: View {
         .preferredColorScheme(.dark)
         .navigationBarTitleDisplayMode(.inline)
         .task(id: scriptID) {
+            guard openTransition.shouldAttemptOpen(
+                currentScriptID: draft?.id,
+                requestedScriptID: scriptID
+            ) else { return }
             let generation = UUID()
             openGeneration = generation
             // NavigationSplitView can reuse this view while the selection changes.
             // Finish the previous document before replacing its draft/controller.
             // A failed flush deliberately leaves the old draft and Retry control
             // visible instead of silently throwing those edits away.
-            if let autosave, !(await autosave.flush()) {
-                return
+            if let autosave {
+                let didFlush = await autosave.flush()
+                guard !Task.isCancelled, openGeneration == generation else { return }
+                if !didFlush {
+                    if let recoveryID = openTransition.registerFailedFlush(
+                        currentScriptID: draft?.id,
+                        requestedScriptID: scriptID
+                    ) {
+                        requestSelection(recoveryID)
+                    }
+                    return
+                }
             }
             guard !Task.isCancelled, openGeneration == generation else { return }
             // Capture the persisted open timestamp in the editor baseline so a
@@ -287,6 +339,7 @@ struct EditorView: View {
             guard !Task.isCancelled, openGeneration == generation else { return }
             let loaded = library.script(id: scriptID)
             replaceEditorDocument(with: loaded, cancelPending: false)
+            openTransition.completedOpen()
         }
         .onChange(of: draft) { _, updated in
             guard EditorDraftObservationPolicy.shouldStage(
@@ -343,7 +396,7 @@ struct EditorView: View {
                     draft: draft,
                     findLineJump: findLineJump,
                     saveState: autosave?.state ?? .saved,
-                    onRetrySave: { autosave?.retry() }
+                    onRetrySave: retrySave
                 )
             } else {
                 OutlineEditor(points: draft.outline)
@@ -356,7 +409,7 @@ struct EditorView: View {
                 // failed retry in the toolbar so Outline tab still offers it.
                 if autosave?.state == .failed, tab != .script {
                     Button(autosave?.state.label ?? "Retry save") {
-                        autosave?.retry()
+                        retrySave()
                     }
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(PhrasaDesign.danger)
@@ -527,6 +580,17 @@ struct EditorView: View {
                 readerRequest = EditorPresentationRequest(script: snapshot)
             case .outline:
                 outlineRequest = EditorPresentationRequest(script: snapshot)
+            }
+        }
+    }
+
+    private func retrySave() {
+        guard let autosave else { return }
+        autosave.retry()
+        Task { @MainActor in
+            guard await autosave.flush(), self.autosave === autosave else { return }
+            if let deferredID = openTransition.consumeDeferredOpenAfterSuccessfulRetry() {
+                requestSelection(deferredID)
             }
         }
     }

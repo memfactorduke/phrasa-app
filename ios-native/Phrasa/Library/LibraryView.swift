@@ -94,7 +94,10 @@ struct LibraryView: View {
             ZStack {
                 PhrasaDesign.canvas.ignoresSafeArea()
                 if let selectedScript {
-                    EditorView(scriptID: selectedScript.id)
+                    EditorView(
+                        scriptID: selectedScript.id,
+                        requestSelection: { selectedScriptID = $0 }
+                    )
                 } else {
                     ContentUnavailableView(
                         "Select a script",
