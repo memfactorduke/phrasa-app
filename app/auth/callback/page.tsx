@@ -68,7 +68,8 @@ export default function AuthCallbackPage() {
           return;
         }
       } else {
-        // Hash tokens (implicit) or already-established session.
+        // PKCE callbacks use `code`; this branch accepts only a session that
+        // was already established before the callback page mounted.
         const { data, error } = await client.auth.getSession();
         if (error) {
           if (!cancelled) {
