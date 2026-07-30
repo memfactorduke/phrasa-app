@@ -1,0 +1,10 @@
+# App Store categories — technical recommendation for this product.
+# Primary/secondary as intended for first release.
+
+primary_category: Productivity
+secondary_category: Utilities
+
+reasoning: >-
+  Phrasa is a presentation/productivity tool (teleprompter, script library,
+  rehearsal). Utilities is a reasonable secondary for a focused system-style
+  tool without games, social, or entertainment framing.

@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+   PHRASA — strict black / white editorial system (public website)
+   Spec: canvas #000, elevated #0A0A0A, ink #FFF / #A3A3A3, divider #1F1F1F.
+   Square corners (0–8px). No gradients, glow, glass, or ornamental shadows.
+   =========================================================================== */
+
+:root {
+  --canvas: #000000;
+  --surface: #0a0a0a;
+  --divider: #1f1f1f;
+  --ink: #ffffff;
+  --ink-muted: #a3a3a3;
+  --ring: #ffffff;
+  --danger: #ff3b30; /* system red — destructive warnings only */
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-divider: var(--divider);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-danger: var(--danger);
+
+  --font-sans: var(--font-site), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-display: var(--font-site), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scrollbar-color: var(--divider) transparent;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: #ffffff;
+    color: #000000;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -3.5rem;
+    z-index: 50;
+    display: inline-flex;
+    min-height: 2.75rem; /* 44px touch/keyboard target */
+    align-items: center;
+    border-radius: var(--radius-sm);
+    background: var(--ink);
+    color: var(--canvas);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+}

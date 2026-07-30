@@ -1,0 +1,14 @@
+.git
+.claude
+.gstack
+.env*
+!.env.local.example
+.next
+node_modules
+coverage
+test-results
+playwright-report
+deploy-*.zip
+ios-native
+supabase
+*.tsbuildinfo

@@ -1,0 +1,48 @@
+# Build identity for the shipping iOS candidate.
+
+bundle_id: com.phrasa.app
+apple_id: "6780259086"
+# Live Connect audit 2026-07-18: iOS version 1.0 status Prepare for Submission;
+# no build selected yet. See connect-audit.yaml.
+
+marketing_version: "1.0"
+build_number: "14"
+display: "1.0 (14)"
+connect_version_status: Prepare for Submission
+connect_build_selected: none
+
+# Repo evidence
+sources:
+  project_yml:
+    path: ../../project.yml
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "14"
+  pbxproj:
+    path: ../../PhrasaNative.xcodeproj/project.pbxproj
+    expected:
+      MARKETING_VERSION: "1.0"
+      CURRENT_PROJECT_VERSION: "14"
+  info_plist:
+    path: ../../Phrasa/Info.plist
+    CFBundleShortVersionString: "$(MARKETING_VERSION)"
+    CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+
+platform: iOS
+devices: [iPhone, iPad]
+targeted_device_family: "1,2"
+minimum_ios: "17.0"
+
+archive_status: not_archived
+upload_status: not_uploaded
+# Do not archive/export/upload until:
+#   1) voice-gate.yaml status is passed (with evidence), and
+#   2) ./validate.sh --mode release-ready PASSES.
+# Signing / upload-path readiness is recorded in release-prerequisites.yaml.
+# Post-upload processed-build selection is recorded in connect-evidence.yaml.
+
+do_not_reuse_builds:
+  - "9"   # legacy Expo
+  - "10"  # legacy Expo
+  - "11"  # prior native lineage
+  - "12"  # prior native lineage
+  - "13"  # prior native lineage

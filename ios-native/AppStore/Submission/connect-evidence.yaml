@@ -1,0 +1,160 @@
+# App Store Connect save evidence — machine-validated for --mode submission-ready.
+# ---------------------------------------------------------------------------
+# Fill this file only after the exact corresponding action is true in Connect.
+# Do not invent values. Null / TODO means "not yet proven."
+#
+# Required for: submission-ready (after upload, processing, selection, saves)
+# NOT required for: packet or release-ready
+#
+# Accessibility labels are optional and are not a submission gate.
+# ---------------------------------------------------------------------------
+
+schema: connect-evidence-v1
+owner_gated: true
+last_updated: "2026-07-29"
+
+# Public app name as saved in App Store Connect (not the temporary name).
+public_app_name:
+  saved_value: "Phrasa Free Teleprompter"
+
+# Version-level store listing metadata as saved (en-US).
+version_metadata:
+  subtitle_saved: true
+  promotional_text_saved: true
+  description_saved: true
+  keywords_saved: true
+  support_url_saved: true
+  marketing_url_saved: true
+  privacy_policy_url_saved: true
+  whats_new_omitted: true
+
+# App Privacy questionnaire completed and privacy details published.
+privacy:
+  questionnaire_completed: true
+  published: true                # Live-verified in App Store Connect on 2026-07-28
+  collects_data_answer: true     # saved in Connect; optional sync
+  tracks_users_answer: false
+  privacy_policy_url: https://phrasa.app/privacy
+  selected_data_types_saved: true
+  per_type_setup_completed: true
+  # Expected declared types when evidence is filled (linked, App Functionality, not tracking):
+  # Email Address, User ID, Other User Content
+  expected_data_types:
+    - Email Address
+    - User ID
+    - Other User Content
+  purpose: App Functionality
+  linked_to_user: true
+  used_for_tracking: false
+
+# Age rating questionnaire saved in Connect.
+age_rating:
+  saved: true
+  intended_rating: "4+"
+  social_media_capability: "no"
+  social_media_and_ugc_all_no: true
+
+# Primary / secondary categories saved.
+categories:
+  primary_saved: "Productivity"
+  secondary_saved: "Utilities"
+
+# Content rights saved.
+content_rights:
+  saved: true
+  has_rights_to_all_content: true
+
+# Export compliance saved.
+export_compliance:
+  saved: true
+  uses_non_exempt_encryption: false
+
+# Pricing and availability saved.
+pricing_availability:
+  price: "free"
+  tax_category: "App Store software"  # Live-verified in Connect on 2026-07-28
+  us_availability_saved: true
+  territories_include_us: true
+
+# Screenshots uploaded to the correct Media Manager slots only.
+# Counts and file lists must bind to screenshots-manifest.yaml / packet.json.
+screenshots:
+  iphone_6_9:
+    connect_slot: "iPhone 6.9-inch"  # fixed expected slot — do not change
+    uploaded_count: 5
+    uploaded_files_in_order:
+      - 05-voice-reader.jpg
+      - 01-library.jpg
+      - 02-editor.jpg
+      - 03-speed-reader.jpg
+      - 04-onboarding.jpg
+    not_uploaded_to_forbidden_slots: true
+  ipad_13:
+    connect_slot: "iPad 13-inch"
+    uploaded_count: 5
+    uploaded_files_in_order:
+      - 05-voice-reader.jpg
+      - 01-library.jpg
+      - 02-editor.jpg
+      - 03-speed-reader.jpg
+      - 04-onboarding.jpg
+    not_uploaded_to_forbidden_slots: true
+
+# Exact native build processed and selected for this version.
+build_selection:
+  marketing_version: "1.0"
+  build_number: "14"
+  display: "1.0 (14)"
+  processing_state: "processed"
+  selected_for_version: true
+
+# App Review Information — Sign-in required.
+sign_in_required:
+  saved_value: false             # Saved and live-verified on 2026-07-28
+
+# Version release method.
+release_mode:
+  saved_value: "manual"
+
+# Platform availability extras.
+apple_silicon_mac:
+  availability: "disabled"       # Saved and live-verified on 2026-07-28
+
+vision_pro:
+  compatibility: "disabled"      # Saved and live-verified on 2026-07-28
+
+# App Review contact and notes as saved in Connect.
+app_review:
+  contact_first_name: "Memorable"
+  contact_last_name: "Factor"
+  contact_phone_number: "owner-supplied; stored privately in App Store Connect"
+  contact_email: "owner-supplied; stored privately in App Store Connect"
+  review_notes_saved: true
+
+# Final review submission — confirmed in both App Store Connect UI and API.
+review_submission:
+  submitted: true
+  submitted_on: "2026-07-29"
+  submitted_at_utc: "2026-07-29T12:50:54.17Z"
+  app_store_state: "WAITING_FOR_REVIEW"
+  # Resource identifiers are operational evidence, not product source, and are
+  # intentionally omitted from the public repository.
+  submission_id: "omitted-from-public-source"
+  app_store_version_id: "omitted-from-public-source"
+  build_id: "omitted-from-public-source"
+
+# DSA trader / non-trader decision as saved (owner/legal only).
+dsa:
+  decision_saved: true
+  status: not_applicable_decision  # Not a trader / no planned EU distribution
+
+# Social-media age-rating answer decision (mirrors age_rating; explicit gate).
+social_media_age_rating:
+  answer_saved: true
+  answer: "no"
+
+# Optional — not a gate. Leave null; do not claim without proof.
+accessibility_labels:
+  required: false
+  claimed: false
+  evidence: null

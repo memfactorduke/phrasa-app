@@ -1,0 +1,14 @@
+# The Vercel project hosts only the public marketing and legal website.
+# Native Swift sources and local build products never belong in a web deploy.
+ios-native/
+
+# Local/generated dependencies and build caches.
+node_modules/
+.next/
+.git/
+
+# Operator-only artifacts and deployment configuration for other providers.
+docs/
+.netlify/
+.env*
+!.env.local.example

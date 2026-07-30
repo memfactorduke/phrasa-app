@@ -1,0 +1,11 @@
+.DS_Store
+Packages/*/.build/
+Packages/*/Package.resolved
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+
+# Cloud-sync/Xcode duplicate; `PhrasaNative.xcodeproj` generated from
+# `project.yml` is the canonical project.
+PhrasaNative 4.xcodeproj/

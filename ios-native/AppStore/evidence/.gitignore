@@ -1,0 +1,5 @@
+# Operator-filled evidence is local only; never commit real device IDs by accident.
+VOICE_ACCEPTANCE_BUILD14.md
+*.filled.md
+!VOICE_ACCEPTANCE_TEMPLATE.md
+!README.md

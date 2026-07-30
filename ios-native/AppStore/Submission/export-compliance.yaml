@@ -1,0 +1,30 @@
+# Export compliance — grounded in Info.plist / project.yml only.
+# Do not overclaim. This answers the standard "uses encryption" path for apps
+# that only use exempt/OS-provided encryption (HTTPS via system frameworks).
+
+uses_non_exempt_encryption: false
+its_app_uses_non_exempt_encryption: false
+
+# Repo evidence
+sources:
+  - path: ../../Phrasa/Info.plist
+    key: ITSAppUsesNonExemptEncryption
+    value: false
+  - path: ../../project.yml
+    key: ITSAppUsesNonExemptEncryption
+    value: false
+  - path: ../../PhrasaNative.xcodeproj/project.pbxproj
+    note: MARKETING_VERSION / CURRENT_PROJECT_VERSION only; encryption flag comes from Info.plist generation
+
+app_store_connect_answer: >-
+  Select that the app uses encryption only as exempted (or equivalent current
+  wording for ITSAppUsesNonExemptEncryption = false). No export compliance
+  documentation upload is expected for standard HTTPS/TLS via Apple system
+  frameworks and no custom non-exempt crypto claimed in this binary.
+
+reasoning: >-
+  The shipping iOS target sets ITSAppUsesNonExemptEncryption to false. The app
+  is local-first; any network use for Apple Speech fallback or optional future
+  cloud would rely on system TLS, not proprietary non-exempt crypto declared
+  here. Do not claim CCATS filings or special export licenses — none are
+  asserted in-repo.

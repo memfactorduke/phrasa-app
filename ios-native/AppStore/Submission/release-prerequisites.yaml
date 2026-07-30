@@ -1,0 +1,63 @@
+# Pre-archive / pre-upload release prerequisites.
+# ---------------------------------------------------------------------------
+# Required for: --mode release-ready (before archive, export, or upload)
+# NOT required for: packet
+# Must NOT claim archive/upload/build-processing evidence here — those happen
+# after release-ready passes and are proven later in connect-evidence.yaml.
+# ---------------------------------------------------------------------------
+
+schema: release-prerequisites-v1
+last_updated: "2026-07-29"
+
+# Exact shipping candidate identity (must match packet / project).
+candidate:
+  marketing_version: "1.0"
+  build_number: "14"
+  display: "1.0 (14)"
+  bundle_id: com.phrasa.app
+  apple_id: "6780259086"
+  project: PhrasaNative.xcodeproj
+  # Never archive Finder duplicates (names containing " 2").
+  forbid_finder_duplicate_projects: true
+
+# Signing and tool readiness — operator-verified, not assumed.
+signing:
+  # true only after operator confirms Apple Distribution identity is usable
+  # for this team and bundle id.
+  apple_distribution_identity_available: true
+  # true only after operator confirms provisioning for com.phrasa.app
+  provisioning_for_bundle_ready: true
+  notes: >-
+    App Store provisioning ready for com.phrasa.app. Profile UUID
+    89047c7a-27e1-47a7-b5a0-8a7e2c14c39e. Profile name: iOS Team Store
+    Provisioning Profile: com.phrasa.app. Team Q42MT7JA7Q. Apple Distribution
+    identity 5402A9774042A9115A427AA24CA589A5B58942FC was created for the
+    Memorable Factor team and verified as a valid local codesigning identity
+    on 2026-07-28.
+
+# Upload path readiness — one of api_key or transporter must be ready for
+# release-ready. Does not prove an upload already happened.
+upload_path:
+  # api_key | transporter | none
+  method: api_key
+  # true only when credentials/session for the chosen method are verified
+  credentials_verified: true
+  notes: >-
+    Dedicated App Manager team key 9V99M39H34 is installed at the conventional
+    owner-only private-key path. Its issuer was authenticated against the live
+    App Store Connect API on 2026-07-28 by querying Phrasa and its uploaded
+    builds without exposing key contents.
+
+# Explicit go / no-go before producing the candidate binary.
+# ready_to_archive must be true for release-ready. Setting this true without
+# voice gate passed and other release-ready gates is invalid (validator fails).
+ready_to_archive: true
+
+# These remain false until AFTER release-ready and the corresponding work.
+# release-ready MUST keep them false/null (fail-closed if claimed early).
+post_release_claims_forbidden_until_later:
+  archive_completed: false
+  export_completed: false
+  upload_completed: false
+  build_processed_in_connect: false
+  build_selected_in_connect: false

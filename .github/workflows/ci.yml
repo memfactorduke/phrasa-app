@@ -1,0 +1,157 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Website (Next.js)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Cache Next.js compiler cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx', '!ios-native/**', '!node_modules/**') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+  e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Resolve Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+      - name: Install Playwright Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Install Playwright system deps (browser cache hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - run: npm run test:e2e
+
+  edge-function:
+    name: Apple account-deletion edge function
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Deno
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version: v2.x
+      - name: Type-check deletion function
+        run: deno check supabase/functions/delete-apple-linked-account/index.ts
+
+  shipping-guard:
+    name: Shipping surface guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Fail if Expo / React Native / mobile assets reappear
+        run: node scripts/guard-no-expo.mjs
+
+  native-packages:
+    name: Native packages (Swift)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: PhrasaCore package tests
+        run: swift test --package-path ios-native/Packages/PhrasaCore --parallel
+      - name: PhrasaDomain package tests
+        run: swift test --package-path ios-native/Packages/PhrasaDomain --parallel
+      - name: PhrasaPersistence package tests
+        run: swift test --package-path ios-native/Packages/PhrasaPersistence --parallel
+      - name: PhrasaSync package tests
+        run: swift test --package-path ios-native/Packages/PhrasaSync --parallel
+
+  native-ios:
+    name: Phrasa iOS (xcodebuild test)
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+      - name: Resolve iOS Simulator destination
+        id: ios-dest
+        run: |
+          set -euo pipefail
+          # Prefer a concrete available iPhone simulator; fall back to first booted-capable device.
+          DEST=$(xcrun simctl list devices available \
+            | sed -n 's/.*\(iPhone [^()]*(.*)\) (.*/\1/p' \
+            | head -1 \
+            | sed -E 's/ \([A-F0-9-]+\)$//')
+          if [ -z "${DEST}" ]; then
+            echo "No available iPhone simulator found" >&2
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "destination=platform=iOS Simulator,name=${DEST}" >> "$GITHUB_OUTPUT"
+          echo "Using destination: platform=iOS Simulator,name=${DEST}"
+      - name: Phrasa iOS unit tests
+        working-directory: ios-native
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project PhrasaNative.xcodeproj \
+            -scheme Phrasa \
+            -destination '${{ steps.ios-dest.outputs.destination }}' \
+            -only-testing:PhrasaTests \
+            CODE_SIGNING_ALLOWED=NO \
+            test
+
+  native-mac:
+    name: PhrasaMac (xcodebuild test)
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+      - name: Mac cloud source hygiene
+        run: bash scripts/validate-mac-cloud-hygiene.sh
+      - name: PhrasaMac unit tests
+        working-directory: ios-native
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project PhrasaNative.xcodeproj \
+            -scheme PhrasaMac \
+            -destination 'platform=macOS,arch=arm64' \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            test

@@ -1,0 +1,79 @@
+# Voice physical-acceptance gate
+# ---------------------------------------------------------------------------
+# NOT uploadable marketing copy. NOT App Store listing text.
+# This file gates archive / export / upload / release-ready.
+# Marketing description may describe intended voice behavior; this gate records
+# whether physical acceptance has actually passed.
+# ---------------------------------------------------------------------------
+
+status: passed
+# Allowed values: not_passed | passed
+# Current: PASSED on the exact pinned candidate with both instrumented Debug
+# and shipping Release physical-device evidence.
+
+blocking: false
+blocks: []
+
+last_updated: "2026-07-29"
+current_blocker: null
+
+# What "passed" means (all required)
+acceptance_criteria:
+  required_all:
+    - id: mic_permission_grant
+      description: Grant Microphone permission; voice mode can start listening.
+    - id: speech_permission_grant
+      description: Grant Speech Recognition permission; recognition task can start.
+    - id: permission_denial
+      description: Deny mic or speech; speed mode remains usable; voice fails safely.
+    - id: on_device_when_supported
+      description: >-
+        On a device that supports on-device recognition, confirm recognition runs
+        with on-device requirement (requiresOnDeviceRecognition when supported).
+    - id: apple_service_fallback_path
+      description: >-
+        Understand and, where testable, exercise the path when on-device is
+        unavailable (Apple Speech may use Apple services; internet may be needed).
+        Do not fake success if the device/environment cannot reach that path.
+    - id: real_script_progress
+      description: Read a multi-sentence real script; prompter advances with speech.
+    - id: pause_resume
+      description: Pause and resume voice following without a stuck session.
+    - id: interruption
+      description: Survive a phone interruption or audio session interruption gracefully.
+    - id: background_foreground
+      description: Background/foreground transitions do not leave voice in a broken state.
+    - id: physical_hardware
+      description: All of the above on physical iPhone (and iPad if claiming iPad voice QA).
+
+  not_sufficient_alone:
+    - Simulator-only runs
+    - Unit / package tests (PhrasaCore alignment, etc.)
+    - Static App Store screenshots showing "Voice paused"
+    - Legacy Expo telemetry
+    - Source code review without device exercise
+
+when_status_becomes_passed:
+  operator_must:
+    - Set status to passed
+    - Record device model, iOS version, date, and short evidence notes below
+    - Re-run validate.sh --mode release-ready (still fails until owner + signing gates clear)
+    - Only after release-ready PASS: archive / export / upload 1.0 (14)
+    - After Connect work: fill connect-evidence.yaml and run --mode submission-ready
+  evidence:
+    device_model: "iPad Air (5th generation; iPad13,16)"
+    ios_version: "iPadOS 26.5"
+    tested_on: "2026-07-29"
+    notes: >-
+      Exact-candidate Debug physical QA passed microphone permission, on-device
+      recognition, non-silent PCM, word callbacks, alignment acceptance, token
+      progress, pause/resume, and background/foreground recovery. Shipping
+      Release QA independently reached Listening and advanced visible script
+      progress from 0.0 to 0.489; the reader chrome then auto-hid as designed.
+      Evidence: voice-uiqa-device-20260729T035244Z and
+      voice-uiqa-release-device-20260729T042454Z.
+
+honest_marketing_boundary: >-
+  Store description and screenshots may show Voice UI (static / Voice paused).
+  They must not claim measured real-device recognition quality or that physical
+  acceptance has completed while status is not_passed.

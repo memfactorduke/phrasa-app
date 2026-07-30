@@ -1,0 +1,72 @@
+# Operator-only placeholders — NOT product metadata, NOT inventable by agents.
+# ---------------------------------------------------------------------------
+# These fields require human owner/legal decisions or external proof.
+#
+# Validation phases:
+#   packet          — values may remain null/TODO
+#   release-ready   — contact, copyright, DSA decision, support channel, and
+#                     website redeploy proof MUST be filled (pre-archive)
+#   submission-ready — also requires connect-evidence.yaml Connect saves
+#
+# Connect field-save proof lives in connect-evidence.yaml (not here).
+# Do not invent App Review contact data, copyright owner strings, DSA trader
+# status, or proof that support@phrasa.app is monitored.
+# ---------------------------------------------------------------------------
+
+schema: operator-placeholders-v2
+owner_gated: true
+
+app_review_contact:
+  connect_current: saved
+  first_name: "Memorable"
+  last_name: "Factor"
+  phone_number: "owner-supplied; stored privately in App Store Connect"
+  email: "owner-supplied; stored privately in App Store Connect"
+  notes: >-
+    Owner supplied these private App Review contact values and they were saved
+    and live-verified in App Store Connect on 2026-07-28.
+
+
+copyright:
+  holder: "Memorable Factor"
+  year: 2026
+  display_string: "2026 Memorable Factor"
+
+dsa_trader_status:
+  connect_banner_present: false
+  # EU Digital Services Act trader / non-trader declaration when applicable.
+  # Allowed values when decided: trader | non_trader | not_applicable_decision
+  status: not_applicable_decision
+  notes: >-
+    Owner requested United States-only distribution and confirmed the
+    non-trader / no planned EU distribution choice. App Store Connect showed
+    all regulatory requirements complete and DSA Active on 2026-07-28.
+
+public_support_channel:
+  # Owner-proven: alias activated and monitored.
+  intended_address: support@phrasa.app
+  activated: true
+  monitored: true
+  verified_at: "2026-07-18T22:25:00Z"
+  notes: >-
+    support@phrasa.app activated and monitored, verified at 2026-07-18T22:25:00Z.
+    Do not re-null this without re-verification.
+
+production_website_redeploy:
+  # Owner-proven: latest source redeployed; live URLs re-checked.
+  latest_source_redeployed: true
+  live_urls_reverified_at: "2026-07-28T14:50:00Z"
+  notes: >-
+    Latest source deployed to production at
+    https://phrasa-oahp0dkxh-bld-solutions-llc.vercel.app and aliased to
+    https://phrasa.app. Live home/app/privacy/terms/support/auth-callback URLs
+    returned HTTPS 200 with valid TLS and expected content on 2026-07-28.
+    The web Sign in with Apple redirect was also verified against client id
+    com.phrasa.web and the production Supabase callback.
+
+public_name_change:
+  connect_current: "Phrasa Free Teleprompter"
+  intended_name: "Phrasa Free Teleprompter"
+  notes: >-
+    Owner selected Phrasa Free Teleprompter after exact Phrasa was unavailable.
+    The replacement name was saved and live-verified on 2026-07-28.

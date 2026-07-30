@@ -1,0 +1,137 @@
+# Screenshot inventory and required upload order (en-US).
+# Paths are relative to ios-native/AppStore/ (parent of Submission/).
+# Local source inventory and live App Store Connect upload evidence.
+
+locale: en-US
+assets_root: ../Screenshots
+upload_status: uploaded
+connect_screenshots_count: 10  # live API verification 2026-07-28
+
+# Official Apple accepted dimensions for these Media Manager slots (current):
+# - iPhone 6.9-inch: 1320 × 2868 (and other listed 6.9 sizes)
+# - iPad 13-inch: 2064 × 2752 (and other listed 13-inch sizes)
+# - Count per device display slot: 1 through 10 screenshots
+
+# CRITICAL MEDIA MANAGER SLOT GUIDANCE
+# ---------------------------------------------------------------------------
+# The default App Store Connect version page often shows a **6.5-inch**
+# screenshot well. Do NOT drop the 1320×2868 assets into that 6.5-inch well.
+#
+# Place assets only in Media Manager display slots that match their pixels:
+# - 1320×2868 → **iPhone 6.9-inch** slot (NOT 6.5-inch)
+# - 2064×2752 → **iPad 13-inch** slot
+# ---------------------------------------------------------------------------
+
+media_manager_slot_rules:
+  - local_set: iPhone-6.9
+    pixels: "1320x2868"
+    connect_display_slot: "iPhone 6.9-inch"
+    do_not_upload_to:
+      - "iPhone 6.5-inch"
+      - "iPhone 6.7-inch"
+      - "any well that is not the 6.9-inch Media Manager slot"
+    operator_warning: >-
+      The version page may surface a 6.5-inch well by default. Open Media
+      Manager (or the correct display size picker) and upload 1320×2868
+      images only into the 6.9-inch iPhone slot.
+
+  - local_set: iPad-13
+    pixels: "2064x2752"
+    connect_display_slot: "iPad 13-inch"
+    do_not_upload_to:
+      - "iPad 12.9-inch legacy-only confusion without checking specs"
+      - "any non-13-inch iPad well"
+    operator_warning: >-
+      Upload 2064×2752 images only into the 13-inch iPad Media Manager slot.
+
+# Connect order is Voice-first (honest static UI: Voice paused / not live recognition).
+# Filenames keep capture numbers; order below is App Store Connect slot order.
+
+display_sets:
+  - id: iphone_6_9
+    display_name: "iPhone 6.9-inch"
+    connect_media_manager_slot: "iPhone 6.9-inch"
+    forbidden_slots: ["iPhone 6.5-inch"]
+    role: required_iphone_primary
+    # Highest-resolution iPhone class preferred as primary iPhone source set.
+    # Official accepted size for this set: 1320 × 2868.
+    pixel_width: 1320
+    pixel_height: 2868
+    orientation: portrait
+    file_type: jpeg
+    color_space: RGB
+    has_alpha: false
+    directory: ../Screenshots/iPhone-6.9
+    # Upload order (1-based Connect slots)
+    upload_order:
+      - order: 1
+        file: 05-voice-reader.jpg
+        shot: voice_reader_static
+        honesty: >-
+          Voice mode chrome with idle/static status (e.g. Voice paused).
+          Proves Voice reader UI only — not live speech recognition.
+      - order: 2
+        file: 01-library.jpg
+        shot: library
+      - order: 3
+        file: 02-editor.jpg
+        shot: editor
+      - order: 4
+        file: 03-speed-reader.jpg
+        shot: speed_reader
+      - order: 5
+        file: 04-onboarding.jpg
+        shot: onboarding
+
+  - id: ipad_13
+    display_name: "iPad 13-inch"
+    connect_media_manager_slot: "iPad 13-inch"
+    forbidden_slots: []
+    role: required_ipad
+    # Required because binary targets iPad (TARGETED_DEVICE_FAMILY 1,2).
+    # Official accepted size for this set: 2064 × 2752.
+    pixel_width: 2064
+    pixel_height: 2752
+    orientation: portrait
+    file_type: jpeg
+    color_space: RGB
+    has_alpha: false
+    directory: ../Screenshots/iPad-13
+    upload_order:
+      - order: 1
+        file: 05-voice-reader.jpg
+        shot: voice_reader_static
+        honesty: >-
+          Voice mode chrome with idle/static status (e.g. Voice paused).
+          Proves Voice reader UI only — not live speech recognition.
+      - order: 2
+        file: 01-library.jpg
+        shot: library
+      - order: 3
+        file: 02-editor.jpg
+        shot: editor
+      - order: 4
+        file: 03-speed-reader.jpg
+        shot: speed_reader
+      - order: 5
+        file: 04-onboarding.jpg
+        shot: onboarding
+
+covered_size_classes:
+  - iPhone_6_9
+  - iPad_13
+
+not_captured_optional:
+  - iPhone_6_5  # do not repurpose 6.9 assets into this well
+  - iPhone_6_1_or_other
+  - reader_settings_appearance
+  - outline_presenter
+
+constraints:
+  min_screenshots_per_set: 1
+  max_screenshots_per_set: 10
+  frames_per_captured_set: 5
+  official_accepted:
+    iphone_6_9: "1320x2868"
+    ipad_13: "2064x2752"
+    count_range: "1-10 per device display slot"

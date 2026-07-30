@@ -1,0 +1,24 @@
+# Version release method.
+
+# Desired / packet recommendation for first release:
+recommendation: manual
+# Manual release after App Store review approval.
+# Do NOT use automatic release for the first version without explicit owner override.
+
+options:
+  automatic: not_recommended
+  manual: recommended
+  phased: optional_later_not_default
+
+# Live Connect audit (2026-07-28) — authoritative current state:
+connect_current:
+  release_mode: manual
+  must_switch_to: null
+  action: null
+
+reasoning: >-
+  First release should ship only after the owner confirms the processed build,
+  store copy, privacy answers, support channel, and any last-minute product
+  checks. Manual release avoids going live the moment Apple approves without
+  that final human gate. Manual release was saved and live-verified in Connect
+  on 2026-07-28.

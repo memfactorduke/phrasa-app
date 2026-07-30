@@ -1,0 +1,110 @@
+# Authoritative App Store Connect live audit.
+# Sources: App Store Connect public API plus authenticated Connect UI.
+# This is current state, not desired end state.
+
+audit_date: "2026-07-28"
+source: live_app_store_connect_api_and_ui
+authoritative: true
+
+app:
+  apple_id: "6780259086"
+  bundle_id: com.phrasa.app
+  platform: iOS
+  version: "1.0"
+  status: Prepare for Submission
+  saved_name: "Phrasa Free Teleprompter"
+  desired_public_name: "Phrasa Free Teleprompter"
+  name_note: >-
+    Owner-selected replacement saved and live-verified on 2026-07-28 after
+    exact "Phrasa" was unavailable.
+
+version_page:
+  store_listing_metadata: saved
+  subtitle: "Voice & speed teleprompter"
+  promotional_text: saved
+  description: saved
+  keywords: saved
+  support_url: https://phrasa.app/support
+  marketing_url: https://phrasa.app
+  privacy_policy_url: https://phrasa.app/privacy
+  screenshots_uploaded_count: 10
+  screenshots_status: complete
+  build_selected: none
+
+app_review:
+  contact: saved
+  notes: saved
+  review_detail_resource: exists
+
+sign_in_required:
+  current_in_connect: false
+  required_for_this_binary: false
+  must_change_before_submit: false
+  note: >-
+    Local use requires no account. The owner supplied the real App Review
+    contact, review notes were saved, and the toggle was live-verified OFF.
+
+release_mode:
+  current_in_connect: manual
+  required_for_this_release: manual
+  must_change_before_submit: false
+
+dsa:
+  banner_present: false
+  status: not_applicable_decision
+  must_change_before_submit: false
+  action: null
+
+age_rating:
+  saved: true
+  calculated_rating: "4+"
+  social_media_capability: "no"
+  all_content_descriptors: none
+
+categories:
+  primary: Productivity
+  secondary: Utilities
+
+content_rights:
+  saved: true
+  value: uses_third_party_content
+
+pricing_availability:
+  price: free
+  availability: usa_only
+  available_territory_count: 1
+  configured_territory_count: 175
+  automatically_include_new_territories: false
+  tax_category: "App Store software"
+  apple_silicon_mac_availability: disabled
+  vision_pro_compatibility: disabled
+
+screenshots_in_connect:
+  count: 10
+  asset_state: complete
+  iphone_6_9_count: 5
+  ipad_13_count: 5
+  order:
+    - 05-voice-reader.jpg
+    - 01-library.jpg
+    - 02-editor.jpg
+    - 03-speed-reader.jpg
+    - 04-onboarding.jpg
+
+privacy:
+  questionnaire_started: true
+  collects_data: true
+  selected_data_types:
+    - Email Address
+    - User ID
+    - Other User Content
+  per_type_setup_completed: true
+  purpose: App Functionality
+  linked_to_user: true
+  used_for_tracking: false
+  published: true
+  published_live_verified_at: "2026-07-28"
+  remaining_action: null
+
+operator_must_fix_in_connect_before_submit:
+  - Upload/process/select native build 1.0 (14)

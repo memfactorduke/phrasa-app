@@ -1,0 +1,9 @@
+# Netlify build for the public Phrasa marketing site.
+# No product secrets required to render. Optional NEXT_PUBLIC_SITE_URL
+# defaults via lib/site.ts when unset; set it here for production URLs.
+[build]
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_PUBLIC_SITE_URL = "https://phrasa.app"

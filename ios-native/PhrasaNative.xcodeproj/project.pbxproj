@@ -1,0 +1,1639 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01CFBB9C96404E5580CFFF30 /* CloudBackendContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B1AD1E2E87C013E51B5F3D /* CloudBackendContract.swift */; };
+		08F1EFF41D5171EF4A931CF3 /* SupabaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C2E72A1CCEB478C07113E0 /* SupabaseAuthService.swift */; };
+		090562CFB1A6171D8C6B54EF /* PhrasaA11y.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B0F0F7D6B11817488A57BF /* PhrasaA11y.swift */; };
+		0E63655107484771F8B1FD3E /* ReaderSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7CF8AB772E472A19554601 /* ReaderSettingsView.swift */; };
+		10B72616ADF2723CE477CBA1 /* AtkinsonHyperlegible-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE6ED1E2263DF804DB34FEAD /* AtkinsonHyperlegible-Regular.ttf */; };
+		11A157D691BF36B41374DF8B /* CloudAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C14050C353991BAF3156351 /* CloudAccountView.swift */; };
+		12845AA37B9D15001B5890C7 /* PhrasaSyncSupabase in Frameworks */ = {isa = PBXBuildFile; productRef = F77B019B0406B1F09D73DDC2 /* PhrasaSyncSupabase */; };
+		129C8B6DE59478C0F5180E57 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 417554001B6DA78A3457F41C /* PrivacyInfo.xcprivacy */; };
+		12A5CA520D0A806AA189D41C /* AtkinsonHyperlegible-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE6ED1E2263DF804DB34FEAD /* AtkinsonHyperlegible-Regular.ttf */; };
+		15A8E4A40CB598E41F793CC3 /* ReaderSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B41D2196DF73D99EFC1BB7 /* ReaderSessionTests.swift */; };
+		178794C73A03E694AFC48399 /* ReaderSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A62C583C1368F79449841 /* ReaderSettings.swift */; };
+		194125878256E763C22E05DE /* PhrasaSync in Frameworks */ = {isa = PBXBuildFile; productRef = 26402AB1BE0827251601678E /* PhrasaSync */; };
+		1C0BC7E0D46B117B73037626 /* ResumeProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9CA73EA84E8746B142626 /* ResumeProgress.swift */; };
+		1CB0D22D1C6A987B75967147 /* ReaderSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3C5FD4395399225D1E6D3E /* ReaderSession.swift */; };
+		1E7C787804B060C770212E77 /* CloudSyncModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CAD92A9B5B63A70F0233F5 /* CloudSyncModels.swift */; };
+		24D7E2A0755928047D822369 /* PhrasaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3965ECC2B2FD5E4FBBDA132A /* PhrasaCore */; };
+		2578395CF3B6DF30F6533CFC /* OutlineSpeechCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5C56539E293AFD750FD569 /* OutlineSpeechCommand.swift */; };
+		261593B013755CEA72B1A57C /* NativeExperiencePresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CC91A9F4BE01AE5D4FD18F /* NativeExperiencePresentationTests.swift */; };
+		265D1FD55F70E4D7E73FFC5D /* ReaderSettingsComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22667A31F3852C97B91B73B /* ReaderSettingsComponents.swift */; };
+		265F22B0B85DA499F87980CD /* DomainBoundaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143A8FDC827B64403F0B736 /* DomainBoundaryTests.swift */; };
+		27C3476D24DC1544DE0EECB1 /* MacAutosaveController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB9C6061A679D3FDB0EFADA /* MacAutosaveController.swift */; };
+		2832E88530A97ABE5B63B2D9 /* PhrasaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E05E97FF79D69782B8DA86 /* PhrasaApp.swift */; };
+		2873DCE9D29CD222BF00132C /* VoicePipelineDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B616D374820EC02409050AE /* VoicePipelineDiagnostics.swift */; };
+		2A979C8355E54B6C0B64484F /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD844899C122D3FD330C08FF /* OFL.txt */; };
+		2C445587A3595DD28FF0F711 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = B60C25BFFFE8A91C49454973 /* Supabase */; };
+		2E6B483D388070878D26C1D8 /* CloudCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4815F7D787049E3C9A72C3 /* CloudCoordinator.swift */; };
+		2EAFA71AE1B8207E97CF3C12 /* CloudAccountSyncRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93E29DC96AA6A4CA30E929A /* CloudAccountSyncRuntime.swift */; };
+		2ED21F51B0BD627B44A5EF64 /* SupabaseClientFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A22B28B7A8501D121BBDD5 /* SupabaseClientFactory.swift */; };
+		2F86E9017794939B15139AD4 /* FindReplace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114FCDE3DB1FD97007C2ADEC /* FindReplace.swift */; };
+		2FEA1E60C4268895CC1BE673 /* MacPresentationSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3889DFFF54D2B41C9FFE93F0 /* MacPresentationSessionTests.swift */; };
+		331FD4A26B45EC0063584835 /* ReaderCompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EF711A32A347D1D5DE657C /* ReaderCompletionView.swift */; };
+		340ABE4EFE9C86DDD2643006 /* OutlineReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2374C4C8AA83C673D2EC350 /* OutlineReaderView.swift */; };
+		34B3D4A232CD0693310574A6 /* OutlineModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AB281A8830D6A47984661A /* OutlineModeTests.swift */; };
+		383C7740F87720F6833AB788 /* MacMenuCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A62D1D73C28BA16967954 /* MacMenuCommands.swift */; };
+		389E6C8D086C2877C179E3D5 /* DocumentInsights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6636794925FE9859973F6CFB /* DocumentInsights.swift */; };
+		3BC401307DD68FB969BF02DC /* CloudOutlinePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A38FE9C042A4C9858089A /* CloudOutlinePoint.swift */; };
+		4077D4D80EC643A15BB23FE3 /* MacAudienceStageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AAAB4943D06C447019A97D /* MacAudienceStageView.swift */; };
+		4150249608AEA12BB7C16E95 /* MacPrompterGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5036AA531719B47737D3EB /* MacPrompterGeometry.swift */; };
+		42108E521DB6D49C39BFDF89 /* VoicePipelineDiagnosticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49B696D9B9712480F1B2CDB /* VoicePipelineDiagnosticsTests.swift */; };
+		422BB18EC9EBE14F1F6CFBCA /* LegacyExpoMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA4FA5CB3C1367A337D3B66 /* LegacyExpoMigrator.swift */; };
+		449F2706882F48124A6D7687 /* PhrasaSyncSupabase in Frameworks */ = {isa = PBXBuildFile; productRef = D921475D06912AE42E34A297 /* PhrasaSyncSupabase */; };
+		451E8AD5996D692E6A593997 /* AppStoreHygieneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDADD3647A7927190FF4032 /* AppStoreHygieneTests.swift */; };
+		4D72E8A3F0E1BD9490A30453 /* MacDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42187CF149C37876C41A935 /* MacDesign.swift */; };
+		4EA87B0D60C07CA77911130E /* CloudSyncEligibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3F3E9792FFBE2C554D5EC7 /* CloudSyncEligibility.swift */; };
+		541C77A7D24155BF7BC3AFBE /* PhrasaDomain in Frameworks */ = {isa = PBXBuildFile; productRef = EEA3D19D3659D4B2066496D8 /* PhrasaDomain */; };
+		55B0A188A13BC8C33993EAAE /* CloudScriptOpenUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73963DDD79CA7F773390682C /* CloudScriptOpenUpdate.swift */; };
+		56B330730B4C50E2B301C650 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 7B8A74F9EED93387BAA74990 /* Supabase */; };
+		578841A3A61F2DC7FEB47000 /* MacEditorChromePresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788D67E496106EBD46F2BFB4 /* MacEditorChromePresentationTests.swift */; };
+		57C3AB803023DD0A4337AFED /* ReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5542757C102EB05852A0C42 /* ReaderView.swift */; };
+		5A3585BD76E7D9736FCFE921 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBE618BD719AEF63704EB49 /* EditorView.swift */; };
+		5D45A051AB2538E20BDD317E /* LegacyExpoMigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF855B8BAB62CBD5D06090B /* LegacyExpoMigratorTests.swift */; };
+		6424C3D5670BE9322EA290EC /* SupabaseCloudRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2948BD754DAE52753183CD /* SupabaseCloudRepository.swift */; };
+		65A57A7437358DAAF4DC8554 /* MacReaderSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E654A7A447AA4C984C73E802 /* MacReaderSession.swift */; };
+		67375218E04D2DD26C79C316 /* VoiceFollowPhysicalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5EEB2AD38F6827ECF530BF /* VoiceFollowPhysicalUITests.swift */; };
+		675D3873EABCC652E0029D81 /* SQLitePersistenceClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B5FCB8747A77DE1E5DABBC /* SQLitePersistenceClient.swift */; };
+		67AB928246E935853A69004D /* LargeScriptPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA91B64C2B70CBE07A2B9F5F /* LargeScriptPerformanceTests.swift */; };
+		6F0BA404736A196BB2E47D3F /* CloudScriptFingerprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6BEC5127C85809C09F59158 /* CloudScriptFingerprint.swift */; };
+		74DBD3B706DA0196C387B006 /* MacFindLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7382B57F8D5C2CA0B9CA060 /* MacFindLine.swift */; };
+		758CFC5C1FB5A0B534D82FCC /* PhrasaSync in Frameworks */ = {isa = PBXBuildFile; productRef = 101F9D9936E486DE76A58614 /* PhrasaSync */; };
+		773A9D5F51866E7F7092AA01 /* MacOutlineReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC225E9EA16CBA47FEDE7128 /* MacOutlineReaderView.swift */; };
+		7C210520FF7608264091BC9C /* LibraryPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C687323965A13C05B9BBA9 /* LibraryPersistence.swift */; };
+		7D06E45995300CD227D95BA4 /* MacLibraryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7184180DF57F3C8CBFA05D59 /* MacLibraryStore.swift */; };
+		8123156BC8C64F05D2A60E4B /* PhrasaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 08BB8FB12B3D68768B2426A9 /* PhrasaCore */; };
+		81D0DF4F05BF00C2EC182278 /* MacEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F696AC487396F624FF08CF /* MacEditorView.swift */; };
+		827C572C89BE3AD8E46FE4E5 /* AppleSignInSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F0FA008D7C34DCFAE404 /* AppleSignInSupport.swift */; };
+		853E7BD79F15FDC432ED48EE /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F12B5075345EFD6F75FD247 /* OnboardingView.swift */; };
+		8710EDE4D75CC7471094F52B /* MacLibraryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF76E5718F706E432EB8CF /* MacLibraryStoreTests.swift */; };
+		885093F0507E37929A8EF5F4 /* TextMetricsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3654A823DC020AA92928EB8A /* TextMetricsTests.swift */; };
+		896F512C86716827C040D42D /* ScriptDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CF41B1D2BD06CCD80B9394 /* ScriptDocument.swift */; };
+		89EFA4B3A029D43C37795531 /* FindLineMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBDEA37564DF0D9637D0954 /* FindLineMatching.swift */; };
+		8AB3D26F0900B2E045122C61 /* MacAudienceOutputCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C2EBE40E6E300F485EABA3 /* MacAudienceOutputCoordinator.swift */; };
+		8BE21F85FFD53F10DF7039DA /* MacOutlineReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41CF769C1EE9D651E114A3AC /* MacOutlineReaderTests.swift */; };
+		8CB9FB67F6212B114889EBD5 /* CloudLibraryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EE5F8E7BAF351F769CE45 /* CloudLibraryRepository.swift */; };
+		8CFDC042C9FA41CCEF4C91B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 817A9DA76FB996CA1C313BB2 /* Assets.xcassets */; };
+		8D34A3A536A4ECB04B2B190F /* PrompterTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A29EA2454665E3288D7DDC /* PrompterTextView.swift */; };
+		8D3EE327820DB3922A346BEF /* OutlineCoverageEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BF1DF469CC1F529C4E1715 /* OutlineCoverageEngine.swift */; };
+		8E779B60BA18F1456BDB41FF /* MacCloudSyncHostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB6627FE520F1E8163ECCA9 /* MacCloudSyncHostTests.swift */; };
+		8FAF608325F17C92E2E0F763 /* PhrasaPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 5580A01F579B26B50793AE7A /* PhrasaPersistence */; };
+		91EA733023D0B0AABDA554E5 /* CloudCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4815F7D787049E3C9A72C3 /* CloudCoordinator.swift */; };
+		936042DC9387D3DF8D73D132 /* MacCloudAccountSyncRuntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A41EEECEEF44F417887E064 /* MacCloudAccountSyncRuntimeTests.swift */; };
+		960D054903B77DB49CB0FF04 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 6AB1FCA33C206D9F883EBEEB /* Supabase */; };
+		99E488CEF418409E14038C77 /* Motion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878E3306FC7AEF521A7044E8 /* Motion.swift */; };
+		9C58AA6FC4060684C158BA10 /* CloudTimestampPrecision.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92B4E7AE5AA3D49BF2965EC /* CloudTimestampPrecision.swift */; };
+		A039FDB495BF59ADF807B7CC /* PersistenceClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CCEFCE5E20A0ED3D35F978 /* PersistenceClient.swift */; };
+		A14FA0F0840C62F2B9A488D0 /* MacSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897B1E905DC1F27EEBC739F9 /* MacSettingsView.swift */; };
+		A2AF3B8F44CBDFE9FF9356F9 /* VoiceFollowProgressParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C011DC6FE1BC1A957DE69D /* VoiceFollowProgressParsingTests.swift */; };
+		A35531F96197A049F886D599 /* ScriptBodyTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AAAF257883040DDB744671 /* ScriptBodyTextEditor.swift */; };
+		A5326083C7CE11EB764D1661 /* OutlineStagePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB89D26030E64BB3C5806C08 /* OutlineStagePresentation.swift */; };
+		A6429EC1E2B3972FB58D7E47 /* LibrarySnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6160B107235AB9B52D530F43 /* LibrarySnapshot.swift */; };
+		A675524BEBF12499CFCBD08B /* PhrasaDomain in Frameworks */ = {isa = PBXBuildFile; productRef = B86A56110D3B011C96D1C5BF /* PhrasaDomain */; };
+		A87709A0E0FE9118209C0C4D /* PhrasaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7BC39E5DD85C2A51A53C981B /* PhrasaCore */; };
+		A87C1DC714786C740F98CF9D /* ReaderAppearancePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7167591DE84B357827608828 /* ReaderAppearancePreset.swift */; };
+		A8A09F5D52D1A2ABCDDB74BD /* MacPresentationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE083AB4F30F296B737FE20 /* MacPresentationSession.swift */; };
+		A8C8157FD43D582E06FFE6C1 /* MacFindLineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2771C501D73B7EECC1B56C50 /* MacFindLineTests.swift */; };
+		A96AA1C4FD314C732C271B6A /* VoiceTrustPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D96B29408CCCECCFC0F89AD /* VoiceTrustPresentation.swift */; };
+		AA4C063D8DBCD37D479CB9BF /* FindLineJumpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E63F658599ADA8DE9CD3A1 /* FindLineJumpTests.swift */; };
+		AA99F231159A9FAB559DC768 /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A57D40C8ACE4DE14F1D6CF /* SpeechRecognitionService.swift */; };
+		AE513AAEAEAA1B3F971AFFE9 /* ImportExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F94DC92439B6A6FF368512 /* ImportExportService.swift */; };
+		AEA7B9FBFF64CF5463CCCD65 /* ModuleBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3521999D465341539013EC /* ModuleBridge.swift */; };
+		B121C2F9FD03EA5EA59EE499 /* SQLitePersistenceClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569023EF165732A4F0FFAB7F /* SQLitePersistenceClientTests.swift */; };
+		B9EF708CC83D148714D3861B /* ImportExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228DE5DA48F9D81369D9E0F2 /* ImportExportServiceTests.swift */; };
+		BDFDEFFD990DD06345DEAE3C /* MacPlaybackClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D6430FE0D7A41F54FD6777 /* MacPlaybackClock.swift */; };
+		BF10A2FB78C807971E1A1276 /* MacCloudAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF471D98953E330BF7AE876 /* MacCloudAccountView.swift */; };
+		C1D7CEFA400F183D4E6EB553 /* AppLegalDestinations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BA23B3C71F6B4CF7085242 /* AppLegalDestinations.swift */; };
+		C2E9B1003DDC3BF719FBF831 /* PhrasaPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 788EEDF772910444BF828F3F /* PhrasaPersistence */; };
+		C4EE488F25C666D607A5E7B2 /* LibraryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A3034C9088A4A9DDCA1D55 /* LibraryStore.swift */; };
+		C60E61A42A8C2ABDA0E4B647 /* MacRecoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C07F33162767B1326E89472 /* MacRecoveryTests.swift */; };
+		C7501E1A874085F66270118D /* PhrasaMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFF13E72E2F03F2629CF07F /* PhrasaMacApp.swift */; };
+		C793B66D9E2945800B8944C1 /* OutlineEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959B4FEC7FCD7BDD3F9B93D /* OutlineEditor.swift */; };
+		C8461406F21373FFCDFBFE06 /* MacRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB3631AE163BD576CA13CAF /* MacRootView.swift */; };
+		C970E165D46C75E6A46A1320 /* MacImportExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57C79037BDEAE7A457E89C /* MacImportExportService.swift */; };
+		C97A60A40D5206D2C2A63D30 /* SupabaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C2E72A1CCEB478C07113E0 /* SupabaseAuthService.swift */; };
+		CA3D7042F202E8315097EC09 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F676B15FD91A350F8A2719BF /* DesignSystem.swift */; };
+		CC297A40615A33413B1C8DD9 /* MacScriptBodyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099FBE0083CCE35DDBDA11A6 /* MacScriptBodyEditor.swift */; };
+		D307C675009E1701FC4640FE /* ReaderSettings+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6290E8DF09669F0D6525DFB /* ReaderSettings+UI.swift */; };
+		D359E2A3DC06FA660A6426DA /* MacReaderCommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FE39D2984FE6E7E4DFF593 /* MacReaderCommandTests.swift */; };
+		D597A514E850D6AA1C50B79A /* WelcomeScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E4699061E0F502F5076451 /* WelcomeScript.swift */; };
+		D783A470576F089D9A612B74 /* CloudFoundationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54202131EB1A50DE77897ABE /* CloudFoundationTests.swift */; };
+		DBE875DCCF8EAED32C5DBF87 /* MacReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE75B3D026633A7CA1741DE /* MacReaderView.swift */; };
+		DC99A983169DFFD375CC49CC /* MacSessionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C969586C8850E367D893F /* MacSessionStoreTests.swift */; };
+		DED04B9C8A59DDDFFA97C43B /* MacDisplaySleepGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D359993E1566AD3EBB51373 /* MacDisplaySleepGuard.swift */; };
+		E0552D4234A698C28EBB0E51 /* MacCloudHygieneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0DEAE1C9C1691BA1E7795D /* MacCloudHygieneTests.swift */; };
+		E259BA7A14E2A0F2CD3CE230 /* CloudConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56023BC93CF8B0BCB7D420E8 /* CloudConfiguration.swift */; };
+		E45DEF702617527E1716C0AB /* CloudAccountSyncRuntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D0ECE09B184B8C544B210A /* CloudAccountSyncRuntimeTests.swift */; };
+		E921C5C19879A9A1DFAB5500 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = FD2B91404E3790C229A6C380 /* Supabase */; };
+		E9F87B168F72A1A0164953A3 /* AppleSignInSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F0FA008D7C34DCFAE404 /* AppleSignInSupport.swift */; };
+		EA97E16FDAFB9377F021C420 /* MacCloudAccountSyncRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F960C51B8C50BB55ABF7A7F0 /* MacCloudAccountSyncRuntime.swift */; };
+		EE5D41C93976355336A7574A /* LibrarySyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CEAFD08DE1268619CF37D4 /* LibrarySyncEngine.swift */; };
+		EE916B14B83A6EAB0E5A3645 /* MacPrompterTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199551B1EA595CD4BA53E92F /* MacPrompterTextView.swift */; };
+		EFAECB04EBE3A8FB436988FE /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD844899C122D3FD330C08FF /* OFL.txt */; };
+		EFE0796EF1445D19C3B6F117 /* PhrasaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 29F6182F69A0334DE2EE5D5F /* PhrasaCore */; };
+		F0A647CF9CFA6EBBF5684B4E /* EditorToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A77A11AF5FAE7FF96B814D /* EditorToolsTests.swift */; };
+		F0CD68D54D9A4C3D0A6CB372 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E9E91845AB3F7F4F17BF08 /* RootView.swift */; };
+		F6747139AE2A25C180B7EF2D /* CloudScriptSyncPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E517F95C3BD83A7DE655A1D9 /* CloudScriptSyncPlan.swift */; };
+		F8D828F345251856106AE180 /* LibraryPersistenceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3386CBDA81FFD1D265261B06 /* LibraryPersistenceFactory.swift */; };
+		F91622EE3594914FF5241BE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0B7F69C61E295164D1AE13E /* Assets.xcassets */; };
+		FA48706B541B0973D0D13662 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998A1E0460F68D4699F17419 /* LibraryView.swift */; };
+		FFCEE33924DF6CA4E462E917 /* WelcomeScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EF0FC1C58D281FFBA1E13F /* WelcomeScript.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0DD9183E6D9496DEE170DE9B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A778ED4E6283F554AB7C0F91 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0193513B4590114E2B2D7895;
+			remoteInfo = PhrasaMac;
+		};
+		873E02200576B2BD79BC1F32 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A778ED4E6283F554AB7C0F91 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8EEF676F24B153F4491D8DAB;
+			remoteInfo = Phrasa;
+		};
+		9A509917FBE07B38F1BC66CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A778ED4E6283F554AB7C0F91 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8EEF676F24B153F4491D8DAB;
+			remoteInfo = Phrasa;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		002FEBC68B5F527072E4DED0 /* PhrasaCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PhrasaCore; path = Packages/PhrasaCore; sourceTree = SOURCE_ROOT; };
+		01CCEFCE5E20A0ED3D35F978 /* PersistenceClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceClient.swift; sourceTree = "<group>"; };
+		03CF41B1D2BD06CCD80B9394 /* ScriptDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptDocument.swift; sourceTree = "<group>"; };
+		06CEAFD08DE1268619CF37D4 /* LibrarySyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySyncEngine.swift; sourceTree = "<group>"; };
+		099FBE0083CCE35DDBDA11A6 /* MacScriptBodyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacScriptBodyEditor.swift; sourceTree = "<group>"; };
+		0AB6627FE520F1E8163ECCA9 /* MacCloudSyncHostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacCloudSyncHostTests.swift; sourceTree = "<group>"; };
+		0C5C56539E293AFD750FD569 /* OutlineSpeechCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineSpeechCommand.swift; sourceTree = "<group>"; };
+		0CB9C6061A679D3FDB0EFADA /* MacAutosaveController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAutosaveController.swift; sourceTree = "<group>"; };
+		114FCDE3DB1FD97007C2ADEC /* FindReplace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindReplace.swift; sourceTree = "<group>"; };
+		11C9CA73EA84E8746B142626 /* ResumeProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeProgress.swift; sourceTree = "<group>"; };
+		15C2E72A1CCEB478C07113E0 /* SupabaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseAuthService.swift; sourceTree = "<group>"; };
+		160A62C583C1368F79449841 /* ReaderSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderSettings.swift; sourceTree = "<group>"; };
+		199551B1EA595CD4BA53E92F /* MacPrompterTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPrompterTextView.swift; sourceTree = "<group>"; };
+		1C14050C353991BAF3156351 /* CloudAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAccountView.swift; sourceTree = "<group>"; };
+		1E57C79037BDEAE7A457E89C /* MacImportExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacImportExportService.swift; sourceTree = "<group>"; };
+		2143A8FDC827B64403F0B736 /* DomainBoundaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainBoundaryTests.swift; sourceTree = "<group>"; };
+		228DE5DA48F9D81369D9E0F2 /* ImportExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportServiceTests.swift; sourceTree = "<group>"; };
+		23063999F6F3BFA6B3B30622 /* Phrasa.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Phrasa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		26D6430FE0D7A41F54FD6777 /* MacPlaybackClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPlaybackClock.swift; sourceTree = "<group>"; };
+		2771C501D73B7EECC1B56C50 /* MacFindLineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFindLineTests.swift; sourceTree = "<group>"; };
+		27C2EBE40E6E300F485EABA3 /* MacAudienceOutputCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAudienceOutputCoordinator.swift; sourceTree = "<group>"; };
+		2BF471D98953E330BF7AE876 /* MacCloudAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacCloudAccountView.swift; sourceTree = "<group>"; };
+		2D359993E1566AD3EBB51373 /* MacDisplaySleepGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDisplaySleepGuard.swift; sourceTree = "<group>"; };
+		2EDADD3647A7927190FF4032 /* AppStoreHygieneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreHygieneTests.swift; sourceTree = "<group>"; };
+		30A22B28B7A8501D121BBDD5 /* SupabaseClientFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClientFactory.swift; sourceTree = "<group>"; };
+		31E4699061E0F502F5076451 /* WelcomeScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScript.swift; sourceTree = "<group>"; };
+		31EF0FC1C58D281FFBA1E13F /* WelcomeScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScript.swift; sourceTree = "<group>"; };
+		3386CBDA81FFD1D265261B06 /* LibraryPersistenceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPersistenceFactory.swift; sourceTree = "<group>"; };
+		3654A823DC020AA92928EB8A /* TextMetricsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMetricsTests.swift; sourceTree = "<group>"; };
+		3889DFFF54D2B41C9FFE93F0 /* MacPresentationSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPresentationSessionTests.swift; sourceTree = "<group>"; };
+		3959B4FEC7FCD7BDD3F9B93D /* OutlineEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineEditor.swift; sourceTree = "<group>"; };
+		3A41EEECEEF44F417887E064 /* MacCloudAccountSyncRuntimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacCloudAccountSyncRuntimeTests.swift; sourceTree = "<group>"; };
+		3E4815F7D787049E3C9A72C3 /* CloudCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudCoordinator.swift; sourceTree = "<group>"; };
+		417554001B6DA78A3457F41C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		41CF769C1EE9D651E114A3AC /* MacOutlineReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOutlineReaderTests.swift; sourceTree = "<group>"; };
+		451A62D1D73C28BA16967954 /* MacMenuCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMenuCommands.swift; sourceTree = "<group>"; };
+		48A77A11AF5FAE7FF96B814D /* EditorToolsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToolsTests.swift; sourceTree = "<group>"; };
+		4B616D374820EC02409050AE /* VoicePipelineDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePipelineDiagnostics.swift; sourceTree = "<group>"; };
+		4D0DEAE1C9C1691BA1E7795D /* MacCloudHygieneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacCloudHygieneTests.swift; sourceTree = "<group>"; };
+		53A3034C9088A4A9DDCA1D55 /* LibraryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStore.swift; sourceTree = "<group>"; };
+		54202131EB1A50DE77897ABE /* CloudFoundationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFoundationTests.swift; sourceTree = "<group>"; };
+		56023BC93CF8B0BCB7D420E8 /* CloudConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudConfiguration.swift; sourceTree = "<group>"; };
+		569023EF165732A4F0FFAB7F /* SQLitePersistenceClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLitePersistenceClientTests.swift; sourceTree = "<group>"; };
+		57B5FCB8747A77DE1E5DABBC /* SQLitePersistenceClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLitePersistenceClient.swift; sourceTree = "<group>"; };
+		5A8FD4FA4CFC7D56154B6029 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5BFF13E72E2F03F2629CF07F /* PhrasaMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhrasaMacApp.swift; sourceTree = "<group>"; };
+		5D96B29408CCCECCFC0F89AD /* VoiceTrustPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTrustPresentation.swift; sourceTree = "<group>"; };
+		5E3F3E9792FFBE2C554D5EC7 /* CloudSyncEligibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncEligibility.swift; sourceTree = "<group>"; };
+		5F12B5075345EFD6F75FD247 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		5FBDEA37564DF0D9637D0954 /* FindLineMatching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindLineMatching.swift; sourceTree = "<group>"; };
+		6160B107235AB9B52D530F43 /* LibrarySnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySnapshot.swift; sourceTree = "<group>"; };
+		61E9F0FA008D7C34DCFAE404 /* AppleSignInSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInSupport.swift; sourceTree = "<group>"; };
+		63B1AD1E2E87C013E51B5F3D /* CloudBackendContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudBackendContract.swift; sourceTree = "<group>"; };
+		64E63F658599ADA8DE9CD3A1 /* FindLineJumpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindLineJumpTests.swift; sourceTree = "<group>"; };
+		6636794925FE9859973F6CFB /* DocumentInsights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentInsights.swift; sourceTree = "<group>"; };
+		7167591DE84B357827608828 /* ReaderAppearancePreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderAppearancePreset.swift; sourceTree = "<group>"; };
+		7184180DF57F3C8CBFA05D59 /* MacLibraryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLibraryStore.swift; sourceTree = "<group>"; };
+		72A8306E413C7D2BF671BB98 /* PhrasaTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PhrasaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		73963DDD79CA7F773390682C /* CloudScriptOpenUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudScriptOpenUpdate.swift; sourceTree = "<group>"; };
+		788D67E496106EBD46F2BFB4 /* MacEditorChromePresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacEditorChromePresentationTests.swift; sourceTree = "<group>"; };
+		7C07F33162767B1326E89472 /* MacRecoveryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacRecoveryTests.swift; sourceTree = "<group>"; };
+		7EB3631AE163BD576CA13CAF /* MacRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacRootView.swift; sourceTree = "<group>"; };
+		801EE5F8E7BAF351F769CE45 /* CloudLibraryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudLibraryRepository.swift; sourceTree = "<group>"; };
+		817A9DA76FB996CA1C313BB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		83E05E97FF79D69782B8DA86 /* PhrasaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhrasaApp.swift; sourceTree = "<group>"; };
+		84DF76E5718F706E432EB8CF /* MacLibraryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLibraryStoreTests.swift; sourceTree = "<group>"; };
+		851A88BA77A4D1E1F11CCDB8 /* PhrasaSync */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PhrasaSync; path = Packages/PhrasaSync; sourceTree = SOURCE_ROOT; };
+		878E3306FC7AEF521A7044E8 /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
+		897B1E905DC1F27EEBC739F9 /* MacSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSettingsView.swift; sourceTree = "<group>"; };
+		8A7CF8AB772E472A19554601 /* ReaderSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderSettingsView.swift; sourceTree = "<group>"; };
+		8DE083AB4F30F296B737FE20 /* MacPresentationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPresentationSession.swift; sourceTree = "<group>"; };
+		8EBE618BD719AEF63704EB49 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		8F6A38FE9C042A4C9858089A /* CloudOutlinePoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudOutlinePoint.swift; sourceTree = "<group>"; };
+		998A1E0460F68D4699F17419 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		9C0B4E6D79450410E7EA692B /* Phrasa.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Phrasa.entitlements; sourceTree = "<group>"; };
+		9E3521999D465341539013EC /* ModuleBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleBridge.swift; sourceTree = "<group>"; };
+		A5542757C102EB05852A0C42 /* ReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderView.swift; sourceTree = "<group>"; };
+		A68199E73AE861E4135602A0 /* PhrasaMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhrasaMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6BEC5127C85809C09F59158 /* CloudScriptFingerprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudScriptFingerprint.swift; sourceTree = "<group>"; };
+		A7382B57F8D5C2CA0B9CA060 /* MacFindLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFindLine.swift; sourceTree = "<group>"; };
+		A8CC91A9F4BE01AE5D4FD18F /* NativeExperiencePresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeExperiencePresentationTests.swift; sourceTree = "<group>"; };
+		A9EF711A32A347D1D5DE657C /* ReaderCompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderCompletionView.swift; sourceTree = "<group>"; };
+		AD97129E305D7865B803C736 /* PhrasaPersistence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PhrasaPersistence; path = Packages/PhrasaPersistence; sourceTree = SOURCE_ROOT; };
+		AE6ED1E2263DF804DB34FEAD /* AtkinsonHyperlegible-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AtkinsonHyperlegible-Regular.ttf"; sourceTree = "<group>"; };
+		B1CAD92A9B5B63A70F0233F5 /* CloudSyncModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncModels.swift; sourceTree = "<group>"; };
+		B2B41D2196DF73D99EFC1BB7 /* ReaderSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderSessionTests.swift; sourceTree = "<group>"; };
+		B42187CF149C37876C41A935 /* MacDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDesign.swift; sourceTree = "<group>"; };
+		B6290E8DF09669F0D6525DFB /* ReaderSettings+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReaderSettings+UI.swift"; sourceTree = "<group>"; };
+		B8A57D40C8ACE4DE14F1D6CF /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
+		B8B0F0F7D6B11817488A57BF /* PhrasaA11y.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhrasaA11y.swift; sourceTree = "<group>"; };
+		B93E29DC96AA6A4CA30E929A /* CloudAccountSyncRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAccountSyncRuntime.swift; sourceTree = "<group>"; };
+		BA5036AA531719B47737D3EB /* MacPrompterGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPrompterGeometry.swift; sourceTree = "<group>"; };
+		BD2948BD754DAE52753183CD /* SupabaseCloudRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseCloudRepository.swift; sourceTree = "<group>"; };
+		BD844899C122D3FD330C08FF /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		BFE75B3D026633A7CA1741DE /* MacReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacReaderView.swift; sourceTree = "<group>"; };
+		C0B7F69C61E295164D1AE13E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C22667A31F3852C97B91B73B /* ReaderSettingsComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderSettingsComponents.swift; sourceTree = "<group>"; };
+		C2374C4C8AA83C673D2EC350 /* OutlineReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineReaderView.swift; sourceTree = "<group>"; };
+		C5AB281A8830D6A47984661A /* OutlineModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineModeTests.swift; sourceTree = "<group>"; };
+		C5FE39D2984FE6E7E4DFF593 /* MacReaderCommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacReaderCommandTests.swift; sourceTree = "<group>"; };
+		C7F94DC92439B6A6FF368512 /* ImportExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportService.swift; sourceTree = "<group>"; };
+		CA91B64C2B70CBE07A2B9F5F /* LargeScriptPerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeScriptPerformanceTests.swift; sourceTree = "<group>"; };
+		CB89D26030E64BB3C5806C08 /* OutlineStagePresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineStagePresentation.swift; sourceTree = "<group>"; };
+		CE1200A13C08B340B960F7BB /* PhrasaMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhrasaMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0C687323965A13C05B9BBA9 /* LibraryPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPersistence.swift; sourceTree = "<group>"; };
+		D0D0ECE09B184B8C544B210A /* CloudAccountSyncRuntimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAccountSyncRuntimeTests.swift; sourceTree = "<group>"; };
+		D2AAAF257883040DDB744671 /* ScriptBodyTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptBodyTextEditor.swift; sourceTree = "<group>"; };
+		D6BF1DF469CC1F529C4E1715 /* OutlineCoverageEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineCoverageEngine.swift; sourceTree = "<group>"; };
+		D8F696AC487396F624FF08CF /* MacEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacEditorView.swift; sourceTree = "<group>"; };
+		DA38AB041971ECC19162A344 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		DD6C969586C8850E367D893F /* MacSessionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSessionStoreTests.swift; sourceTree = "<group>"; };
+		E2A29EA2454665E3288D7DDC /* PrompterTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrompterTextView.swift; sourceTree = "<group>"; };
+		E2BA23B3C71F6B4CF7085242 /* AppLegalDestinations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLegalDestinations.swift; sourceTree = "<group>"; };
+		E517F95C3BD83A7DE655A1D9 /* CloudScriptSyncPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudScriptSyncPlan.swift; sourceTree = "<group>"; };
+		E654A7A447AA4C984C73E802 /* MacReaderSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacReaderSession.swift; sourceTree = "<group>"; };
+		E92B4E7AE5AA3D49BF2965EC /* CloudTimestampPrecision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTimestampPrecision.swift; sourceTree = "<group>"; };
+		EBA4FA5CB3C1367A337D3B66 /* LegacyExpoMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyExpoMigrator.swift; sourceTree = "<group>"; };
+		EBD4DF2A1029149F0C65B824 /* PhrasaDomain */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PhrasaDomain; path = Packages/PhrasaDomain; sourceTree = SOURCE_ROOT; };
+		EC225E9EA16CBA47FEDE7128 /* MacOutlineReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOutlineReaderView.swift; sourceTree = "<group>"; };
+		EFF855B8BAB62CBD5D06090B /* LegacyExpoMigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyExpoMigratorTests.swift; sourceTree = "<group>"; };
+		F1AAAB4943D06C447019A97D /* MacAudienceStageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAudienceStageView.swift; sourceTree = "<group>"; };
+		F49B696D9B9712480F1B2CDB /* VoicePipelineDiagnosticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePipelineDiagnosticsTests.swift; sourceTree = "<group>"; };
+		F4F9EAB56A12DCE6323BD1D7 /* PhrasaMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhrasaMac.entitlements; sourceTree = "<group>"; };
+		F676B15FD91A350F8A2719BF /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		F6C011DC6FE1BC1A957DE69D /* VoiceFollowProgressParsingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceFollowProgressParsingTests.swift; sourceTree = "<group>"; };
+		F7E9E91845AB3F7F4F17BF08 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		F960C51B8C50BB55ABF7A7F0 /* MacCloudAccountSyncRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacCloudAccountSyncRuntime.swift; sourceTree = "<group>"; };
+		FA792C6033F9E47BAB3153DC /* PhrasaUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PhrasaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC3C5FD4395399225D1E6D3E /* ReaderSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderSession.swift; sourceTree = "<group>"; };
+		FE5EEB2AD38F6827ECF530BF /* VoiceFollowPhysicalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceFollowPhysicalUITests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0E212D3DEA8123807E81AE6E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24D7E2A0755928047D822369 /* PhrasaCore in Frameworks */,
+				56B330730B4C50E2B301C650 /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CE3171081F0D2D7A1497038 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EFE0796EF1445D19C3B6F117 /* PhrasaCore in Frameworks */,
+				960D054903B77DB49CB0FF04 /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		72CB75D2B1238548985CE9D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A675524BEBF12499CFCBD08B /* PhrasaDomain in Frameworks */,
+				C2E9B1003DDC3BF719FBF831 /* PhrasaPersistence in Frameworks */,
+				8123156BC8C64F05D2A60E4B /* PhrasaCore in Frameworks */,
+				194125878256E763C22E05DE /* PhrasaSync in Frameworks */,
+				12845AA37B9D15001B5890C7 /* PhrasaSyncSupabase in Frameworks */,
+				2C445587A3595DD28FF0F711 /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F80FF20488273C52D12B7589 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				541C77A7D24155BF7BC3AFBE /* PhrasaDomain in Frameworks */,
+				8FAF608325F17C92E2E0F763 /* PhrasaPersistence in Frameworks */,
+				A87709A0E0FE9118209C0C4D /* PhrasaCore in Frameworks */,
+				758CFC5C1FB5A0B534D82FCC /* PhrasaSync in Frameworks */,
+				449F2706882F48124A6D7687 /* PhrasaSyncSupabase in Frameworks */,
+				E921C5C19879A9A1DFAB5500 /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		001CEC968F215953E0C11914 /* Reader */ = {
+			isa = PBXGroup;
+			children = (
+				2D359993E1566AD3EBB51373 /* MacDisplaySleepGuard.swift */,
+				EC225E9EA16CBA47FEDE7128 /* MacOutlineReaderView.swift */,
+				BA5036AA531719B47737D3EB /* MacPrompterGeometry.swift */,
+				199551B1EA595CD4BA53E92F /* MacPrompterTextView.swift */,
+				E654A7A447AA4C984C73E802 /* MacReaderSession.swift */,
+				BFE75B3D026633A7CA1741DE /* MacReaderView.swift */,
+			);
+			path = Reader;
+			sourceTree = "<group>";
+		};
+		02333A0BED5D5C70EB8AF20C /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				0CB9C6061A679D3FDB0EFADA /* MacAutosaveController.swift */,
+				D8F696AC487396F624FF08CF /* MacEditorView.swift */,
+				A7382B57F8D5C2CA0B9CA060 /* MacFindLine.swift */,
+				099FBE0083CCE35DDBDA11A6 /* MacScriptBodyEditor.swift */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		038EB9E0DD73DC88B3066716 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				E2BA23B3C71F6B4CF7085242 /* AppLegalDestinations.swift */,
+				F676B15FD91A350F8A2719BF /* DesignSystem.swift */,
+				878E3306FC7AEF521A7044E8 /* Motion.swift */,
+				B8B0F0F7D6B11817488A57BF /* PhrasaA11y.swift */,
+				5D96B29408CCCECCFC0F89AD /* VoiceTrustPresentation.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		06403A3275C0B48366678FAB /* PhrasaSyncSupabase */ = {
+			isa = PBXGroup;
+			children = (
+				30A22B28B7A8501D121BBDD5 /* SupabaseClientFactory.swift */,
+				BD2948BD754DAE52753183CD /* SupabaseCloudRepository.swift */,
+			);
+			name = PhrasaSyncSupabase;
+			path = Packages/PhrasaSync/Sources/PhrasaSyncSupabase;
+			sourceTree = "<group>";
+		};
+		074733E779E813638AD1C2E3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				23063999F6F3BFA6B3B30622 /* Phrasa.app */,
+				CE1200A13C08B340B960F7BB /* PhrasaMac.app */,
+				A68199E73AE861E4135602A0 /* PhrasaMacTests.xctest */,
+				72A8306E413C7D2BF671BB98 /* PhrasaTests.xctest */,
+				FA792C6033F9E47BAB3153DC /* PhrasaUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0C7EEA4E53B03F5A6786EDC8 /* PhrasaDomain */ = {
+			isa = PBXGroup;
+			children = (
+				5FBDEA37564DF0D9637D0954 /* FindLineMatching.swift */,
+				D0C687323965A13C05B9BBA9 /* LibraryPersistence.swift */,
+				6160B107235AB9B52D530F43 /* LibrarySnapshot.swift */,
+				160A62C583C1368F79449841 /* ReaderSettings.swift */,
+				11C9CA73EA84E8746B142626 /* ResumeProgress.swift */,
+				03CF41B1D2BD06CCD80B9394 /* ScriptDocument.swift */,
+			);
+			name = PhrasaDomain;
+			path = Packages/PhrasaDomain/Sources/PhrasaDomain;
+			sourceTree = "<group>";
+		};
+		13997D0D2F931CAC7CBD4DE0 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				83E05E97FF79D69782B8DA86 /* PhrasaApp.swift */,
+				F7E9E91845AB3F7F4F17BF08 /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		13B1089E46F2E64C727A767E /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				7184180DF57F3C8CBFA05D59 /* MacLibraryStore.swift */,
+				31EF0FC1C58D281FFBA1E13F /* WelcomeScript.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		1F8D50D336FB4607021D8CC9 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				451A62D1D73C28BA16967954 /* MacMenuCommands.swift */,
+				7EB3631AE163BD576CA13CAF /* MacRootView.swift */,
+				5BFF13E72E2F03F2629CF07F /* PhrasaMacApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		2CD963E063768ADFF6D1235D /* Reader */ = {
+			isa = PBXGroup;
+			children = (
+				E2A29EA2454665E3288D7DDC /* PrompterTextView.swift */,
+				A9EF711A32A347D1D5DE657C /* ReaderCompletionView.swift */,
+				FC3C5FD4395399225D1E6D3E /* ReaderSession.swift */,
+				A5542757C102EB05852A0C42 /* ReaderView.swift */,
+			);
+			path = Reader;
+			sourceTree = "<group>";
+		};
+		2F9216CC658673248364FD26 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				998A1E0460F68D4699F17419 /* LibraryView.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		36EBA715FAD507F34D276E9F /* PhrasaMac */ = {
+			isa = PBXGroup;
+			children = (
+				DA38AB041971ECC19162A344 /* Info.plist */,
+				F4F9EAB56A12DCE6323BD1D7 /* PhrasaMac.entitlements */,
+				1F8D50D336FB4607021D8CC9 /* App */,
+				53D565444FF04D2917B3E93B /* Cloud */,
+				13B1089E46F2E64C727A767E /* Data */,
+				7ACDECA581F4AB6C57289B04 /* Design */,
+				02333A0BED5D5C70EB8AF20C /* Editor */,
+				AD64E647B55E61B752ACB2BA /* ImportExport */,
+				D8A771E9EB5544106CF871D9 /* Presentation */,
+				001CEC968F215953E0C11914 /* Reader */,
+				F1683AF2751D9B070397858C /* Resources */,
+				A1E7929FC31D32885482562D /* Settings */,
+			);
+			path = PhrasaMac;
+			sourceTree = "<group>";
+		};
+		430B75C836F5129045BAFCFE /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				002FEBC68B5F527072E4DED0 /* PhrasaCore */,
+				EBD4DF2A1029149F0C65B824 /* PhrasaDomain */,
+				AD97129E305D7865B803C736 /* PhrasaPersistence */,
+				851A88BA77A4D1E1F11CCDB8 /* PhrasaSync */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		481FF62C543E091EFAD53E93 /* PhrasaSync */ = {
+			isa = PBXGroup;
+			children = (
+				63B1AD1E2E87C013E51B5F3D /* CloudBackendContract.swift */,
+				56023BC93CF8B0BCB7D420E8 /* CloudConfiguration.swift */,
+				801EE5F8E7BAF351F769CE45 /* CloudLibraryRepository.swift */,
+				8F6A38FE9C042A4C9858089A /* CloudOutlinePoint.swift */,
+				A6BEC5127C85809C09F59158 /* CloudScriptFingerprint.swift */,
+				73963DDD79CA7F773390682C /* CloudScriptOpenUpdate.swift */,
+				E517F95C3BD83A7DE655A1D9 /* CloudScriptSyncPlan.swift */,
+				5E3F3E9792FFBE2C554D5EC7 /* CloudSyncEligibility.swift */,
+				B1CAD92A9B5B63A70F0233F5 /* CloudSyncModels.swift */,
+				E92B4E7AE5AA3D49BF2965EC /* CloudTimestampPrecision.swift */,
+				06CEAFD08DE1268619CF37D4 /* LibrarySyncEngine.swift */,
+				9E3521999D465341539013EC /* ModuleBridge.swift */,
+			);
+			name = PhrasaSync;
+			path = Packages/PhrasaSync/Sources/PhrasaSync;
+			sourceTree = "<group>";
+		};
+		53D565444FF04D2917B3E93B /* Cloud */ = {
+			isa = PBXGroup;
+			children = (
+				F960C51B8C50BB55ABF7A7F0 /* MacCloudAccountSyncRuntime.swift */,
+				2BF471D98953E330BF7AE876 /* MacCloudAccountView.swift */,
+			);
+			path = Cloud;
+			sourceTree = "<group>";
+		};
+		743C1B8DB928EEF77A96F67A /* PhrasaMacTests */ = {
+			isa = PBXGroup;
+			children = (
+				3A41EEECEEF44F417887E064 /* MacCloudAccountSyncRuntimeTests.swift */,
+				4D0DEAE1C9C1691BA1E7795D /* MacCloudHygieneTests.swift */,
+				0AB6627FE520F1E8163ECCA9 /* MacCloudSyncHostTests.swift */,
+				788D67E496106EBD46F2BFB4 /* MacEditorChromePresentationTests.swift */,
+				2771C501D73B7EECC1B56C50 /* MacFindLineTests.swift */,
+				84DF76E5718F706E432EB8CF /* MacLibraryStoreTests.swift */,
+				41CF769C1EE9D651E114A3AC /* MacOutlineReaderTests.swift */,
+				3889DFFF54D2B41C9FFE93F0 /* MacPresentationSessionTests.swift */,
+				C5FE39D2984FE6E7E4DFF593 /* MacReaderCommandTests.swift */,
+				7C07F33162767B1326E89472 /* MacRecoveryTests.swift */,
+				DD6C969586C8850E367D893F /* MacSessionStoreTests.swift */,
+			);
+			path = PhrasaMacTests;
+			sourceTree = "<group>";
+		};
+		7ACDECA581F4AB6C57289B04 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				B42187CF149C37876C41A935 /* MacDesign.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		7AFBAE333CE4E54B0B99F6B5 /* PhrasaUITests */ = {
+			isa = PBXGroup;
+			children = (
+				FE5EEB2AD38F6827ECF530BF /* VoiceFollowPhysicalUITests.swift */,
+				F6C011DC6FE1BC1A957DE69D /* VoiceFollowProgressParsingTests.swift */,
+			);
+			path = PhrasaUITests;
+			sourceTree = "<group>";
+		};
+		821DC2A0EB3E51A3CD256E9E /* Speech */ = {
+			isa = PBXGroup;
+			children = (
+				B8A57D40C8ACE4DE14F1D6CF /* SpeechRecognitionService.swift */,
+				4B616D374820EC02409050AE /* VoicePipelineDiagnostics.swift */,
+			);
+			path = Speech;
+			sourceTree = "<group>";
+		};
+		8F55C2B1F913310BBABD686C /* Outline */ = {
+			isa = PBXGroup;
+			children = (
+				D6BF1DF469CC1F529C4E1715 /* OutlineCoverageEngine.swift */,
+				C2374C4C8AA83C673D2EC350 /* OutlineReaderView.swift */,
+				0C5C56539E293AFD750FD569 /* OutlineSpeechCommand.swift */,
+				CB89D26030E64BB3C5806C08 /* OutlineStagePresentation.swift */,
+			);
+			path = Outline;
+			sourceTree = "<group>";
+		};
+		93A28E81F844965B01E5FF54 /* Phrasa */ = {
+			isa = PBXGroup;
+			children = (
+				5A8FD4FA4CFC7D56154B6029 /* Info.plist */,
+				9C0B4E6D79450410E7EA692B /* Phrasa.entitlements */,
+				13997D0D2F931CAC7CBD4DE0 /* App */,
+				C898A327EAA7F4AB03111BC5 /* Cloud */,
+				F1F809F51DBD2AED91A68E44 /* Data */,
+				038EB9E0DD73DC88B3066716 /* Design */,
+				A6BC989723706CD509A0B268 /* Editor */,
+				EDAC28540FC943901CBCAC02 /* ImportExport */,
+				2F9216CC658673248364FD26 /* Library */,
+				AAC989B3ACC7D13F38199CD5 /* Models */,
+				ABA46D986DFA8004FB3DB31A /* Onboarding */,
+				8F55C2B1F913310BBABD686C /* Outline */,
+				2CD963E063768ADFF6D1235D /* Reader */,
+				A001A5706F50671A6A733750 /* Resources */,
+				9AE39332F40D1C286A3C54E8 /* Settings */,
+				821DC2A0EB3E51A3CD256E9E /* Speech */,
+			);
+			path = Phrasa;
+			sourceTree = "<group>";
+		};
+		9AE39332F40D1C286A3C54E8 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				7167591DE84B357827608828 /* ReaderAppearancePreset.swift */,
+				C22667A31F3852C97B91B73B /* ReaderSettingsComponents.swift */,
+				8A7CF8AB772E472A19554601 /* ReaderSettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A001A5706F50671A6A733750 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				817A9DA76FB996CA1C313BB2 /* Assets.xcassets */,
+				417554001B6DA78A3457F41C /* PrivacyInfo.xcprivacy */,
+				C36CCE656F3EFAA4858F5ADA /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A1E7929FC31D32885482562D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				897B1E905DC1F27EEBC739F9 /* MacSettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A6BC989723706CD509A0B268 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				6636794925FE9859973F6CFB /* DocumentInsights.swift */,
+				8EBE618BD719AEF63704EB49 /* EditorView.swift */,
+				114FCDE3DB1FD97007C2ADEC /* FindReplace.swift */,
+				3959B4FEC7FCD7BDD3F9B93D /* OutlineEditor.swift */,
+				D2AAAF257883040DDB744671 /* ScriptBodyTextEditor.swift */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		A6C079D466062B5C84CF03E9 /* PhrasaPersistence */ = {
+			isa = PBXGroup;
+			children = (
+				3386CBDA81FFD1D265261B06 /* LibraryPersistenceFactory.swift */,
+				01CCEFCE5E20A0ED3D35F978 /* PersistenceClient.swift */,
+				57B5FCB8747A77DE1E5DABBC /* SQLitePersistenceClient.swift */,
+			);
+			name = PhrasaPersistence;
+			path = Packages/PhrasaPersistence/Sources/PhrasaPersistence;
+			sourceTree = "<group>";
+		};
+		AAC989B3ACC7D13F38199CD5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B6290E8DF09669F0D6525DFB /* ReaderSettings+UI.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		ABA46D986DFA8004FB3DB31A /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				5F12B5075345EFD6F75FD247 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		AD64E647B55E61B752ACB2BA /* ImportExport */ = {
+			isa = PBXGroup;
+			children = (
+				1E57C79037BDEAE7A457E89C /* MacImportExportService.swift */,
+			);
+			path = ImportExport;
+			sourceTree = "<group>";
+		};
+		C36CCE656F3EFAA4858F5ADA /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				AE6ED1E2263DF804DB34FEAD /* AtkinsonHyperlegible-Regular.ttf */,
+				BD844899C122D3FD330C08FF /* OFL.txt */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		C898A327EAA7F4AB03111BC5 /* Cloud */ = {
+			isa = PBXGroup;
+			children = (
+				61E9F0FA008D7C34DCFAE404 /* AppleSignInSupport.swift */,
+				B93E29DC96AA6A4CA30E929A /* CloudAccountSyncRuntime.swift */,
+				1C14050C353991BAF3156351 /* CloudAccountView.swift */,
+				3E4815F7D787049E3C9A72C3 /* CloudCoordinator.swift */,
+				15C2E72A1CCEB478C07113E0 /* SupabaseAuthService.swift */,
+			);
+			path = Cloud;
+			sourceTree = "<group>";
+		};
+		D8A771E9EB5544106CF871D9 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				27C2EBE40E6E300F485EABA3 /* MacAudienceOutputCoordinator.swift */,
+				F1AAAB4943D06C447019A97D /* MacAudienceStageView.swift */,
+				26D6430FE0D7A41F54FD6777 /* MacPlaybackClock.swift */,
+				8DE083AB4F30F296B737FE20 /* MacPresentationSession.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		E083D5583338EFCE1BDD117D /* PhrasaTests */ = {
+			isa = PBXGroup;
+			children = (
+				2EDADD3647A7927190FF4032 /* AppStoreHygieneTests.swift */,
+				D0D0ECE09B184B8C544B210A /* CloudAccountSyncRuntimeTests.swift */,
+				54202131EB1A50DE77897ABE /* CloudFoundationTests.swift */,
+				2143A8FDC827B64403F0B736 /* DomainBoundaryTests.swift */,
+				48A77A11AF5FAE7FF96B814D /* EditorToolsTests.swift */,
+				64E63F658599ADA8DE9CD3A1 /* FindLineJumpTests.swift */,
+				228DE5DA48F9D81369D9E0F2 /* ImportExportServiceTests.swift */,
+				CA91B64C2B70CBE07A2B9F5F /* LargeScriptPerformanceTests.swift */,
+				EFF855B8BAB62CBD5D06090B /* LegacyExpoMigratorTests.swift */,
+				A8CC91A9F4BE01AE5D4FD18F /* NativeExperiencePresentationTests.swift */,
+				C5AB281A8830D6A47984661A /* OutlineModeTests.swift */,
+				B2B41D2196DF73D99EFC1BB7 /* ReaderSessionTests.swift */,
+				569023EF165732A4F0FFAB7F /* SQLitePersistenceClientTests.swift */,
+				3654A823DC020AA92928EB8A /* TextMetricsTests.swift */,
+				F49B696D9B9712480F1B2CDB /* VoicePipelineDiagnosticsTests.swift */,
+			);
+			path = PhrasaTests;
+			sourceTree = "<group>";
+		};
+		ED10C0A6529A6606805BB51C = {
+			isa = PBXGroup;
+			children = (
+				430B75C836F5129045BAFCFE /* Packages */,
+				93A28E81F844965B01E5FF54 /* Phrasa */,
+				0C7EEA4E53B03F5A6786EDC8 /* PhrasaDomain */,
+				36EBA715FAD507F34D276E9F /* PhrasaMac */,
+				743C1B8DB928EEF77A96F67A /* PhrasaMacTests */,
+				A6C079D466062B5C84CF03E9 /* PhrasaPersistence */,
+				481FF62C543E091EFAD53E93 /* PhrasaSync */,
+				06403A3275C0B48366678FAB /* PhrasaSyncSupabase */,
+				E083D5583338EFCE1BDD117D /* PhrasaTests */,
+				7AFBAE333CE4E54B0B99F6B5 /* PhrasaUITests */,
+				074733E779E813638AD1C2E3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EDAC28540FC943901CBCAC02 /* ImportExport */ = {
+			isa = PBXGroup;
+			children = (
+				C7F94DC92439B6A6FF368512 /* ImportExportService.swift */,
+			);
+			path = ImportExport;
+			sourceTree = "<group>";
+		};
+		F1683AF2751D9B070397858C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C0B7F69C61E295164D1AE13E /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F1F809F51DBD2AED91A68E44 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				EBA4FA5CB3C1367A337D3B66 /* LegacyExpoMigrator.swift */,
+				53A3034C9088A4A9DDCA1D55 /* LibraryStore.swift */,
+				31E4699061E0F502F5076451 /* WelcomeScript.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0193513B4590114E2B2D7895 /* PhrasaMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 51995F4BB8F8163B3ABE83E5 /* Build configuration list for PBXNativeTarget "PhrasaMac" */;
+			buildPhases = (
+				99E8062E88067E1EAA3F4784 /* Sources */,
+				0C23E06869A9521693FD401D /* Resources */,
+				F80FF20488273C52D12B7589 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PhrasaMac;
+			packageProductDependencies = (
+				EEA3D19D3659D4B2066496D8 /* PhrasaDomain */,
+				5580A01F579B26B50793AE7A /* PhrasaPersistence */,
+				7BC39E5DD85C2A51A53C981B /* PhrasaCore */,
+				101F9D9936E486DE76A58614 /* PhrasaSync */,
+				D921475D06912AE42E34A297 /* PhrasaSyncSupabase */,
+				FD2B91404E3790C229A6C380 /* Supabase */,
+			);
+			productName = PhrasaMac;
+			productReference = CE1200A13C08B340B960F7BB /* PhrasaMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+		24AC19EACCD53BAD997681E0 /* PhrasaMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 57BD57D1FE43530590E87D38 /* Build configuration list for PBXNativeTarget "PhrasaMacTests" */;
+			buildPhases = (
+				DEBAE49D64301A50E1B1F324 /* Sources */,
+				72CB75D2B1238548985CE9D0 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				54536CC7FDC37906422D7B96 /* PBXTargetDependency */,
+			);
+			name = PhrasaMacTests;
+			packageProductDependencies = (
+				B86A56110D3B011C96D1C5BF /* PhrasaDomain */,
+				788EEDF772910444BF828F3F /* PhrasaPersistence */,
+				08BB8FB12B3D68768B2426A9 /* PhrasaCore */,
+				26402AB1BE0827251601678E /* PhrasaSync */,
+				F77B019B0406B1F09D73DDC2 /* PhrasaSyncSupabase */,
+				B60C25BFFFE8A91C49454973 /* Supabase */,
+			);
+			productName = PhrasaMacTests;
+			productReference = A68199E73AE861E4135602A0 /* PhrasaMacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8EEF676F24B153F4491D8DAB /* Phrasa */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92B487ABF0384F82793EBFE6 /* Build configuration list for PBXNativeTarget "Phrasa" */;
+			buildPhases = (
+				EA21FA873BF719912B90EEF5 /* Sources */,
+				329F4306B463E3022B714EC3 /* Resources */,
+				6CE3171081F0D2D7A1497038 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Phrasa;
+			packageProductDependencies = (
+				29F6182F69A0334DE2EE5D5F /* PhrasaCore */,
+				6AB1FCA33C206D9F883EBEEB /* Supabase */,
+			);
+			productName = Phrasa;
+			productReference = 23063999F6F3BFA6B3B30622 /* Phrasa.app */;
+			productType = "com.apple.product-type.application";
+		};
+		95BA084D2B03E333D27347E3 /* PhrasaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DF1B64E50071CC3D22470958 /* Build configuration list for PBXNativeTarget "PhrasaTests" */;
+			buildPhases = (
+				A66B5468E7F7BC67D626D50D /* Sources */,
+				0E212D3DEA8123807E81AE6E /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				51A86750B82EAC390996706C /* PBXTargetDependency */,
+			);
+			name = PhrasaTests;
+			packageProductDependencies = (
+				3965ECC2B2FD5E4FBBDA132A /* PhrasaCore */,
+				7B8A74F9EED93387BAA74990 /* Supabase */,
+			);
+			productName = PhrasaTests;
+			productReference = 72A8306E413C7D2BF671BB98 /* PhrasaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		C506F68AD7ADA51A0494AC78 /* PhrasaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D6E8369BE815D42D844B70E9 /* Build configuration list for PBXNativeTarget "PhrasaUITests" */;
+			buildPhases = (
+				91266137C66CE8D1BFE33DBA /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4EC9FBB80353111311290A19 /* PBXTargetDependency */,
+			);
+			name = PhrasaUITests;
+			packageProductDependencies = (
+			);
+			productName = PhrasaUITests;
+			productReference = FA792C6033F9E47BAB3153DC /* PhrasaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A778ED4E6283F554AB7C0F91 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					0193513B4590114E2B2D7895 = {
+						DevelopmentTeam = Q42MT7JA7Q;
+						ProvisioningStyle = Automatic;
+					};
+					24AC19EACCD53BAD997681E0 = {
+						DevelopmentTeam = Q42MT7JA7Q;
+						ProvisioningStyle = Automatic;
+					};
+					8EEF676F24B153F4491D8DAB = {
+						DevelopmentTeam = Q42MT7JA7Q;
+						ProvisioningStyle = Automatic;
+					};
+					95BA084D2B03E333D27347E3 = {
+						DevelopmentTeam = Q42MT7JA7Q;
+						ProvisioningStyle = Automatic;
+					};
+					C506F68AD7ADA51A0494AC78 = {
+						DevelopmentTeam = Q42MT7JA7Q;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 8EEF676F24B153F4491D8DAB;
+					};
+				};
+			};
+			buildConfigurationList = 6D044A7A2B2AD125EE6D1833 /* Build configuration list for PBXProject "PhrasaNative" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = ED10C0A6529A6606805BB51C;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6C421B7CBA5DC7D4790E377D /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				C0DD78D75490367409B2FCF5 /* XCLocalSwiftPackageReference "Packages/PhrasaCore" */,
+				2A2D100207EE2D1951DDD225 /* XCLocalSwiftPackageReference "Packages/PhrasaDomain" */,
+				EF696C81B7B68168172BF790 /* XCLocalSwiftPackageReference "Packages/PhrasaPersistence" */,
+				9F25B71B22C0111037E63689 /* XCLocalSwiftPackageReference "Packages/PhrasaSync" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 074733E779E813638AD1C2E3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8EEF676F24B153F4491D8DAB /* Phrasa */,
+				0193513B4590114E2B2D7895 /* PhrasaMac */,
+				24AC19EACCD53BAD997681E0 /* PhrasaMacTests */,
+				95BA084D2B03E333D27347E3 /* PhrasaTests */,
+				C506F68AD7ADA51A0494AC78 /* PhrasaUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0C23E06869A9521693FD401D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F91622EE3594914FF5241BE0 /* Assets.xcassets in Resources */,
+				12A5CA520D0A806AA189D41C /* AtkinsonHyperlegible-Regular.ttf in Resources */,
+				2A979C8355E54B6C0B64484F /* OFL.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		329F4306B463E3022B714EC3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CFDC042C9FA41CCEF4C91B4 /* Assets.xcassets in Resources */,
+				10B72616ADF2723CE477CBA1 /* AtkinsonHyperlegible-Regular.ttf in Resources */,
+				EFAECB04EBE3A8FB436988FE /* OFL.txt in Resources */,
+				129C8B6DE59478C0F5180E57 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		91266137C66CE8D1BFE33DBA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67375218E04D2DD26C79C316 /* VoiceFollowPhysicalUITests.swift in Sources */,
+				A2AF3B8F44CBDFE9FF9356F9 /* VoiceFollowProgressParsingTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		99E8062E88067E1EAA3F4784 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827C572C89BE3AD8E46FE4E5 /* AppleSignInSupport.swift in Sources */,
+				91EA733023D0B0AABDA554E5 /* CloudCoordinator.swift in Sources */,
+				8AB3D26F0900B2E045122C61 /* MacAudienceOutputCoordinator.swift in Sources */,
+				4077D4D80EC643A15BB23FE3 /* MacAudienceStageView.swift in Sources */,
+				27C3476D24DC1544DE0EECB1 /* MacAutosaveController.swift in Sources */,
+				EA97E16FDAFB9377F021C420 /* MacCloudAccountSyncRuntime.swift in Sources */,
+				BF10A2FB78C807971E1A1276 /* MacCloudAccountView.swift in Sources */,
+				4D72E8A3F0E1BD9490A30453 /* MacDesign.swift in Sources */,
+				DED04B9C8A59DDDFFA97C43B /* MacDisplaySleepGuard.swift in Sources */,
+				81D0DF4F05BF00C2EC182278 /* MacEditorView.swift in Sources */,
+				74DBD3B706DA0196C387B006 /* MacFindLine.swift in Sources */,
+				C970E165D46C75E6A46A1320 /* MacImportExportService.swift in Sources */,
+				7D06E45995300CD227D95BA4 /* MacLibraryStore.swift in Sources */,
+				383C7740F87720F6833AB788 /* MacMenuCommands.swift in Sources */,
+				773A9D5F51866E7F7092AA01 /* MacOutlineReaderView.swift in Sources */,
+				BDFDEFFD990DD06345DEAE3C /* MacPlaybackClock.swift in Sources */,
+				A8A09F5D52D1A2ABCDDB74BD /* MacPresentationSession.swift in Sources */,
+				4150249608AEA12BB7C16E95 /* MacPrompterGeometry.swift in Sources */,
+				EE916B14B83A6EAB0E5A3645 /* MacPrompterTextView.swift in Sources */,
+				65A57A7437358DAAF4DC8554 /* MacReaderSession.swift in Sources */,
+				DBE875DCCF8EAED32C5DBF87 /* MacReaderView.swift in Sources */,
+				C8461406F21373FFCDFBFE06 /* MacRootView.swift in Sources */,
+				CC297A40615A33413B1C8DD9 /* MacScriptBodyEditor.swift in Sources */,
+				A14FA0F0840C62F2B9A488D0 /* MacSettingsView.swift in Sources */,
+				C7501E1A874085F66270118D /* PhrasaMacApp.swift in Sources */,
+				C97A60A40D5206D2C2A63D30 /* SupabaseAuthService.swift in Sources */,
+				FFCEE33924DF6CA4E462E917 /* WelcomeScript.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A66B5468E7F7BC67D626D50D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				451E8AD5996D692E6A593997 /* AppStoreHygieneTests.swift in Sources */,
+				E45DEF702617527E1716C0AB /* CloudAccountSyncRuntimeTests.swift in Sources */,
+				D783A470576F089D9A612B74 /* CloudFoundationTests.swift in Sources */,
+				265F22B0B85DA499F87980CD /* DomainBoundaryTests.swift in Sources */,
+				F0A647CF9CFA6EBBF5684B4E /* EditorToolsTests.swift in Sources */,
+				AA4C063D8DBCD37D479CB9BF /* FindLineJumpTests.swift in Sources */,
+				B9EF708CC83D148714D3861B /* ImportExportServiceTests.swift in Sources */,
+				67AB928246E935853A69004D /* LargeScriptPerformanceTests.swift in Sources */,
+				5D45A051AB2538E20BDD317E /* LegacyExpoMigratorTests.swift in Sources */,
+				261593B013755CEA72B1A57C /* NativeExperiencePresentationTests.swift in Sources */,
+				34B3D4A232CD0693310574A6 /* OutlineModeTests.swift in Sources */,
+				15A8E4A40CB598E41F793CC3 /* ReaderSessionTests.swift in Sources */,
+				B121C2F9FD03EA5EA59EE499 /* SQLitePersistenceClientTests.swift in Sources */,
+				885093F0507E37929A8EF5F4 /* TextMetricsTests.swift in Sources */,
+				42108E521DB6D49C39BFDF89 /* VoicePipelineDiagnosticsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DEBAE49D64301A50E1B1F324 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				936042DC9387D3DF8D73D132 /* MacCloudAccountSyncRuntimeTests.swift in Sources */,
+				E0552D4234A698C28EBB0E51 /* MacCloudHygieneTests.swift in Sources */,
+				8E779B60BA18F1456BDB41FF /* MacCloudSyncHostTests.swift in Sources */,
+				578841A3A61F2DC7FEB47000 /* MacEditorChromePresentationTests.swift in Sources */,
+				A8C8157FD43D582E06FFE6C1 /* MacFindLineTests.swift in Sources */,
+				8710EDE4D75CC7471094F52B /* MacLibraryStoreTests.swift in Sources */,
+				8BE21F85FFD53F10DF7039DA /* MacOutlineReaderTests.swift in Sources */,
+				2FEA1E60C4268895CC1BE673 /* MacPresentationSessionTests.swift in Sources */,
+				D359E2A3DC06FA660A6426DA /* MacReaderCommandTests.swift in Sources */,
+				C60E61A42A8C2ABDA0E4B647 /* MacRecoveryTests.swift in Sources */,
+				DC99A983169DFFD375CC49CC /* MacSessionStoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA21FA873BF719912B90EEF5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1D7CEFA400F183D4E6EB553 /* AppLegalDestinations.swift in Sources */,
+				E9F87B168F72A1A0164953A3 /* AppleSignInSupport.swift in Sources */,
+				2EAFA71AE1B8207E97CF3C12 /* CloudAccountSyncRuntime.swift in Sources */,
+				11A157D691BF36B41374DF8B /* CloudAccountView.swift in Sources */,
+				01CFBB9C96404E5580CFFF30 /* CloudBackendContract.swift in Sources */,
+				E259BA7A14E2A0F2CD3CE230 /* CloudConfiguration.swift in Sources */,
+				2E6B483D388070878D26C1D8 /* CloudCoordinator.swift in Sources */,
+				8CB9FB67F6212B114889EBD5 /* CloudLibraryRepository.swift in Sources */,
+				3BC401307DD68FB969BF02DC /* CloudOutlinePoint.swift in Sources */,
+				6F0BA404736A196BB2E47D3F /* CloudScriptFingerprint.swift in Sources */,
+				55B0A188A13BC8C33993EAAE /* CloudScriptOpenUpdate.swift in Sources */,
+				F6747139AE2A25C180B7EF2D /* CloudScriptSyncPlan.swift in Sources */,
+				4EA87B0D60C07CA77911130E /* CloudSyncEligibility.swift in Sources */,
+				1E7C787804B060C770212E77 /* CloudSyncModels.swift in Sources */,
+				9C58AA6FC4060684C158BA10 /* CloudTimestampPrecision.swift in Sources */,
+				CA3D7042F202E8315097EC09 /* DesignSystem.swift in Sources */,
+				389E6C8D086C2877C179E3D5 /* DocumentInsights.swift in Sources */,
+				5A3585BD76E7D9736FCFE921 /* EditorView.swift in Sources */,
+				89EFA4B3A029D43C37795531 /* FindLineMatching.swift in Sources */,
+				2F86E9017794939B15139AD4 /* FindReplace.swift in Sources */,
+				AE513AAEAEAA1B3F971AFFE9 /* ImportExportService.swift in Sources */,
+				422BB18EC9EBE14F1F6CFBCA /* LegacyExpoMigrator.swift in Sources */,
+				7C210520FF7608264091BC9C /* LibraryPersistence.swift in Sources */,
+				F8D828F345251856106AE180 /* LibraryPersistenceFactory.swift in Sources */,
+				A6429EC1E2B3972FB58D7E47 /* LibrarySnapshot.swift in Sources */,
+				C4EE488F25C666D607A5E7B2 /* LibraryStore.swift in Sources */,
+				EE5D41C93976355336A7574A /* LibrarySyncEngine.swift in Sources */,
+				FA48706B541B0973D0D13662 /* LibraryView.swift in Sources */,
+				AEA7B9FBFF64CF5463CCCD65 /* ModuleBridge.swift in Sources */,
+				99E488CEF418409E14038C77 /* Motion.swift in Sources */,
+				853E7BD79F15FDC432ED48EE /* OnboardingView.swift in Sources */,
+				8D3EE327820DB3922A346BEF /* OutlineCoverageEngine.swift in Sources */,
+				C793B66D9E2945800B8944C1 /* OutlineEditor.swift in Sources */,
+				340ABE4EFE9C86DDD2643006 /* OutlineReaderView.swift in Sources */,
+				2578395CF3B6DF30F6533CFC /* OutlineSpeechCommand.swift in Sources */,
+				A5326083C7CE11EB764D1661 /* OutlineStagePresentation.swift in Sources */,
+				A039FDB495BF59ADF807B7CC /* PersistenceClient.swift in Sources */,
+				090562CFB1A6171D8C6B54EF /* PhrasaA11y.swift in Sources */,
+				2832E88530A97ABE5B63B2D9 /* PhrasaApp.swift in Sources */,
+				8D34A3A536A4ECB04B2B190F /* PrompterTextView.swift in Sources */,
+				A87C1DC714786C740F98CF9D /* ReaderAppearancePreset.swift in Sources */,
+				331FD4A26B45EC0063584835 /* ReaderCompletionView.swift in Sources */,
+				1CB0D22D1C6A987B75967147 /* ReaderSession.swift in Sources */,
+				D307C675009E1701FC4640FE /* ReaderSettings+UI.swift in Sources */,
+				178794C73A03E694AFC48399 /* ReaderSettings.swift in Sources */,
+				265D1FD55F70E4D7E73FFC5D /* ReaderSettingsComponents.swift in Sources */,
+				0E63655107484771F8B1FD3E /* ReaderSettingsView.swift in Sources */,
+				57C3AB803023DD0A4337AFED /* ReaderView.swift in Sources */,
+				1C0BC7E0D46B117B73037626 /* ResumeProgress.swift in Sources */,
+				F0CD68D54D9A4C3D0A6CB372 /* RootView.swift in Sources */,
+				675D3873EABCC652E0029D81 /* SQLitePersistenceClient.swift in Sources */,
+				A35531F96197A049F886D599 /* ScriptBodyTextEditor.swift in Sources */,
+				896F512C86716827C040D42D /* ScriptDocument.swift in Sources */,
+				AA99F231159A9FAB559DC768 /* SpeechRecognitionService.swift in Sources */,
+				08F1EFF41D5171EF4A931CF3 /* SupabaseAuthService.swift in Sources */,
+				2ED21F51B0BD627B44A5EF64 /* SupabaseClientFactory.swift in Sources */,
+				6424C3D5670BE9322EA290EC /* SupabaseCloudRepository.swift in Sources */,
+				2873DCE9D29CD222BF00132C /* VoicePipelineDiagnostics.swift in Sources */,
+				A96AA1C4FD314C732C271B6A /* VoiceTrustPresentation.swift in Sources */,
+				D597A514E850D6AA1C50B79A /* WelcomeScript.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4EC9FBB80353111311290A19 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8EEF676F24B153F4491D8DAB /* Phrasa */;
+			targetProxy = 873E02200576B2BD79BC1F32 /* PBXContainerItemProxy */;
+		};
+		51A86750B82EAC390996706C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8EEF676F24B153F4491D8DAB /* Phrasa */;
+			targetProxy = 9A509917FBE07B38F1BC66CD /* PBXContainerItemProxy */;
+		};
+		54536CC7FDC37906422D7B96 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0193513B4590114E2B2D7895 /* PhrasaMac */;
+			targetProxy = 0DD9183E6D9496DEE170DE9B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		02A7C599CD21F225B2D663CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 14;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = Q42MT7JA7Q;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		0FB6B521BF587DBE37AFF0EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.phrasa.app.uitests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Phrasa;
+			};
+			name = Debug;
+		};
+		12AF47F16F8FEB8E0E29580B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 14;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = Q42MT7JA7Q;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		4B11B910770D643C6B148BA1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Phrasa/Phrasa.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				EXCLUDED_SOURCE_FILE_NAMES = VoicePipelineDiagnostics.swift;
+				INFOPLIST_FILE = Phrasa/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PHRASA_SUPABASE_PUBLISHABLE_KEY = "";
+				PHRASA_SUPABASE_URL = "https://uqkjidvqyngrnyftdazp.supabase.co";
+				PRODUCT_BUNDLE_IDENTIFIER = com.phrasa.app;
+				PRODUCT_NAME = Phrasa;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4EDD87ED0C24FCCFB1435FC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.phrasa.app.uitests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Phrasa;
+			};
+			name = Release;
+		};
+		6B00E46666DAE5700A963922 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.phrasa.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Phrasa.app/Phrasa";
+			};
+			name = Debug;
+		};
+		7A5F83F7F02F63CD7DD865BD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PhrasaMac/PhrasaMac.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = PhrasaMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PHRASA_SUPABASE_PUBLISHABLE_KEY = "";
+				PHRASA_SUPABASE_URL = "https://uqkjidvqyngrnyftdazp.supabase.co";
+				PRODUCT_BUNDLE_IDENTIFIER = com.phrasa.mac;
+				PRODUCT_MODULE_NAME = PhrasaMac;
+				PRODUCT_NAME = PhrasaMac;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C11952B188E1C989EF9B8545 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PhrasaMac/PhrasaMac.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = PhrasaMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PHRASA_SUPABASE_PUBLISHABLE_KEY = "";
+				PHRASA_SUPABASE_URL = "https://uqkjidvqyngrnyftdazp.supabase.co";
+				PRODUCT_BUNDLE_IDENTIFIER = com.phrasa.mac;
+				PRODUCT_MODULE_NAME = PhrasaMac;
+				PRODUCT_NAME = PhrasaMac;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		D72BBCE9F537D6A7B4EFE267 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.phrasa.mac.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PhrasaMac.app/Contents/MacOS/PhrasaMac";
+			};
+			name = Debug;
+		};
+		D7963073B996514788EC3B44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.phrasa.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Phrasa.app/Phrasa";
+			};
+			name = Release;
+		};
+		DDAE72D99BCA8104CF3C7ABA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Phrasa/Phrasa.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Phrasa/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PHRASA_SUPABASE_PUBLISHABLE_KEY = "";
+				PHRASA_SUPABASE_URL = "https://uqkjidvqyngrnyftdazp.supabase.co";
+				PRODUCT_BUNDLE_IDENTIFIER = com.phrasa.app;
+				PRODUCT_NAME = Phrasa;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E22959E330DF7C67642ABE99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.phrasa.mac.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PhrasaMac.app/Contents/MacOS/PhrasaMac";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		51995F4BB8F8163B3ABE83E5 /* Build configuration list for PBXNativeTarget "PhrasaMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C11952B188E1C989EF9B8545 /* Debug */,
+				7A5F83F7F02F63CD7DD865BD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		57BD57D1FE43530590E87D38 /* Build configuration list for PBXNativeTarget "PhrasaMacTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D72BBCE9F537D6A7B4EFE267 /* Debug */,
+				E22959E330DF7C67642ABE99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6D044A7A2B2AD125EE6D1833 /* Build configuration list for PBXProject "PhrasaNative" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12AF47F16F8FEB8E0E29580B /* Debug */,
+				02A7C599CD21F225B2D663CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		92B487ABF0384F82793EBFE6 /* Build configuration list for PBXNativeTarget "Phrasa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DDAE72D99BCA8104CF3C7ABA /* Debug */,
+				4B11B910770D643C6B148BA1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D6E8369BE815D42D844B70E9 /* Build configuration list for PBXNativeTarget "PhrasaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0FB6B521BF587DBE37AFF0EC /* Debug */,
+				4EDD87ED0C24FCCFB1435FC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DF1B64E50071CC3D22470958 /* Build configuration list for PBXNativeTarget "PhrasaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B00E46666DAE5700A963922 /* Debug */,
+				D7963073B996514788EC3B44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		2A2D100207EE2D1951DDD225 /* XCLocalSwiftPackageReference "Packages/PhrasaDomain" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PhrasaDomain;
+		};
+		9F25B71B22C0111037E63689 /* XCLocalSwiftPackageReference "Packages/PhrasaSync" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PhrasaSync;
+		};
+		C0DD78D75490367409B2FCF5 /* XCLocalSwiftPackageReference "Packages/PhrasaCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PhrasaCore;
+		};
+		EF696C81B7B68168172BF790 /* XCLocalSwiftPackageReference "Packages/PhrasaPersistence" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PhrasaPersistence;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6C421B7CBA5DC7D4790E377D /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 2.51.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		08BB8FB12B3D68768B2426A9 /* PhrasaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaCore;
+		};
+		101F9D9936E486DE76A58614 /* PhrasaSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaSync;
+		};
+		26402AB1BE0827251601678E /* PhrasaSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaSync;
+		};
+		29F6182F69A0334DE2EE5D5F /* PhrasaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaCore;
+		};
+		3965ECC2B2FD5E4FBBDA132A /* PhrasaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaCore;
+		};
+		5580A01F579B26B50793AE7A /* PhrasaPersistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaPersistence;
+		};
+		6AB1FCA33C206D9F883EBEEB /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6C421B7CBA5DC7D4790E377D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		788EEDF772910444BF828F3F /* PhrasaPersistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaPersistence;
+		};
+		7B8A74F9EED93387BAA74990 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6C421B7CBA5DC7D4790E377D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		7BC39E5DD85C2A51A53C981B /* PhrasaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaCore;
+		};
+		B60C25BFFFE8A91C49454973 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6C421B7CBA5DC7D4790E377D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		B86A56110D3B011C96D1C5BF /* PhrasaDomain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaDomain;
+		};
+		D921475D06912AE42E34A297 /* PhrasaSyncSupabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaSyncSupabase;
+		};
+		EEA3D19D3659D4B2066496D8 /* PhrasaDomain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaDomain;
+		};
+		F77B019B0406B1F09D73DDC2 /* PhrasaSyncSupabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PhrasaSyncSupabase;
+		};
+		FD2B91404E3790C229A6C380 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6C421B7CBA5DC7D4790E377D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A778ED4E6283F554AB7C0F91 /* Project object */;
+}

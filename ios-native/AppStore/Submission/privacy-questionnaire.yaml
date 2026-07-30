@@ -1,0 +1,132 @@
+# App Privacy questionnaire answers for the intended sync-enabled binary.
+# Grounded in: optional Supabase accounts/sync, shipping CloudAccountSyncRuntime
+# triggers (launch, authRestored, foreground, manual, durablePush ~800ms),
+# SpeechRecognitionService (Apple Speech; no Phrasa/Supabase audio or transcript
+# retention), website privacy copy in app/privacy/page.tsx, and METADATA.md.
+#
+# Top-level answer: Yes, data is collected for optional account/sync
+# (App Functionality). Tracking: No. No ads, analytics products, marketing, or sale.
+# Account is optional; after sign-in, library sync runs automatically.
+
+data_collection:
+  # Top-level App Store Connect question:
+  # "Do you or your third-party partners collect data from this app?"
+  collects_data: true
+  answer_text: "Yes, we collect data from this app"
+  reasoning: >-
+    Account and sync are optional. Local library, editing, prompting, export,
+    and backup work without an account. After the user opts in by signing in,
+    Phrasa automatically synchronizes scripts, folders, tags, and outlines on
+    launch, auth restoration, foreground, and shortly after durable cloud-relevant
+    local mutations (~800 ms debounce), and via the manual Sync now control.
+    Unsaved drafts are not uploaded. Reader settings are forced local-only in
+    shipping runtimes and are not uploaded or downloaded. Account data and that
+    library content go to the dedicated Phrasa Supabase project solely for App
+    Functionality and cross-device sync. No third-party advertising or analytics
+    SDK is integrated for product telemetry. User-initiated import/export/backup
+    uses system share/Files destinations chosen by the user. Microphone audio
+    and speech recognition text are never sent to Phrasa or Supabase.
+
+tracking:
+  # "Do you or your third-party partners use data for tracking?"
+  tracks_users: false
+  answer_text: "No"
+  reasoning: >-
+    NSPrivacyTracking is false. No advertising identifier use, no cross-app
+    tracking SDKs, no developer analytics for advertising attribution.
+    Optional sync data is not used for tracking.
+
+privacy_policy_url: https://phrasa.app/privacy
+
+# Collected data types declared for App Privacy (linked to user; App Functionality).
+data_types_declared:
+  - type: Email Address
+    apple_category: Contact Info
+    linked_to_user: true
+    used_for_tracking: false
+    purposes:
+      - App Functionality
+    notes: >-
+      Email address, or Apple private relay address when the user chooses
+      Sign in with Apple. Collected only when the user signs in for optional sync.
+  - type: User ID
+    apple_category: Identifiers
+    linked_to_user: true
+    used_for_tracking: false
+    purposes:
+      - App Functionality
+    notes: >-
+      Supabase user UUID identifying the account for authentication and sync.
+  - type: Other User Content
+    apple_category: User Content
+    linked_to_user: true
+    used_for_tracking: false
+    purposes:
+      - App Functionality
+    notes: >-
+      Scripts, folders, tags, and outlines synchronized to the dedicated Supabase
+      project after optional sign-in (automatic on launch/foreground/saved
+      changes; Sync now available). Unsaved drafts are not uploaded. Reader
+      settings are not included in this release (local-only on each device).
+
+# Not developer data collection for the App Privacy “collect data” product
+# surface beyond the types above, but must be disclosed accurately.
+apple_speech_disclosure:
+  relevant: true
+  summary: >-
+    Optional voice following requests Microphone and Speech Recognition
+    permission. When the device supports on-device recognition, the app sets
+    requiresOnDeviceRecognition. When on-device recognition is unavailable,
+    Apple Speech may process audio via Apple services (internet may be
+    required). Phrasa does not receive or store audio or transcripts on
+    developer-controlled servers. Supabase never receives microphone audio or
+    speech recognition text. Apple’s processing is not Phrasa developer data
+    collection for the types above, but it is explained in the privacy policy,
+    usage descriptions, and App Review notes.
+
+privacy_manifest:
+  path: ../../Phrasa/Resources/PrivacyInfo.xcprivacy
+  ns_privacy_tracking: false
+  # Manifest should declare the same linked App Functionality types when the
+  # shipping binary includes optional sync (Email Address, User ID, Other User Content).
+  expected_collected_types:
+    - NSPrivacyCollectedDataTypeEmailAddress
+    - NSPrivacyCollectedDataTypeUserID
+    - NSPrivacyCollectedDataTypeOtherUserContent
+  required_reason_apis:
+    - api: NSPrivacyAccessedAPICategoryUserDefaults
+      reasons: ["CA92.1"]
+
+account_and_deletion:
+  sign_in_required_to_use_app: false
+  primary_sign_in: Sign in with Apple
+  secondary_sign_in: email_password
+  # Opt-in by signing in; thereafter automatic library sync + Sync now.
+  sync_model: optional_opt_in_then_automatic_after_sign_in
+  sync_triggers:
+    - launch
+    - authRestored
+    - foreground
+    - durablePush_after_saved_library_mutations_approx_800ms
+    - manual_sync_now
+  synced_content:
+    - scripts
+    - folders
+    - tags
+    - outlines
+  not_synced:
+    - reader_settings
+    - unsaved_drafts
+  in_app_supabase_account_deletion: true
+  apple_token_revocation: >-
+    Email/password deletion uses delete_own_account.
+    Apple-linked deletion requires fresh SIWA reauthorization (authorization_code
+    + platform client_id com.phrasa.app or com.phrasa.mac) and Edge Function
+    delete-apple-linked-account: allowlist client_id, exchange code, validate
+    Apple-returned id_token (iss/aud/exp/sub) against stored Apple identity,
+    revoke, then delete. Never trust a client identity_token. APPLE_CLIENT_IDS
+    must include both platform client ids (not interchangeable). The function
+    is deployed ACTIVE in the production Phrasa Supabase project with JWT
+    verification enabled and the required Apple/Supabase secrets configured.
+    Do not claim end-to-end Apple revocation acceptance complete until sandbox
+    evidence exists on both iOS and Mac.

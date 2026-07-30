@@ -1,0 +1,295 @@
+name: PhrasaNative
+packages:
+  PhrasaCore:
+    path: Packages/PhrasaCore
+  PhrasaDomain:
+    path: Packages/PhrasaDomain
+  PhrasaPersistence:
+    path: Packages/PhrasaPersistence
+  PhrasaSync:
+    path: Packages/PhrasaSync
+  # Domain, persistence, and pure sync engine are also compiled into the iOS app
+  # target from shared package sources so existing feature screens keep resolving
+  # types without new imports. Package tests still run via
+  # `swift test --package-path …`. The macOS target links package products.
+  # iOS and Mac shipping link Supabase; Mac links PhrasaSync + PhrasaSyncSupabase
+  # products and compiles shared CloudCoordinator / SupabaseAuthService sources.
+  Supabase:
+    url: https://github.com/supabase/supabase-swift.git
+    exactVersion: 2.51.0
+options:
+  bundleIdPrefix: com.phrasa
+  deploymentTarget:
+    iOS: "17.0"
+    macOS: "14.0"
+  xcodeVersion: "26.0"
+  generateEmptyDirectories: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    DEVELOPMENT_TEAM: Q42MT7JA7Q
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "14"
+    ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+targets:
+  Phrasa:
+    type: application
+    platform: iOS
+    sources:
+      - path: Phrasa
+        # Preserve Finder copies on disk, but never compile any space-2 Swift
+        # duplicate into a generated project.
+        excludes:
+          - "**/* 2.swift"
+      - path: Packages/PhrasaDomain/Sources/PhrasaDomain
+      - path: Packages/PhrasaPersistence/Sources/PhrasaPersistence
+      # Pure sync engine (no Supabase SDK). Plans, fingerprints, merge engine.
+      - path: Packages/PhrasaSync/Sources/PhrasaSync
+      # Supabase transport adapter (publishable key only; no secrets in source).
+      - path: Packages/PhrasaSync/Sources/PhrasaSyncSupabase
+      - path: Phrasa/Resources/Fonts/AtkinsonHyperlegible-Regular.ttf
+        buildPhase: resources
+      - path: Phrasa/Resources/Fonts/OFL.txt
+        buildPhase: resources
+    dependencies:
+      - package: PhrasaCore
+      - package: Supabase
+    info:
+      path: Phrasa/Info.plist
+      properties:
+        CFBundleDisplayName: Phrasa
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        # URL expands from the pinned production build setting; key stays an
+        # operator placeholder. Empty/unresolved $(NAME) values stay offline-only
+        # (or incomplete when only one side is set). Never commit secrets;
+        # service-role keys remain blocked at load.
+        PhrasaSupabaseURL: "$(PHRASA_SUPABASE_URL)"
+        PhrasaSupabasePublishableKey: "$(PHRASA_SUPABASE_PUBLISHABLE_KEY)"
+        CFBundleURLTypes:
+          - CFBundleURLName: com.phrasa.app.auth
+            CFBundleURLSchemes:
+              - phrasa
+        ITSAppUsesNonExemptEncryption: false
+        UIAppFonts:
+          - AtkinsonHyperlegible-Regular.ttf
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSMicrophoneUsageDescription: Phrasa uses the microphone to follow your voice and keep your place. Audio is never sent to Phrasa's servers.
+        NSSpeechRecognitionUsageDescription: Phrasa uses speech recognition to follow along as you read. When on-device recognition is unavailable, Apple may process speech. Phrasa does not send or retain audio or transcripts on developer-controlled servers.
+        LSSupportsOpeningDocumentsInPlace: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.phrasa.app
+        PRODUCT_NAME: Phrasa
+        TARGETED_DEVICE_FAMILY: "1,2"
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: true
+        # Sign in with Apple is the primary account path (email/password secondary).
+        # Capability must also be enabled on the App ID and provisioning profiles.
+        CODE_SIGN_ENTITLEMENTS: Phrasa/Phrasa.entitlements
+        # Production project URL is pinned for Debug and Release so operators only
+        # need to supply a publishable key to enable online sync. Release runtime
+        # still accepts only this exact host and ignores every env override.
+        PHRASA_SUPABASE_URL: "https://uqkjidvqyngrnyftdazp.supabase.co"
+        # Safe operator placeholder — leave empty for offline-only / incomplete
+        # shipping builds; never commit a real key or service-role secret.
+        PHRASA_SUPABASE_PUBLISHABLE_KEY: ""
+      configs:
+        Release:
+          # Diagnostics are DEBUG-only; exclude the file from App Store Release products.
+          EXCLUDED_SOURCE_FILE_NAMES: VoicePipelineDiagnostics.swift
+    scheme:
+      testTargets:
+        - PhrasaTests
+  PhrasaTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: PhrasaTests
+    dependencies:
+      - target: Phrasa
+      - package: PhrasaCore
+      - package: Supabase
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.phrasa.app.tests
+        GENERATE_INFOPLIST_FILE: true
+
+  # Non-shipping XCUITest harness for physical Voice Follow QA.
+  # NEVER attach this target to Archive / App Store export of Phrasa.
+  # Exercise only via the non-shipping Voice QA schemes below.
+  PhrasaUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: PhrasaUITests
+    dependencies:
+      - target: Phrasa
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.phrasa.app.uitests
+        GENERATE_INFOPLIST_FILE: true
+        # Ensure the UI test bundle is never installed as a product artifact.
+        SKIP_INSTALL: YES
+        CODE_SIGN_STYLE: Automatic
+        TARGETED_DEVICE_FAMILY: "1,2"
+        # XcodeGen's bundle.ui-testing product preset incorrectly sets
+        # BUNDLE_LOADER = $(TEST_HOST) without a TEST_HOST (unit-test leak).
+        # UI tests host via TEST_TARGET_NAME only — clear the unit-test loader.
+        BUNDLE_LOADER: ""
+
+  PhrasaMac:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: PhrasaMac
+        # Same guard for the preserved Finder copy in the macOS source tree.
+        excludes:
+          - "**/* 2.swift"
+      # Shared account/auth coordinator + Apple sign-in helpers. Compiled into
+      # the Mac module so CloudCoordinator / SupabaseAuthService / SIWA match iOS.
+      - path: Phrasa/Cloud/CloudCoordinator.swift
+      - path: Phrasa/Cloud/SupabaseAuthService.swift
+      - path: Phrasa/Cloud/AppleSignInSupport.swift
+      - path: Phrasa/Resources/Fonts/AtkinsonHyperlegible-Regular.ttf
+        buildPhase: resources
+      - path: Phrasa/Resources/Fonts/OFL.txt
+        buildPhase: resources
+    dependencies:
+      - package: PhrasaDomain
+      - package: PhrasaPersistence
+      - package: PhrasaCore
+      - package: PhrasaSync
+        product: PhrasaSync
+      - package: PhrasaSync
+        product: PhrasaSyncSupabase
+      - package: Supabase
+    info:
+      path: PhrasaMac/Info.plist
+      properties:
+        CFBundleDisplayName: Phrasa
+        CFBundleName: Phrasa
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        LSApplicationCategoryType: public.app-category.productivity
+        ITSAppUsesNonExemptEncryption: false
+        NSHumanReadableCopyright: "Copyright © Phrasa. All rights reserved."
+        ATSApplicationFontsPath: .
+        NSPrincipalClass: NSApplication
+        LSMinimumSystemVersion: "14.0"
+        # URL expands from the pinned production build setting; key stays an
+        # operator placeholder. Empty/unresolved $(NAME) values stay offline-only.
+        # Never commit secrets; service-role keys remain blocked at load.
+        PhrasaSupabaseURL: "$(PHRASA_SUPABASE_URL)"
+        PhrasaSupabasePublishableKey: "$(PHRASA_SUPABASE_PUBLISHABLE_KEY)"
+        # Same callback scheme as iOS — recovery routing is safe because the
+        # Mac target registers CFBundleURLTypes for phrasa://auth/*.
+        CFBundleURLTypes:
+          - CFBundleURLName: com.phrasa.mac.auth
+            CFBundleURLSchemes:
+              - phrasa
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.phrasa.mac
+        PRODUCT_NAME: PhrasaMac
+        PRODUCT_MODULE_NAME: PhrasaMac
+        CODE_SIGN_ENTITLEMENTS: PhrasaMac/PhrasaMac.entitlements
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        # Production project URL is pinned for Debug and Release so operators only
+        # need to supply a publishable key to enable online sync. Release runtime
+        # still accepts only this exact host and ignores every env override.
+        PHRASA_SUPABASE_URL: "https://uqkjidvqyngrnyftdazp.supabase.co"
+        # Safe operator placeholder — leave empty for offline-only / incomplete
+        # shipping builds; never commit a real key or service-role secret.
+        PHRASA_SUPABASE_PUBLISHABLE_KEY: ""
+    scheme:
+      testTargets:
+        - PhrasaMacTests
+
+  PhrasaMacTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: PhrasaMacTests
+    dependencies:
+      - target: PhrasaMac
+      - package: PhrasaDomain
+      - package: PhrasaPersistence
+      - package: PhrasaCore
+      - package: PhrasaSync
+        product: PhrasaSync
+      - package: PhrasaSync
+        product: PhrasaSyncSupabase
+      - package: Supabase
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.phrasa.mac.tests
+        GENERATE_INFOPLIST_FILE: true
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+
+# Non-shipping Voice Follow UI QA only. Not used by release-ios.sh archive/upload.
+# Shipping Phrasa scheme above keeps unit tests only and remains the App Store scheme.
+schemes:
+  # Full privacy-safe instrumentation. VoicePipelineDiagnostics is DEBUG-only,
+  # so changing this scheme to Release makes the physical test invalid.
+  PhrasaVoiceUIQA:
+    build:
+      targets:
+        Phrasa: [test, run, profile, analyze]
+        PhrasaUITests: [test]
+    test:
+      config: Debug
+      gatherCoverageData: false
+      targets:
+        - name: PhrasaUITests
+          parallelizable: false
+          randomExecutionOrder: false
+    run:
+      config: Debug
+    profile:
+      config: Debug
+    analyze:
+      config: Debug
+    # Explicit empty archive config is intentionally omitted — do not archive this scheme.
+
+  # Shipping-behavior proof. This deliberately excludes DEBUG diagnostics and
+  # observes only the same visible progress/status accessibility as App Store users.
+  PhrasaVoiceReleaseUIQA:
+    build:
+      targets:
+        Phrasa: [test, run, profile, analyze]
+        PhrasaUITests: [test]
+    test:
+      config: Release
+      gatherCoverageData: false
+      macroExpansion: Phrasa
+      environmentVariables:
+        PHRASA_SYNC_DELETE_FIXTURE_TITLE: "$(PHRASA_SYNC_DELETE_FIXTURE_TITLE)"
+        PHRASA_SYNC_CONFLICT_FIXTURE_TITLE: "$(PHRASA_SYNC_CONFLICT_FIXTURE_TITLE)"
+        PHRASA_SYNC_CONFLICT_LOCAL_MARKER: "$(PHRASA_SYNC_CONFLICT_LOCAL_MARKER)"
+        PHRASA_SYNC_CONFLICT_CLOUD_MARKER: "$(PHRASA_SYNC_CONFLICT_CLOUD_MARKER)"
+      targets:
+        - name: PhrasaUITests
+          parallelizable: false
+          randomExecutionOrder: false
+    run:
+      config: Release
+    profile:
+      config: Release
+    analyze:
+      config: Release
+    # Explicit empty archive config is intentionally omitted — do not archive this scheme.

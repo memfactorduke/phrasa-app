@@ -1,0 +1,33 @@
+Phrasa is a native teleprompter for speakers who need a dependable stage, not another account dashboard.
+
+WRITE AND ORGANIZE
+
+Create scripts on your device. Search, tags, folders, sorting, duplication, and autosave keep a growing library tidy.
+
+IMPORT AND EXPORT
+
+Bring in TXT, Markdown, or PDF. Export a script as text or Phrasa JSON. Back up or restore your full library with an explicit merge or replace confirmation.
+
+SPEED PROMPTING
+
+Use smooth continuous motion or line-by-line stepping, scrub through a script, adjust pacing, mirror the display, change the reader theme, blackout the stage, and review a short rehearsal recap when you finish.
+
+VOICE FOLLOWING
+
+Let the prompt follow along as you speak using the microphone and Apple Speech Recognition. On-device recognition is required when the device supports it; otherwise Apple Speech may process audio using Apple services and an internet connection may be required. Phrasa does not receive or store microphone audio or transcript history on developer servers.
+
+OUTLINE PRESENTER
+
+Build ordered talking points and step through them with touch, keyboard, or clicker-style controls.
+
+LOCAL FIRST, OPTIONAL SYNC
+
+No account is required for local use. Library, editor, reader, import, export, and backup work offline on your device. Optionally sign in with Apple (primary) or email to sync scripts, folders, tags, and outlines across your devices for App Functionality only. After you sign in, that library content synchronizes automatically on launch and foreground, and shortly after you save library changes; Sync now is also available. Unsaved drafts are not uploaded. Reader settings stay on each device. No ads, tracking, or subscription.
+
+Phrasa is built natively with Swift and SwiftUI for iPhone and iPad.
+
+OPEN SOURCE
+
+Phrasa is open source under the Apache License 2.0. Read the code, audit how the app handles your data, report issues, or contribute:
+
+https://github.com/memfactorduke/phrasa-app

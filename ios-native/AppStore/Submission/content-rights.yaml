@@ -1,0 +1,26 @@
+# Content rights answer for App Store Connect.
+
+contains_third_party_content: true
+# App includes third-party licensed font software (Atkinson Hyperlegible).
+
+has_rights_to_all_content: true
+# Recommendation: confirm Yes — the app contains or has rights to use all
+# included content (app UI, sample script, bundled font under OFL).
+
+third_party_components:
+  - name: Atkinson Hyperlegible
+    type: font
+    license: SIL Open Font License Version 1.1
+    copyright: Copyright 2020 Braille Institute of America, Inc.
+    bundled_notice: ../../Phrasa/Resources/Fonts/OFL.txt
+    font_file: ../../Phrasa/Resources/Fonts/AtkinsonHyperlegible-Regular.ttf
+
+app_authored_content:
+  - Native Swift/SwiftUI UI and product copy
+  - Sample/welcome script (app-authored; non-PII)
+  - App icon and monochrome branding assets in the app target
+
+operator_confirmation_required: true
+# Owner should still confirm rights before final submission. The packet does not
+# invent a copyright holder string for the App Store listing (see
+# operator-placeholders.yaml).

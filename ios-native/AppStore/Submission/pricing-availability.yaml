@@ -1,0 +1,26 @@
+# Pricing and availability — first release intent.
+
+price: free
+price_tier: 0
+in_app_purchases: none
+subscriptions: none
+
+# App Store Connect tax category for this software product.
+# submission-ready requires connect-evidence.yaml pricing_availability.tax_category
+# to match exactly (case-sensitive):
+tax_category: "App Store software"
+
+availability:
+  strategy: us_first
+  territories:
+    - United States
+  notes: >-
+    First release limited to the United States only. Expand territories later
+    only after owner decision; do not claim worldwide availability for v1.0.
+
+paid_apps_agreement:
+  required_for_this_release: false
+  reason: Free app with no paid content or in-app purchases.
+  free_apps_agreement: active_per_METADATA_audit
+  # Free Apps Agreement state was verified in AppStore/METADATA.md (2026-07-18).
+  # Re-verify in App Store Connect before submission; this file is not live Connect state.

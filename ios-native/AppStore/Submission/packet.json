@@ -1,0 +1,217 @@
+{
+  "schema_version": 3,
+  "locale": "en-US",
+  "validation_phases": {
+    "packet": "Static packet completeness and internal consistency before App Store work.",
+    "release-ready": "Pre-archive/pre-upload gates: identity, local checks, voice evidence, owner external readiness, signing/upload-path prerequisites. Does not require Connect saves or post-upload evidence.",
+    "submission-ready": "Post-upload Connect evidence after exact 1.0(14) processing/selection and all metadata saves, immediately before submit."
+  },
+  "connect_audit": {
+    "file": "connect-audit.yaml",
+    "note": "Point-in-time read-only Connect snapshot (see audit_date). Progressive saves are recorded in connect-evidence.yaml.",
+    "apple_id": "6780259086",
+    "version": "1.0",
+    "status": "Prepare for Submission",
+    "store_listing_metadata": "saved",
+    "screenshots_uploaded_count": 10,
+    "build_selected": "none",
+    "sign_in_required_current": false,
+    "sign_in_required_must_be": false,
+    "release_mode_current": "manual",
+    "release_mode_must_be": "manual",
+    "app_review_contact": "saved",
+    "dsa_banner_present": false,
+    "dsa_status": "not_applicable_decision",
+    "social_media_age_rating_banner_present": false
+  },
+  "build": {
+    "apple_id": "6780259086",
+    "bundle_id": "com.phrasa.app",
+    "marketing_version": "1.0",
+    "build_number": "14",
+    "display": "1.0 (14)"
+  },
+  "store_listing": {
+    "name_file": "en-US/name.txt",
+    "subtitle_file": "en-US/subtitle.txt",
+    "promotional_text_file": "en-US/promotional-text.txt",
+    "description_file": "en-US/description.txt",
+    "keywords_file": "en-US/keywords.txt",
+    "review_notes_file": "en-US/review-notes.txt",
+    "limits": {
+      "name_chars": 30,
+      "subtitle_chars": 30,
+      "promotional_text_chars": 170,
+      "description_chars": 4000,
+      "keywords_utf8_bytes": 100
+    },
+    "urls": {
+      "support_url": "https://phrasa.app/support",
+      "marketing_url": "https://phrasa.app",
+      "privacy_policy_url": "https://phrasa.app/privacy"
+    },
+    "whats_new": null
+  },
+  "categories": {
+    "primary": "Productivity",
+    "secondary": "Utilities"
+  },
+  "pricing": {
+    "price": "free",
+    "availability": "us_first",
+    "territories": ["United States"],
+    "in_app_purchases": "none",
+    "tax_category_required": "App Store software"
+  },
+  "sign_in_required": false,
+  "sign_in_required_connect_current": false,
+  "release_mode_recommendation": "manual",
+  "release_mode_connect_current": "manual",
+  "export_compliance": {
+    "uses_non_exempt_encryption": false
+  },
+  "privacy": {
+    "collects_data": true,
+    "tracks_users": false,
+    "privacy_policy_url": "https://phrasa.app/privacy",
+    "collection_context": "optional_opt_in_then_automatic_after_sign_in",
+    "account_optional": true,
+    "sync_opt_in_by_sign_in": true,
+    "sync_automatic_after_sign_in": true,
+    "sync_triggers": [
+      "launch",
+      "authRestored",
+      "foreground",
+      "durablePush",
+      "manual"
+    ],
+    "durable_push_debounce_ms": 800,
+    "manual_sync_now_available": true,
+    "unsaved_drafts_uploaded": false,
+    "synced_content": ["scripts", "folders", "tags", "outlines"],
+    "reader_settings_synced": false,
+    "data_types": [
+      {
+        "type": "Email Address",
+        "linked_to_user": true,
+        "used_for_tracking": false,
+        "purposes": ["App Functionality"]
+      },
+      {
+        "type": "User ID",
+        "linked_to_user": true,
+        "used_for_tracking": false,
+        "purposes": ["App Functionality"]
+      },
+      {
+        "type": "Other User Content",
+        "linked_to_user": true,
+        "used_for_tracking": false,
+        "purposes": ["App Functionality"],
+        "includes": ["scripts", "folders", "tags", "outlines"],
+        "excludes": ["reader_settings"]
+      }
+    ],
+    "primary_sign_in": "Sign in with Apple",
+    "secondary_sign_in": "email_password",
+    "sign_in_required_for_local_use": false,
+    "apple_token_revocation_complete": false
+  },
+  "age_rating": {
+    "intended_rating": "4+",
+    "unrestricted_web_access": false,
+    "apple_social_media_capability_policy": {
+      "notice_date": "2026-07-09",
+      "responses_required_from": "2026-09",
+      "definition_summary": "Social media capability means the app lets users redistribute, amplify, or interact with user-generated content through a social feed or discovery mechanism.",
+      "phrasa_answer": "no"
+    },
+    "social_media_and_ugc": {
+      "includes_social_media_features": false,
+      "includes_user_generated_content": false,
+      "social_media_capability": "no",
+      "answers_all_no_or_none": true,
+      "fields": {
+        "social_networking": "no",
+        "chat_or_messaging": "no",
+        "public_forums_or_feeds": "no",
+        "public_sharing": "no",
+        "user_generated_content": "no",
+        "user_to_user_communication": "no",
+        "account_system_for_social": "no",
+        "profiles_or_follows": "no",
+        "friend_finding_or_contacts_matching": "no",
+        "moderated_public_ugc": "no",
+        "unmoderated_public_ugc": "no"
+      }
+    }
+  },
+  "content_rights": {
+    "has_rights_to_all_content": true,
+    "bundled_ofl_path": "../../Phrasa/Resources/Fonts/OFL.txt"
+  },
+  "voice_gate_file": "voice-gate.yaml",
+  "operator_placeholders_file": "operator-placeholders.yaml",
+  "connect_audit_file": "connect-audit.yaml",
+  "connect_evidence_file": "connect-evidence.yaml",
+  "release_prerequisites_file": "release-prerequisites.yaml",
+  "screenshots": {
+    "manifest_file": "screenshots-manifest.yaml",
+    "connect_uploaded_count": 0,
+    "count_range_per_slot": [1, 10],
+    "sets": [
+      {
+        "id": "iphone_6_9",
+        "directory": "../Screenshots/iPhone-6.9",
+        "width": 1320,
+        "height": 2868,
+        "connect_media_manager_slot": "iPhone 6.9-inch",
+        "forbidden_slots": ["iPhone 6.5-inch"],
+        "slot_warning": "Do NOT upload 1320x2868 into the default 6.5-inch version-page well; use Media Manager iPhone 6.9-inch slot only.",
+        "upload_order": [
+          "05-voice-reader.jpg",
+          "01-library.jpg",
+          "02-editor.jpg",
+          "03-speed-reader.jpg",
+          "04-onboarding.jpg"
+        ]
+      },
+      {
+        "id": "ipad_13",
+        "directory": "../Screenshots/iPad-13",
+        "width": 2064,
+        "height": 2752,
+        "connect_media_manager_slot": "iPad 13-inch",
+        "forbidden_slots": [],
+        "slot_warning": "Upload 2064x2752 only into the iPad 13-inch Media Manager slot.",
+        "upload_order": [
+          "05-voice-reader.jpg",
+          "01-library.jpg",
+          "02-editor.jpg",
+          "03-speed-reader.jpg",
+          "04-onboarding.jpg"
+        ]
+      }
+    ]
+  },
+  "project_evidence": {
+    "project_yml": "../../project.yml",
+    "info_plist": "../../Phrasa/Info.plist",
+    "privacy_manifest": "../../Phrasa/Resources/PrivacyInfo.xcprivacy"
+  },
+  "platform_availability_targets": {
+    "apple_silicon_mac": "disabled",
+    "vision_pro_compatibility": "disabled"
+  },
+  "accessibility_labels": {
+    "required": false,
+    "note": "Optional. Do not claim or require without proof."
+  },
+  "prohibited_claim_patterns": [
+    "proven real-device",
+    "physically validated",
+    "voice acceptance passed",
+    "100% accurate",
+    "guaranteed recognition"
+  ]
+}

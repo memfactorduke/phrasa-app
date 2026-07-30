@@ -1,0 +1,25 @@
+# App Store Connect "Sign-in required" for review.
+
+# Desired / packet answer for this binary:
+# Account is optional (local use works without sign-in). Review must not require
+# Sign-in required ON solely because optional sync exists.
+sign_in_required: false
+demo_account: none
+demo_username: null
+demo_password: null
+
+# Live Connect audit (2026-07-28) — authoritative current state:
+connect_current:
+  sign_in_required: false
+  must_switch_to: false
+  action: null
+
+reasoning: >-
+  Core library, editor, reader, import, export, and backup work without an
+  account. Optional Sign in with Apple is primary for cross-device sync of
+  scripts, folders, tags, and outlines; email/password is secondary. After the
+  user opts in by signing in, that library content synchronizes automatically on
+  launch, auth restore, foreground, and shortly after durable saved library
+  changes; Sync now is also available. Unsaved drafts are not uploaded. Reader
+  settings remain local. Sign-in is not required to exercise the product. No
+  demo account is provided. Live audit shows Sign-in required is OFF in Connect.

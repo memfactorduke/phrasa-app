@@ -1,0 +1,41 @@
+# App Store Connect store listing — locale en-US
+# Machine-ready fields for operator copy/paste or later automation.
+# Source of truth for limits: Apple App Store Connect field rules (stable limits).
+# Status: local packet complete; NOT saved in App Store Connect.
+
+locale: en-US
+locale_display_name: English (U.S.)
+
+# Public marketing name saved in App Store Connect.
+name: Phrasa Free Teleprompter
+# limits: max 30 characters
+
+subtitle: Voice & speed teleprompter
+# limits: max 30 characters
+
+# Editable after release without a new binary.
+promotional_text: >-
+  A calm, open-source teleprompter for iPhone and iPad. Write or import
+  scripts, use speed or Voice Follow, and work without an account or
+  subscription.
+# limits: max 170 characters
+
+# Full description lives in description.txt (plain text; no markdown).
+description_file: description.txt
+# limits: max 4000 characters
+
+# Keywords live in keywords.txt (comma-separated, no spaces after commas).
+keywords_file: keywords.txt
+# limits: max 100 UTF-8 bytes for the full string including commas
+
+# First version: do not provide What's New / release notes.
+whats_new: null
+whats_new_policy: omit_for_version_1_0
+
+urls:
+  support_url: https://phrasa.app/support
+  marketing_url: https://phrasa.app
+  privacy_policy_url: https://phrasa.app/privacy
+
+# App Review notes live in review-notes.txt
+review_notes_file: review-notes.txt

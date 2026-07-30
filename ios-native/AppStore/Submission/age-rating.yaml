@@ -1,0 +1,104 @@
+# Age rating questionnaire answers for Phrasa 1.0 (local-first teleprompter
+# with optional private account sync — not a social/UGC product).
+# Intended result: 4+ when all content descriptors remain none/no.
+# Operator must enter these in App Store Connect; values are product-truthful
+# recommendations grounded in current app behavior, not Connect save state.
+#
+# Live Connect audit (2026-07-18): a Social Media age-rating questions banner
+# is present. Answer ALL Social Media / User-Generated Content fields as
+# No/None — Phrasa has no social features, chat, feeds, messaging, public
+# sharing, UGC network, or account system.
+
+intended_rating: "4+"
+questionnaire_version_note: >-
+  Apple’s age-rating form labels change over time. Map these answers to the
+  current Connect questionnaire. If a new capability question appears that is
+  not listed here, answer from product truth and update this file.
+
+# ---------------------------------------------------------------------------
+# Apple policy interpretation (dated) — social media capability question
+# ---------------------------------------------------------------------------
+# Source summary (release audit; no public URL recorded in this packet):
+# Apple’s July 9, 2026 notice: the new age-rating questionnaire asks whether
+# the app has social media capability, meaning whether it lets users
+# redistribute, amplify, or interact with user-generated content through a
+# social feed or discovery mechanism. Responses become required in
+# September 2026.
+#
+# Phrasa truthful answer: No.
+# Local script create/import/edit on device is not redistribution, amplification,
+# or interaction with UGC via a social feed or discovery mechanism.
+apple_social_media_capability_policy:
+  notice_date: "2026-07-09"
+  responses_required_from: "2026-09"
+  definition_summary: >-
+    Social media capability means the app lets users redistribute, amplify,
+    or interact with user-generated content through a social feed or discovery
+    mechanism.
+  phrasa_answer: no
+  phrasa_answer_bool: false
+
+# Content descriptors — all None / No for this product.
+content_descriptors:
+  cartoon_or_fantasy_violence: none
+  realistic_violence: none
+  prolonged_graphic_or_sadistic_realistic_violence: none
+  profanity_or_crude_humor: none
+  mature_or_suggestive_themes: none
+  horror_or_fear_themes: none
+  medical_or_treatment_information: none
+  alcohol_tobacco_or_drug_use_or_references: none
+  simulated_gambling: none
+  sexual_content_or_nudity: none
+  graphic_sexual_content_and_nudity: none
+  unrestricted_web_access: no
+  gambling_and_contests: no
+
+# Capability-style questions often present on the form.
+capabilities:
+  unrestricted_web_access: false
+  advertising: false
+  in_app_controls_parental: not_applicable
+
+# ---------------------------------------------------------------------------
+# Social Media / User-Generated Content (Connect banner present 2026-07-18)
+# Answer every related field No / None / false.
+# ---------------------------------------------------------------------------
+social_media_and_ugc:
+  # Top-level Connect-style question (Apple 2026-07-09 definition): No.
+  # See apple_social_media_capability_policy above.
+  includes_social_media_features: false
+  includes_user_generated_content: false
+  social_media_capability: no  # redistribute/amplify/interact via social feed or discovery — No
+
+  # Explicit No/None answers for common Connect Social Media / UGC prompts.
+  # Map label variants in Connect to these answers. Keep all No/None.
+  answers:
+    social_networking: no
+    chat_or_messaging: no
+    public_forums_or_feeds: no
+    public_sharing: no
+    user_generated_content: no
+    user_to_user_communication: no
+    account_system_for_social: no
+    profiles_or_follows: no
+    friend_finding_or_contacts_matching: no
+    moderated_public_ugc: no
+    unmoderated_public_ugc: no
+    age_gating_for_social: not_applicable  # no social features to gate
+
+  product_truth: >-
+    Phrasa is a local-first teleprompter. Users may create or import scripts for
+    personal presentation and may optionally sync a private library to their own
+    account. There is no public social graph, no chat, no public feed, no
+    discovery mechanism for others’ content, no public sharing network, and no
+    developer-hosted UGC. Under Apple’s July 9, 2026 social media capability
+    definition (redistribute, amplify, or interact with UGC through a social
+    feed or discovery mechanism), the answer is No. Private scripts and optional
+    account sync are not social media capability.
+
+reasoning: >-
+  Phrasa is a general-purpose presentation tool. It does not ship violent,
+  sexual, gambling, or horror content. It does not open an unrestricted
+  in-app browser. It has no social media or public UGC features. Expected
+  age rating is 4+.

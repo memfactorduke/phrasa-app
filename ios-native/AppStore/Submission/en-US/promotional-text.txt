@@ -1,0 +1,1 @@
+A calm, open-source teleprompter for iPhone and iPad. Write or import scripts, use speed or Voice Follow, and work without an account or subscription.
