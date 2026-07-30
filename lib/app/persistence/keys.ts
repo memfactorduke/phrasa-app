@@ -25,6 +25,10 @@ export function readerSettingsStorageKey(principal: StoragePrincipal): string {
   return `${STORAGE_PREFIX}.${principalKeySegment(principal)}.readerSettings`;
 }
 
+export function syncStateStorageKey(principal: StoragePrincipal): string {
+  return `${STORAGE_PREFIX}.${principalKeySegment(principal)}.syncState`;
+}
+
 export function guestPrincipal(): StoragePrincipal {
   return { kind: "guest" };
 }

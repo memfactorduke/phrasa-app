@@ -233,8 +233,8 @@ function synchronizedContentDiverges(
   });
 }
 
-/** Stable representation of every field written by the content update path. */
-export function synchronizedContentFingerprint(
+/** Stable representation used by pre-digest browser caches. */
+export function synchronizedContentCanonical(
   script: ScriptDocument,
 ): string {
   return JSON.stringify({
@@ -251,14 +251,42 @@ export function synchronizedContentFingerprint(
   });
 }
 
+const CONTENT_FINGERPRINT_PREFIX = "v2:sha256:";
+
+/**
+ * Bounded, versioned digest of every field written by the content update path.
+ * The version prefix makes future migrations explicit instead of silently
+ * changing the meaning of already-acknowledged browser data.
+ */
+export function synchronizedContentFingerprint(
+  script: ScriptDocument,
+): string {
+  const hex = Array.from(
+    sha256Bytes(synchronizedContentCanonical(script)),
+    (byte) => byte.toString(16).padStart(2, "0"),
+  ).join("");
+  return `${CONTENT_FINGERPRINT_PREFIX}${hex}`;
+}
+
+export function synchronizedContentFingerprintMatches(
+  script: ScriptDocument,
+  storedFingerprint: string,
+): boolean {
+  return storedFingerprint.startsWith(CONTENT_FINGERPRINT_PREFIX)
+    ? synchronizedContentFingerprint(script) === storedFingerprint
+    : synchronizedContentCanonical(script) === storedFingerprint;
+}
+
 export function scriptHasUnacknowledgedLocalEdit(
   local: ScriptDocument,
 ): boolean {
   if (!local.remoteUpdatedAtWire) return true;
   if (typeof local.remoteContentFingerprint === "string") {
-    return (
-      synchronizedContentFingerprint(local) !==
-      local.remoteContentFingerprint
+    // Compatibility for the original raw-JSON baseline. The next successful
+    // cloud acknowledgement migrates it to the bounded v2 digest.
+    return !synchronizedContentFingerprintMatches(
+      local,
+      local.remoteContentFingerprint,
     );
   }
   // Compatibility for cache rows saved before content fingerprints existed.
@@ -312,7 +340,7 @@ function deterministicConflictScriptId(local: ScriptDocument): string {
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
 }
 
-/** Sync SHA-256 (browser + Node) — first 16 bytes used for conflict UUIDs. */
+/** Sync SHA-256 (browser + Node). Conflict UUIDs consume the first 16 bytes. */
 function sha256Bytes(message: string): number[] {
   const K = new Uint32Array([
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1,
@@ -389,9 +417,9 @@ function sha256Bytes(message: string): number[] {
     h6 = (h6 + g) >>> 0;
     h7 = (h7 + h) >>> 0;
   }
-  const out = new Array<number>(16);
-  const words = [h0, h1, h2, h3];
-  for (let i = 0; i < 4; i++) {
+  const out = new Array<number>(32);
+  const words = [h0, h1, h2, h3, h4, h5, h6, h7];
+  for (let i = 0; i < words.length; i++) {
     const word = words[i]!;
     out[i * 4] = (word >>> 24) & 0xff;
     out[i * 4 + 1] = (word >>> 16) & 0xff;

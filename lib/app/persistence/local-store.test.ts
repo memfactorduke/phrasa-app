@@ -4,8 +4,13 @@ import {
   guestPrincipal,
   libraryStorageKey,
   principalFromUserId,
+  syncStateStorageKey,
   userPrincipal,
 } from "./keys";
+import {
+  emptyWebSyncState,
+  upsertScriptTombstone,
+} from "@/lib/app/sync/durable-state";
 import {
   clearGuestLibraryAfterSuccessfulImport,
   clearLibrary,
@@ -13,9 +18,11 @@ import {
   loadLibrary,
   loadLibraryResult,
   loadReaderSettings,
+  loadSyncStateResult,
   memoryStorage,
   saveLibrary,
   saveReaderSettings,
+  saveSyncState,
 } from "./local-store";
 
 describe("namespaced local persistence", () => {
@@ -176,6 +183,98 @@ describe("namespaced local persistence", () => {
 
     expect(loadLibraryResult(principal, storage).status).toBe("corrupt");
     expect(storage.data[key]).toContain("missing-required-fields");
+  });
+
+  it("rejects malformed nested outline points, duplicate point ids, and loose dates", () => {
+    const principal = guestPrincipal();
+    const key = libraryStorageKey(principal);
+    const valid = createScript({
+      id: "strict-script",
+      outline: [{ id: "point-a", text: "Open", note: "" }],
+    });
+    const cases = [
+      { ...valid, outline: [{ id: "point-a", text: null }] },
+      {
+        ...valid,
+        outline: [
+          { id: "duplicate", text: "One", note: "" },
+          { id: "duplicate", text: "Two", note: "" },
+        ],
+      },
+      { ...valid, updatedAt: "tomorrow" },
+      { ...valid, remoteContentFingerprint: "" },
+    ];
+
+    for (const script of cases) {
+      const storage = memoryStorage({
+        [key]: JSON.stringify({ scripts: [script], folders: [] }),
+      });
+      expect(loadLibraryResult(principal, storage).status).toBe("corrupt");
+    }
+  });
+
+  it("keeps a recovery block visible after the primary library is repaired", () => {
+    const principal = guestPrincipal();
+    const key = libraryStorageKey(principal);
+    const storage = memoryStorage({
+      [key]: JSON.stringify({ scripts: [], folders: [] }),
+      [`${key}.recovery`]: "{original-corrupt-json",
+    });
+
+    const result = loadLibraryResult(principal, storage);
+    expect(result.status).toBe("recovery");
+    if (result.status !== "recovery") return;
+    expect(result.raw).toBe("{original-corrupt-json");
+    expect(storage.data[`${key}.recovery`]).toBe("{original-corrupt-json");
+  });
+
+  it("round-trips durable sync state and preserves malformed metadata", () => {
+    const principal = userPrincipal("account-a");
+    const key = syncStateStorageKey(principal);
+    const storage = memoryStorage();
+    const state = upsertScriptTombstone(emptyWebSyncState(), {
+      scriptId: "script-a",
+      deletedAt: "2026-07-30T13:00:00.000Z",
+      expectedRemoteContentFingerprint: "v2:sha256:abc",
+    });
+
+    expect(saveSyncState(principal, state, storage)).toEqual({ ok: true });
+    expect(loadSyncStateResult(principal, storage)).toEqual({
+      status: "ok",
+      state,
+    });
+
+    storage.data[key] = JSON.stringify({
+      ...state,
+      scriptTombstones: [
+        {
+          ...state.scriptTombstones[0],
+          deletedAt: "not-an-iso-date",
+        },
+      ],
+    });
+    const corrupt = loadSyncStateResult(principal, storage);
+    expect(corrupt.status).toBe("corrupt");
+    if (corrupt.status !== "corrupt") return;
+    expect(corrupt.recoveryKey).toBe(`${key}.recovery`);
+    expect(storage.data[`${key}.recovery`]).toBe(storage.data[key]);
+  });
+
+  it("clearLibrary removes only the target principal's sync metadata and recovery", () => {
+    const accountA = userPrincipal("account-a");
+    const accountB = userPrincipal("account-b");
+    const accountAKey = syncStateStorageKey(accountA);
+    const accountBKey = syncStateStorageKey(accountB);
+    const storage = memoryStorage({
+      [accountAKey]: JSON.stringify(emptyWebSyncState()),
+      [`${accountAKey}.recovery`]: "damaged-a",
+      [accountBKey]: JSON.stringify(emptyWebSyncState()),
+    });
+
+    expect(clearLibrary(accountA, storage)).toEqual({ ok: true });
+    expect(storage.data[accountAKey]).toBeUndefined();
+    expect(storage.data[`${accountAKey}.recovery`]).toBeUndefined();
+    expect(storage.data[accountBKey]).toBeDefined();
   });
 
   it("reports storage read and quota failures without throwing", () => {

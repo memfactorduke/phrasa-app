@@ -1,9 +1,13 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { describe, expect, it } from "vitest";
-import type { RemoteScriptRow } from "./remote-map";
+import type { RemoteFolderRow, RemoteScriptRow } from "./remote-map";
+import { createFolder } from "@/lib/app/models/script";
 import {
+  deleteRemoteFolder,
   fetchRemoteScripts,
+  verifyRemoteFolderAbsences,
   verifyRemoteScriptAbsences,
+  writeRemoteFolder,
 } from "./repository";
 
 type FakePage = {
@@ -246,5 +250,228 @@ describe("remote absence verification", () => {
     if (result.ok) {
       expect(Array.from(result.data)).toEqual(["gone-a", "gone-b"]);
     }
+  });
+
+  it("applies the same point verification to missing folder baselines", async () => {
+    const result = await verifyRemoteFolderAbsences(
+      absenceClient([
+        { data: null, error: null },
+        { data: null, error: null },
+      ]),
+      "account-a",
+      ["gone-folder-a", "gone-folder-b"],
+    );
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(Array.from(result.data)).toEqual([
+        "gone-folder-a",
+        "gone-folder-b",
+      ]);
+    }
+  });
+});
+
+describe("folder compare-and-swap writes", () => {
+  type Response = {
+    data: RemoteFolderRow | RemoteFolderRow[] | null;
+    error: { message: string; code?: string } | null;
+  };
+
+  function mutationClient(responses: Response[]) {
+    const equalityChecks: Array<[string, unknown]> = [];
+    const operations: string[] = [];
+    let responseIndex = 0;
+
+    class FakeFolderQuery {
+      insert(): this {
+        operations.push("insert");
+        return this;
+      }
+
+      update(): this {
+        operations.push("update");
+        return this;
+      }
+
+      delete(): this {
+        operations.push("delete");
+        return this;
+      }
+
+      select(): this {
+        operations.push("select");
+        return this;
+      }
+
+      eq(column: string, value: unknown): this {
+        equalityChecks.push([column, value]);
+        return this;
+      }
+
+      single(): Promise<Response> {
+        const response = responses[responseIndex++];
+        if (!response) throw new Error("unexpected single query");
+        return Promise.resolve(response);
+      }
+
+      maybeSingle(): Promise<Response> {
+        const response = responses[responseIndex++];
+        if (!response) throw new Error("unexpected maybeSingle query");
+        return Promise.resolve(response);
+      }
+
+      then<TResult1 = Response, TResult2 = never>(
+        onfulfilled?:
+          | ((value: Response) => TResult1 | PromiseLike<TResult1>)
+          | null,
+        onrejected?:
+          | ((reason: unknown) => TResult2 | PromiseLike<TResult2>)
+          | null,
+      ): PromiseLike<TResult1 | TResult2> {
+        const response = responses[responseIndex++];
+        if (!response) {
+          return Promise.reject(new Error("unexpected awaited query")).then(
+            onfulfilled,
+            onrejected,
+          );
+        }
+        return Promise.resolve(response).then(onfulfilled, onrejected);
+      }
+    }
+
+    return {
+      client: {
+        from() {
+          return new FakeFolderQuery();
+        },
+      } as unknown as SupabaseClient,
+      equalityChecks,
+      operations,
+    };
+  }
+
+  const original = createFolder("Original", {
+    id: "folder-a",
+    createdAt: "2026-07-30T12:00:00.000Z",
+  });
+  const renamed = { ...original, name: "Renamed" };
+
+  it("carries the exact acknowledged name and creation time on rename", async () => {
+    const { client, equalityChecks, operations } = mutationClient([
+      {
+        data: {
+          id: renamed.id,
+          name: renamed.name,
+          created_at: renamed.createdAt,
+        },
+        error: null,
+      },
+    ]);
+
+    const result = await writeRemoteFolder(
+      client,
+      "account-a",
+      renamed,
+      original,
+    );
+
+    expect(result).toMatchObject({ ok: true, data: renamed });
+    expect(operations).toContain("update");
+    expect(equalityChecks).toEqual(
+      expect.arrayContaining([
+        ["id", original.id],
+        ["user_id", "account-a"],
+        ["name", original.name],
+        ["created_at", original.createdAt],
+      ]),
+    );
+  });
+
+  it("fails closed when a concurrent rename misses the baseline", async () => {
+    const cloudChanged = { ...original, name: "Cloud rename" };
+    const { client } = mutationClient([
+      { data: null, error: null },
+      {
+        data: {
+          id: cloudChanged.id,
+          name: cloudChanged.name,
+          created_at: cloudChanged.createdAt,
+        },
+        error: null,
+      },
+    ]);
+
+    const result = await writeRemoteFolder(
+      client,
+      "account-a",
+      renamed,
+      original,
+    );
+
+    expect(result).toMatchObject({
+      ok: false,
+      code: "folder_conflict",
+    });
+  });
+
+  it("treats an identical concurrent create as idempotent, never as an upsert", async () => {
+    const { client, operations } = mutationClient([
+      {
+        data: null,
+        error: { message: "duplicate key", code: "23505" },
+      },
+      {
+        data: {
+          id: original.id,
+          name: original.name,
+          created_at: original.createdAt,
+        },
+        error: null,
+      },
+    ]);
+
+    const result = await writeRemoteFolder(
+      client,
+      "account-a",
+      original,
+      null,
+    );
+
+    expect(result).toMatchObject({ ok: true, data: original });
+    expect(operations).toContain("insert");
+    expect(operations).not.toContain("upsert");
+  });
+
+  it("preserves a changed cloud folder when conditional delete misses", async () => {
+    const cloudChanged = { ...original, name: "Cloud rename" };
+    const { client, equalityChecks } = mutationClient([
+      { data: [], error: null },
+      {
+        data: {
+          id: cloudChanged.id,
+          name: cloudChanged.name,
+          created_at: cloudChanged.createdAt,
+        },
+        error: null,
+      },
+    ]);
+
+    const result = await deleteRemoteFolder(
+      client,
+      "account-a",
+      original,
+    );
+
+    expect(result).toMatchObject({
+      ok: false,
+      code: "folder_conflict",
+    });
+    expect(equalityChecks).toEqual(
+      expect.arrayContaining([
+        ["name", original.name],
+        ["created_at", original.createdAt],
+      ]),
+    );
   });
 });

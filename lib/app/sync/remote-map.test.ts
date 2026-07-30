@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createHash } from "node:crypto";
 import { createScript, createFolder } from "@/lib/app/models/script";
 import {
   folderFromRemoteRow,
@@ -11,7 +12,9 @@ import {
   scriptFromRemoteRow,
   scriptToContentUpdatePayload,
   scriptToInsertPayload,
+  synchronizedContentCanonical,
   synchronizedContentFingerprint,
+  synchronizedContentFingerprintMatches,
 } from "./remote-map";
 
 describe("remote sync mapping", () => {
@@ -67,6 +70,97 @@ describe("remote sync mapping", () => {
         ...clean,
         tags: ["one", "two"],
       }),
+    ).toBe(true);
+  });
+
+  it("uses a bounded versioned SHA-256 digest independent of body size", () => {
+    const short = createScript({
+      id: "digest",
+      title: "Digest",
+      body: "short",
+    });
+    const huge = { ...short, body: "x".repeat(500_000) };
+
+    const shortDigest = synchronizedContentFingerprint(short);
+    const hugeDigest = synchronizedContentFingerprint(huge);
+
+    expect(shortDigest).toMatch(/^v2:sha256:[a-f0-9]{64}$/);
+    expect(hugeDigest).toMatch(/^v2:sha256:[a-f0-9]{64}$/);
+    expect(shortDigest).toHaveLength(74);
+    expect(hugeDigest).toHaveLength(74);
+    expect(hugeDigest).not.toBe(shortDigest);
+    expect(synchronizedContentFingerprint(short)).toBe(shortDigest);
+    expect(shortDigest).toBe(
+      `v2:sha256:${createHash("sha256")
+        .update(synchronizedContentCanonical(short))
+        .digest("hex")}`,
+    );
+  });
+
+  it("digests every synchronized field but ignores local clock metadata", () => {
+    const baseline = createScript({
+      id: "digest-fields",
+      title: "Title",
+      body: "Body",
+      tags: ["tag"],
+      folderId: "folder-a",
+      outline: [{ id: "point-a", text: "Point", note: "Note" }],
+      source: "manual",
+    });
+    const digest = synchronizedContentFingerprint(baseline);
+    const changes = [
+      { ...baseline, title: "Other" },
+      { ...baseline, body: "Other" },
+      { ...baseline, source: "upload" as const },
+      { ...baseline, folderId: null },
+      { ...baseline, tags: ["other"] },
+      {
+        ...baseline,
+        outline: [{ id: "point-a", text: "Other", note: "Note" }],
+      },
+    ];
+
+    for (const changed of changes) {
+      expect(synchronizedContentFingerprint(changed)).not.toBe(digest);
+    }
+    expect(
+      synchronizedContentFingerprint({
+        ...baseline,
+        updatedAt: "2030-01-01T00:00:00.000Z",
+        lastOpenedAt: "2030-01-01T00:00:00.000Z",
+        remoteUpdatedAtWire: "2030-01-01T00:00:00.000Z",
+      }),
+    ).toBe(digest);
+  });
+
+  it("accepts the original raw-JSON baseline until the next acknowledgement migrates it", () => {
+    const clean = createScript({
+      id: "legacy-fingerprint",
+      title: "Legacy",
+      body: "Stored before digest migration",
+      remoteUpdatedAtWire: "2026-07-30T12:00:00.000Z",
+    });
+    const legacyFingerprint = synchronizedContentCanonical(clean);
+    const legacyCached = {
+      ...clean,
+      remoteContentFingerprint: legacyFingerprint,
+    };
+
+    expect(scriptHasUnacknowledgedLocalEdit(legacyCached)).toBe(false);
+    expect(
+      synchronizedContentFingerprintMatches(clean, legacyFingerprint),
+    ).toBe(true);
+    expect(
+      scriptHasUnacknowledgedLocalEdit({
+        ...legacyCached,
+        body: "Edited",
+      }),
+    ).toBe(true);
+    expect(
+      synchronizedContentFingerprintMatches(
+        clean,
+        synchronizedContentFingerprint(clean),
+      ),
     ).toBe(true);
   });
 

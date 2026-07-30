@@ -1,5 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { ScriptDocument, ScriptFolder } from "@/lib/app/models/script";
+import {
+  normalizeFolderName,
+  type ScriptDocument,
+  type ScriptFolder,
+} from "@/lib/app/models/script";
 import {
   FOLDER_SELECT_COLUMNS,
   folderFromRemoteRow,
@@ -186,22 +190,164 @@ export async function fetchRemoteFolders(
   };
 }
 
-export async function upsertRemoteFolder(
+export async function fetchRemoteScript(
   client: SupabaseClient,
   userId: string,
-  folder: ScriptFolder,
-): Promise<SyncResult<ScriptFolder>> {
-  const payload = folderToInsertPayload(folder, userId);
+  scriptId: string,
+): Promise<SyncResult<ScriptDocument | null>> {
   const { data, error } = await client
-    .from("folders")
-    .upsert(payload, { onConflict: "id" })
-    .select(FOLDER_SELECT_COLUMNS)
-    .single();
-
+    .from("scripts")
+    .select(SCRIPT_SELECT_COLUMNS)
+    .eq("id", scriptId)
+    .eq("user_id", userId)
+    .maybeSingle();
   if (error) {
     return { ok: false, error: error.message, code: error.code };
   }
-  return { ok: true, data: folderFromRemoteRow(data as RemoteFolderRow) };
+  return {
+    ok: true,
+    data: data ? scriptFromRemoteRow(data as RemoteScriptRow) : null,
+  };
+}
+
+export async function fetchRemoteFolder(
+  client: SupabaseClient,
+  userId: string,
+  folderId: string,
+): Promise<SyncResult<ScriptFolder | null>> {
+  const { data, error } = await client
+    .from("folders")
+    .select(FOLDER_SELECT_COLUMNS)
+    .eq("id", folderId)
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (error) {
+    return { ok: false, error: error.message, code: error.code };
+  }
+  return {
+    ok: true,
+    data: data ? folderFromRemoteRow(data as RemoteFolderRow) : null,
+  };
+}
+
+function foldersEqual(left: ScriptFolder, right: ScriptFolder): boolean {
+  return (
+    left.id === right.id &&
+    left.name === right.name &&
+    Date.parse(left.createdAt) === Date.parse(right.createdAt)
+  );
+}
+
+/**
+ * Create or rename a folder without a generic upsert. Every existing-row write
+ * carries the exact shared baseline, so a concurrent rename/recreate cannot be
+ * overwritten by this browser.
+ */
+export async function writeRemoteFolder(
+  client: SupabaseClient,
+  userId: string,
+  desired: ScriptFolder,
+  expectedRemote: ScriptFolder | null,
+): Promise<SyncResult<ScriptFolder>> {
+  const normalizedDesired = {
+    ...desired,
+    name: normalizeFolderName(desired.name),
+  };
+  if (!expectedRemote) {
+    const { data, error } = await client
+      .from("folders")
+      .insert(folderToInsertPayload(normalizedDesired, userId))
+      .select(FOLDER_SELECT_COLUMNS)
+      .single();
+    if (!error && data) {
+      return { ok: true, data: folderFromRemoteRow(data as RemoteFolderRow) };
+    }
+    const current = await fetchRemoteFolder(
+      client,
+      userId,
+      normalizedDesired.id,
+    );
+    if (
+      current.ok &&
+      current.data &&
+      foldersEqual(current.data, normalizedDesired)
+    ) {
+      return current as SyncResult<ScriptFolder>;
+    }
+    return {
+      ok: false,
+      error:
+        current.ok && current.data
+          ? "Folder id already belongs to a different cloud folder. Nothing was overwritten."
+          : error?.message ?? (current.ok ? "Folder could not be created." : current.error),
+      code: current.ok && current.data ? "folder_conflict" : error?.code ?? (!current.ok ? current.code : undefined),
+    };
+  }
+
+  const { data, error } = await client
+    .from("folders")
+    .update({ name: normalizedDesired.name })
+    .eq("id", normalizedDesired.id)
+    .eq("user_id", userId)
+    .eq("name", expectedRemote.name)
+    .eq("created_at", expectedRemote.createdAt)
+    .select(FOLDER_SELECT_COLUMNS)
+    .maybeSingle();
+  if (error) {
+    return { ok: false, error: error.message, code: error.code };
+  }
+  if (data) {
+    return { ok: true, data: folderFromRemoteRow(data as RemoteFolderRow) };
+  }
+  const current = await fetchRemoteFolder(
+    client,
+    userId,
+    normalizedDesired.id,
+  );
+  if (
+    current.ok &&
+    current.data &&
+    foldersEqual(current.data, normalizedDesired)
+  ) {
+    return current as SyncResult<ScriptFolder>;
+  }
+  return {
+    ok: false,
+    error:
+      "Cloud folder changed before this rename completed. Nothing was overwritten.",
+    code: "folder_conflict",
+  };
+}
+
+export async function deleteRemoteFolder(
+  client: SupabaseClient,
+  userId: string,
+  expectedRemote: ScriptFolder,
+): Promise<SyncResult<true>> {
+  const { data, error } = await client
+    .from("folders")
+    .delete()
+    .eq("id", expectedRemote.id)
+    .eq("user_id", userId)
+    .eq("name", expectedRemote.name)
+    .eq("created_at", expectedRemote.createdAt)
+    .select("id");
+  if (error) {
+    return { ok: false, error: error.message, code: error.code };
+  }
+  if (!data || data.length === 0) {
+    const current = await fetchRemoteFolder(client, userId, expectedRemote.id);
+    if (!current.ok) return current;
+    if (current.data) {
+      return {
+        ok: false,
+        error:
+          "Cloud folder changed before this delete completed. The cloud copy was preserved.",
+        code: "folder_conflict",
+      };
+    }
+  }
+  return { ok: true, data: true };
 }
 
 export async function upsertRemoteScript(
@@ -312,6 +458,25 @@ export async function verifyRemoteScriptAbsences(
     if (data) {
       return incompleteRemoteResult(
         `script ${id} was omitted from the paginated snapshot`,
+      );
+    }
+    verified.add(id);
+  }
+  return { ok: true, data: verified };
+}
+
+export async function verifyRemoteFolderAbsences(
+  client: SupabaseClient,
+  userId: string,
+  candidateIDs: readonly string[],
+): Promise<SyncResult<Set<string>>> {
+  const verified = new Set<string>();
+  for (const id of candidateIDs) {
+    const current = await fetchRemoteFolder(client, userId, id);
+    if (!current.ok) return current;
+    if (current.data) {
+      return incompleteRemoteResult(
+        `folder ${id} was omitted from the paginated snapshot`,
       );
     }
     verified.add(id);

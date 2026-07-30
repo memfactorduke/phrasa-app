@@ -42,26 +42,46 @@ import {
   loadLibrary,
   loadLibraryResult,
   loadReaderSettings,
+  loadSyncState,
+  loadSyncStateResult,
   saveLibrary,
   saveReaderSettings,
+  saveSyncState,
 } from "@/lib/app/persistence/local-store";
 import {
   libraryStorageKey,
   principalFromUserId,
+  syncStateStorageKey,
   userPrincipal,
 } from "@/lib/app/persistence/keys";
+import { PersistenceBlockRegistry } from "@/lib/app/persistence/block-registry";
 import {
   mergeRemoteLibrary,
   scriptHasUnacknowledgedLocalEdit,
+  synchronizedContentFingerprint,
 } from "@/lib/app/sync/remote-map";
 import {
+  deleteRemoteFolder,
   deleteRemoteScript,
+  fetchRemoteScript,
   fetchRemoteFolders,
   pullRemoteLibrary,
-  upsertRemoteFolder,
   upsertRemoteScript,
+  verifyRemoteFolderAbsences,
   verifyRemoteScriptAbsences,
+  writeRemoteFolder,
 } from "@/lib/app/sync/repository";
+import {
+  acknowledgeFolderDeletion,
+  acknowledgeFolderWrite,
+  reconcileFolders,
+  removeScriptTombstone,
+  removeScriptsCoveredByTombstones,
+  resolveScriptTombstone,
+  unfileScriptsFromMissingFolders,
+  upsertScriptTombstone,
+  type WebSyncState,
+} from "@/lib/app/sync/durable-state";
 import {
   librarySnapshotsEqual,
   mergeConcurrentLocalLibraries,
@@ -151,6 +171,18 @@ function guestLibraryForImport(
   return scripts.length > 0 ? { scripts, folders: library.folders } : null;
 }
 
+function loadGuestLibraryForImport(): LibrarySnapshot {
+  const principal = principalFromUserId(null);
+  const library = loadGuestLibrary();
+  return {
+    ...library,
+    scripts: removeScriptsCoveredByTombstones(
+      library.scripts,
+      loadSyncState(principal),
+    ),
+  };
+}
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const cloudConfigured = useMemo(() => getCloudConfig().configured, []);
   const [ready, setReady] = useState(false);
@@ -182,7 +214,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const cloudMutationRevision = useRef(0);
   const crossTabChannel = useRef<BroadcastChannel | null>(null);
   const crossTabDeletedScriptIDs = useRef(new Set<string>());
-  const blockedPersistenceKey = useRef<string | null>(null);
+  const persistenceBlocks = useRef(new PersistenceBlockRegistry());
+  const syncStateRef = useRef<WebSyncState | null>(null);
 
   useEffect(() => {
     libraryRef.current = library;
@@ -202,17 +235,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   /** Persist any account's cache without changing whichever principal is visible. */
-  const persistLibraryCache = useCallback(
+  const durablyPersistLibraryCache = useCallback(
     (next: LibrarySnapshot, userId: string | null | undefined) => {
       const sorted = sortLibrary(next);
       const principal = principalFromUserId(userId);
       const key = libraryStorageKey(principal);
-      if (blockedPersistenceKey.current === key) {
+      if (persistenceBlocks.current.isBlocked(key)) {
         setPersistenceIssue((prior) => prior ?? {
           message:
             "This library is visible for recovery but is not being overwritten. Download the recovery copy before starting fresh.",
         });
-        return sorted;
+        return null;
       }
       const saved = saveLibrary(principal, sorted);
       if (!saved.ok && principalGuard.current.current().userId === (userId ?? null)) {
@@ -220,7 +253,45 @@ export function AppProvider({ children }: { children: ReactNode }) {
           message: `Your latest changes are visible but were not saved in this browser: ${saved.error}`,
         });
       }
-      return sorted;
+      return saved.ok ? sorted : null;
+    },
+    [],
+  );
+
+  const persistLibraryCache = useCallback(
+    (next: LibrarySnapshot, userId: string | null | undefined) =>
+      durablyPersistLibraryCache(next, userId) ?? sortLibrary(next),
+    [durablyPersistLibraryCache],
+  );
+
+  const persistSyncStateCache = useCallback(
+    (state: WebSyncState, userId: string | null | undefined): boolean => {
+      const principal = principalFromUserId(userId);
+      const key = syncStateStorageKey(principal);
+      if (persistenceBlocks.current.isBlocked(key)) {
+        if (principalGuard.current.current().userId === (userId ?? null)) {
+          setPersistenceIssue((prior) => prior ?? {
+            message:
+              "Cloud recovery metadata is protected from being overwritten. Clear this browser only after downloading the recovery copy.",
+          });
+        }
+        return false;
+      }
+      const saved = saveSyncState(principal, state);
+      if (!saved.ok) {
+        persistenceBlocks.current.block(key);
+        if (principalGuard.current.current().userId === (userId ?? null)) {
+          setPersistenceIssue({
+            message:
+              `Cloud recovery metadata could not be saved. Destructive sync is paused: ${saved.error}`,
+          });
+        }
+        return false;
+      }
+      if (principalGuard.current.current().userId === (userId ?? null)) {
+        syncStateRef.current = state;
+      }
+      return true;
     },
     [],
   );
@@ -261,23 +332,44 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const loadPrincipalSnapshot = useCallback((userId: string | null) => {
     const principal = principalFromUserId(userId);
     const loaded = loadLibraryResult(principal);
+    const loadedSyncState = loadSyncStateResult(principal);
     let snap = loaded.library;
     let issue: BrowserPersistenceIssue | null = null;
     const key = libraryStorageKey(principal);
-    if (loaded.status === "corrupt") {
-      blockedPersistenceKey.current = loaded.recoveryKey ? null : key;
+    const syncKey = syncStateStorageKey(principal);
+    if (loaded.status === "corrupt" || loaded.status === "recovery") {
+      persistenceBlocks.current.block(key);
       issue = {
         message:
           "Phrasa found damaged browser library data and did not overwrite it. Download the recovery copy before editing or clearing this browser.",
         recoveryRaw: loaded.raw,
       };
     } else if (loaded.status === "unavailable") {
-      blockedPersistenceKey.current = key;
+      persistenceBlocks.current.block(key);
       issue = {
         message: `Browser storage is unavailable. Changes in this tab may not survive a reload: ${loaded.error}`,
       };
     } else {
-      blockedPersistenceKey.current = null;
+      persistenceBlocks.current.resolve(key);
+    }
+    if (
+      loadedSyncState.status === "corrupt" ||
+      loadedSyncState.status === "recovery"
+    ) {
+      persistenceBlocks.current.block(syncKey);
+      issue ??= {
+        message:
+          "Phrasa found damaged cloud recovery metadata and paused cloud sync so deleted work cannot reappear or erase a newer copy.",
+        recoveryRaw: loadedSyncState.raw,
+      };
+    } else if (loadedSyncState.status === "unavailable") {
+      persistenceBlocks.current.block(syncKey);
+      issue ??= {
+        message:
+          `Cloud recovery metadata is unavailable. Destructive sync is paused: ${loadedSyncState.error}`,
+      };
+    } else {
+      persistenceBlocks.current.resolve(syncKey);
     }
     if (principal.kind === "guest" && loaded.status === "empty") {
       snap = {
@@ -292,8 +384,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
     }
     return {
-      library: sortLibrary(snap),
+      library: sortLibrary({
+        ...snap,
+        scripts: removeScriptsCoveredByTombstones(
+          snap.scripts,
+          loadedSyncState.state,
+        ),
+      }),
       settings: loadReaderSettings(principal),
+      syncState: loadedSyncState.state,
       issue,
     };
   }, []);
@@ -312,6 +411,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       userRef.current = nextUser;
       libraryRef.current = loaded.library;
       readerSettingsRef.current = loaded.settings;
+      syncStateRef.current = loaded.syncState;
       cloudMutationRevision.current = 0;
       crossTabDeletedScriptIDs.current.clear();
       setUser(nextUser);
@@ -341,38 +441,281 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return { needsFollowUpPush: false };
       }
 
+      const principal = userPrincipal(userId);
+      if (
+        persistenceBlocks.current.isBlocked(libraryStorageKey(principal)) ||
+        persistenceBlocks.current.isBlocked(syncStateStorageKey(principal))
+      ) {
+        setSyncError(
+          "Cloud sync is paused until this browser's protected recovery data is downloaded or cleared.",
+        );
+        return { needsFollowUpPush: false };
+      }
+
       const startingRevision = cloudMutationRevision.current;
-      const uploadSnapshot = loadLibrary(userPrincipal(userId));
       const acknowledgements: ScriptUploadAcknowledgement[] = [];
       let operationError: string | null = null;
+      let syncState = loadSyncState(principal);
 
-      const remoteFolders = await fetchRemoteFolders(client, userId);
-      if (!remoteFolders.ok) {
-        operationError = remoteFolders.error;
-      } else {
-        const remoteFoldersByID = new Map(
-          remoteFolders.data.map((folder) => [folder.id, folder]),
+      // Destructive intent is consumed only inside this serialized lane. A
+      // reload, offline period, or transient failure leaves the tombstone for
+      // the next launch/reconnect instead of resurrecting the row.
+      for (const tombstone of [...syncState.scriptTombstones]) {
+        if (!principalGuard.current.isCurrent(token)) break;
+        const remoteScript = await fetchRemoteScript(
+          client,
+          userId,
+          tombstone.scriptId,
         );
-        for (const folder of uploadSnapshot.folders) {
-          if (!principalGuard.current.isCurrent(token)) break;
-          const remoteFolder = remoteFoldersByID.get(folder.id);
-          if (remoteFolder?.name === folder.name) continue;
-          if (remoteFolder) {
+        if (!remoteScript.ok) {
+          operationError = remoteScript.error;
+          break;
+        }
+        const resolution = resolveScriptTombstone(
+          tombstone,
+          remoteScript.data,
+        );
+        if (resolution.action === "acknowledge-absence") {
+          const latest = loadLibrary(principal);
+          const cached = durablyPersistLibraryCache(
+            {
+              ...latest,
+              scripts: latest.scripts.filter(
+                (script) => script.id !== tombstone.scriptId,
+              ),
+            },
+            userId,
+          );
+          if (!cached) {
             operationError =
-              `Folder “${folder.name}” changed on another device. ` +
-              "Sync again to use the cloud version; no folder was overwritten.";
+              "The cloud deletion is complete, but the browser copy could not be removed safely. Its deletion marker was kept for retry.";
             break;
           }
-          const result = await upsertRemoteFolder(client, userId, folder);
-          if (!result.ok) {
-            operationError = result.error;
+          const nextState = removeScriptTombstone(
+            syncState,
+            tombstone.scriptId,
+          );
+          if (!persistSyncStateCache(nextState, userId)) {
+            operationError =
+              "A completed script deletion could not be acknowledged locally. Destructive sync is paused.";
             break;
+          }
+          syncState = nextState;
+          crossTabDeletedScriptIDs.current.delete(tombstone.scriptId);
+          applyVisibleLibrary(cached, token);
+          continue;
+        }
+        if (resolution.action === "restore") {
+          const changedRemote = resolution.changedRemote;
+          const latest = loadLibrary(principal);
+          const restored = {
+            ...latest,
+            scripts: [
+              changedRemote,
+              ...latest.scripts.filter(
+                (script) => script.id !== changedRemote.id,
+              ),
+            ],
+          };
+          const cached = durablyPersistLibraryCache(restored, userId);
+          if (!cached) {
+            operationError =
+              "The cloud script changed and was preserved, but its restored browser copy could not be saved. The deletion marker was kept for retry.";
+            break;
+          }
+          const nextState = removeScriptTombstone(
+            syncState,
+            tombstone.scriptId,
+          );
+          if (!persistSyncStateCache(nextState, userId)) {
+            operationError =
+              "The cloud script changed, but its stale deletion marker could not be retired. The cloud copy was preserved.";
+            break;
+          }
+          syncState = nextState;
+          crossTabDeletedScriptIDs.current.delete(tombstone.scriptId);
+          crossTabChannel.current?.postMessage({
+            kind: "restore-script",
+            userId,
+            script: changedRemote,
+          } satisfies CrossTabLibraryMessage);
+          applyVisibleLibrary(cached, token);
+          operationError =
+            `“${changedRemote.title}” changed in the cloud after it was deleted here. ` +
+            "The newer cloud copy was restored instead of being erased.";
+          continue;
+        }
+        const deleted = await deleteRemoteScript(
+          client,
+          userId,
+          resolution.expectedRemote,
+        );
+        if (!deleted.ok) {
+          operationError = deleted.error;
+          break;
+        }
+        const latest = loadLibrary(principal);
+        const cached = durablyPersistLibraryCache(
+          {
+            ...latest,
+            scripts: latest.scripts.filter(
+              (script) => script.id !== tombstone.scriptId,
+            ),
+          },
+          userId,
+        );
+        if (!cached) {
+          operationError =
+            "The cloud script was deleted, but the browser copy could not be removed safely. Its deletion marker was kept for retry.";
+          break;
+        }
+        const nextState = removeScriptTombstone(
+          syncState,
+          tombstone.scriptId,
+        );
+        if (!persistSyncStateCache(nextState, userId)) {
+          operationError =
+            "The cloud script was deleted, but its local deletion marker could not be acknowledged. Sync is paused.";
+          break;
+        }
+        syncState = nextState;
+        crossTabDeletedScriptIDs.current.delete(tombstone.scriptId);
+        applyVisibleLibrary(cached, token);
+      }
+
+      if (!operationError) {
+        const folderSnapshot = loadLibrary(principal);
+        const remoteFolders = await fetchRemoteFolders(client, userId);
+        if (!remoteFolders.ok) {
+          operationError = remoteFolders.error;
+        } else {
+          const remoteFolderIDs = new Set(
+            remoteFolders.data.map((folder) => folder.id),
+          );
+          const folderAbsenceCandidates = new Set<string>();
+          for (const baseline of syncState.folderBaselines) {
+            if (!remoteFolderIDs.has(baseline.folderId)) {
+              folderAbsenceCandidates.add(baseline.folderId);
+            }
+          }
+          for (const tombstone of syncState.folderTombstones) {
+            if (!remoteFolderIDs.has(tombstone.folderId)) {
+              folderAbsenceCandidates.add(tombstone.folderId);
+            }
+          }
+          const verifiedFolderAbsences = await verifyRemoteFolderAbsences(
+            client,
+            userId,
+            Array.from(folderAbsenceCandidates),
+          );
+          if (!verifiedFolderAbsences.ok) {
+            operationError = verifiedFolderAbsences.error;
+          } else {
+            const folderResult = reconcileFolders(
+              folderSnapshot.folders,
+              remoteFolders.data,
+              syncState,
+              verifiedFolderAbsences.data,
+            );
+            if (!folderResult.ok) {
+              operationError = folderResult.error;
+            } else {
+              syncState = folderResult.state;
+              const reconciledFolders = new Map(
+                folderResult.folders.map((folder) => [folder.id, folder]),
+              );
+              const completedFolderDeletionIDs: string[] = [];
+
+              for (const deletion of folderResult.remoteDeletes) {
+                const result = await deleteRemoteFolder(
+                  client,
+                  userId,
+                  deletion.expectedRemote,
+                );
+                if (!result.ok) {
+                  operationError = result.error;
+                  break;
+                }
+                reconciledFolders.delete(deletion.tombstone.folderId);
+                completedFolderDeletionIDs.push(
+                  deletion.tombstone.folderId,
+                );
+              }
+
+              if (!operationError) {
+                for (const write of folderResult.writes) {
+                  const result = await writeRemoteFolder(
+                    client,
+                    userId,
+                    write.desired,
+                    write.expectedRemote,
+                  );
+                  if (!result.ok) {
+                    operationError = result.error;
+                    break;
+                  }
+                  syncState = acknowledgeFolderWrite(syncState, result.data);
+                  reconciledFolders.set(result.data.id, result.data);
+                  if (!persistSyncStateCache(syncState, userId)) {
+                    operationError =
+                      "A completed folder write could not be acknowledged locally. Sync is paused.";
+                    break;
+                  }
+                }
+              }
+
+              // Keep folders created by this tab while cloud I/O was in
+              // flight. They will be handled by the scheduled follow-up pass.
+              const latest = loadLibrary(principal);
+              const startedFolderIDs = new Set(
+                folderSnapshot.folders.map((folder) => folder.id),
+              );
+              for (const folder of latest.folders) {
+                if (!startedFolderIDs.has(folder.id)) {
+                  reconciledFolders.set(folder.id, folder);
+                }
+              }
+              const folders = Array.from(reconciledFolders.values());
+              const folderCached = durablyPersistLibraryCache(
+                {
+                  scripts: unfileScriptsFromMissingFolders(
+                    removeScriptsCoveredByTombstones(
+                      latest.scripts,
+                      syncState,
+                    ),
+                    folders,
+                  ),
+                  folders,
+                },
+                userId,
+              );
+              if (!folderCached) {
+                operationError ??=
+                  "Folder reconciliation reached the cloud, but the browser library could not be saved. Deletion markers were kept for retry.";
+              } else {
+                applyVisibleLibrary(folderCached, token);
+                for (const folderId of completedFolderDeletionIDs) {
+                  syncState = acknowledgeFolderDeletion(syncState, folderId);
+                }
+              }
+              if (
+                folderCached &&
+                !persistSyncStateCache(syncState, userId)
+              ) {
+                operationError ??=
+                  "Folder reconciliation could not be saved safely. Sync is paused.";
+              }
+            }
           }
         }
       }
 
       if (!operationError) {
-        const dirtyScripts = uploadSnapshot.scripts.filter(
+        const uploadSnapshot = loadLibrary(principal);
+        const dirtyScripts = removeScriptsCoveredByTombstones(
+          uploadSnapshot.scripts,
+          syncState,
+        ).filter(
           scriptHasUnacknowledgedLocalEdit,
         );
         for (const script of dirtyScripts) {
@@ -392,12 +735,28 @@ export function AppProvider({ children }: { children: ReactNode }) {
       // Always reconcile completed acknowledgements into account A's latest
       // cache. This is safe after an A -> B transition because it does not touch
       // visible state, and it prevents a successful write from losing its OCC wire.
-      const latest = loadLibrary(userPrincipal(userId));
+      const latest = loadLibrary(principal);
       const reconciled = reconcileUploadAcknowledgements(
-        latest,
+        {
+          ...latest,
+          scripts: removeScriptsCoveredByTombstones(
+            latest.scripts,
+            syncState,
+          ),
+        },
         acknowledgements,
       );
-      const cached = persistLibraryCache(reconciled.library, userId);
+      const durableAcknowledgementCache = durablyPersistLibraryCache(
+        reconciled.library,
+        userId,
+      );
+      if (!durableAcknowledgementCache && acknowledgements.length > 0) {
+        persistenceBlocks.current.block(libraryStorageKey(principal));
+        operationError ??=
+          "Cloud writes completed, but their safe browser acknowledgements could not be saved. Cloud sync is paused to prevent a duplicate retry.";
+      }
+      const cached =
+        durableAcknowledgementCache ?? sortLibrary(reconciled.library);
       const stillCurrent = principalGuard.current.isCurrent(token);
       if (stillCurrent) {
         applyVisibleLibrary(cached, token);
@@ -416,7 +775,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
             cloudMutationRevision.current !== startingRevision),
       };
     },
-    [applyVisibleLibrary, persistLibraryCache],
+    [
+      applyVisibleLibrary,
+      durablyPersistLibraryCache,
+      persistSyncStateCache,
+    ],
   );
 
   const enqueuePush = useCallback(
@@ -469,6 +832,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
         if (!userId || !principalGuard.current.isCurrent(token)) return;
         const client = getSupabaseBrowserClient();
         if (!client) return;
+        const principal = userPrincipal(userId);
+        if (
+          persistenceBlocks.current.isBlocked(libraryStorageKey(principal)) ||
+          persistenceBlocks.current.isBlocked(syncStateStorageKey(principal))
+        ) {
+          setSyncError(
+            "Cloud sync is paused until this browser's protected recovery data is downloaded or cleared.",
+          );
+          return;
+        }
         setSyncing(true);
         setSyncError(null);
         try {
@@ -479,9 +852,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
             }
             return;
           }
-          const local = loadLibrary(userPrincipal(userId));
+          const syncState = loadSyncState(principal);
+          const remoteScripts = removeScriptsCoveredByTombstones(
+            remote.data.scripts,
+            syncState,
+          );
+          const loadedLocal = loadLibrary(principal);
+          const local = {
+            ...loadedLocal,
+            scripts: removeScriptsCoveredByTombstones(
+              loadedLocal.scripts,
+              syncState,
+            ),
+          };
           const remoteScriptIDs = new Set(
-            remote.data.scripts.map((script) => script.id),
+            remoteScripts.map((script) => script.id),
           );
           const absenceCandidates = local.scripts
             .filter(
@@ -501,16 +886,82 @@ export function AppProvider({ children }: { children: ReactNode }) {
             }
             return;
           }
-          const latest = loadLibrary(userPrincipal(userId));
+          const remoteFolderIDs = new Set(
+            remote.data.folders.map((folder) => folder.id),
+          );
+          const folderAbsenceCandidates = new Set<string>();
+          for (const baseline of syncState.folderBaselines) {
+            if (!remoteFolderIDs.has(baseline.folderId)) {
+              folderAbsenceCandidates.add(baseline.folderId);
+            }
+          }
+          for (const tombstone of syncState.folderTombstones) {
+            if (!remoteFolderIDs.has(tombstone.folderId)) {
+              folderAbsenceCandidates.add(tombstone.folderId);
+            }
+          }
+          const verifiedFolderAbsences = await verifyRemoteFolderAbsences(
+            client,
+            userId,
+            Array.from(folderAbsenceCandidates),
+          );
+          if (!verifiedFolderAbsences.ok) {
+            if (principalGuard.current.isCurrent(token)) {
+              setSyncError(verifiedFolderAbsences.error);
+            }
+            return;
+          }
+          const loadedLatest = loadLibrary(principal);
+          const latest = {
+            ...loadedLatest,
+            scripts: removeScriptsCoveredByTombstones(
+              loadedLatest.scripts,
+              syncState,
+            ),
+          };
+          const folderResult = reconcileFolders(
+            latest.folders,
+            remote.data.folders,
+            syncState,
+            verifiedFolderAbsences.data,
+          );
+          if (!folderResult.ok) {
+            if (principalGuard.current.isCurrent(token)) {
+              setSyncError(folderResult.error);
+            }
+            return;
+          }
           const merged = mergeRemoteLibrary(
             latest,
-            remote.data,
+            { scripts: remoteScripts, folders: [] },
             verifiedAbsences.data,
           );
-          const cached = persistLibraryCache(
-            { scripts: merged.scripts, folders: merged.folders },
+          const cached = durablyPersistLibraryCache(
+            {
+              scripts: unfileScriptsFromMissingFolders(
+                merged.scripts,
+                folderResult.folders,
+              ),
+              folders: folderResult.folders,
+            },
             userId,
           );
+          if (!cached) {
+            if (principalGuard.current.isCurrent(token)) {
+              setSyncError(
+                "The cloud library was read, but the browser copy could not be saved. Existing recovery baselines were kept.",
+              );
+            }
+            return;
+          }
+          if (!persistSyncStateCache(folderResult.state, userId)) {
+            if (principalGuard.current.isCurrent(token)) {
+              setSyncError(
+                "The cloud library was read, but its recovery baseline could not be saved. Further sync is paused.",
+              );
+            }
+            return;
+          }
           if (principalGuard.current.isCurrent(token)) {
             applyVisibleLibrary(cached, token);
             setLastSyncedAt(new Date().toISOString());
@@ -529,7 +980,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
         }
       });
     },
-    [applyVisibleLibrary, persistLibraryCache],
+    [
+      applyVisibleLibrary,
+      durablyPersistLibraryCache,
+      persistSyncStateCache,
+    ],
   );
 
   const schedulePush = useCallback(
@@ -564,10 +1019,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
       token: PrincipalGenerationToken,
     ) => {
       if (!principalGuard.current.isCurrent(token)) return;
+      const durableState =
+        syncStateRef.current ??
+        loadSyncState(principalFromUserId(token.userId));
       const filtered = {
         ...incoming,
-        scripts: incoming.scripts.filter(
-          (script) => !crossTabDeletedScriptIDs.current.has(script.id),
+        scripts: removeScriptsCoveredByTombstones(
+          incoming.scripts,
+          durableState,
+        ).filter(
+          (script) =>
+            !crossTabDeletedScriptIDs.current.has(script.id),
         ),
       };
       const current = libraryRef.current;
@@ -589,13 +1051,48 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const onStorage = (event: StorageEvent) => {
       const token = principalGuard.current.current();
       const principal = principalFromUserId(token.userId);
-      if (
-        event.key !== libraryStorageKey(principal)
-      ) {
+      const libraryKey = libraryStorageKey(principal);
+      const syncKey = syncStateStorageKey(principal);
+      if (event.key !== libraryKey && event.key !== syncKey) {
+        return;
+      }
+      if (event.key === syncKey) {
+        const loadedState = loadSyncStateResult(principal);
+        if (
+          loadedState.status === "corrupt" ||
+          loadedState.status === "recovery"
+        ) {
+          persistenceBlocks.current.block(syncKey);
+          setPersistenceIssue({
+            message:
+              "Another tab wrote damaged cloud recovery metadata. Cloud sync is paused and the raw data was preserved.",
+            recoveryRaw: loadedState.raw,
+          });
+          return;
+        }
+        if (loadedState.status === "unavailable") {
+          persistenceBlocks.current.block(syncKey);
+          setPersistenceIssue({
+            message:
+              `Cloud recovery metadata could not be read after another-tab update: ${loadedState.error}`,
+          });
+          return;
+        }
+        persistenceBlocks.current.resolve(syncKey);
+        syncStateRef.current = loadedState.state;
+        const filtered = {
+          ...libraryRef.current,
+          scripts: removeScriptsCoveredByTombstones(
+            libraryRef.current.scripts,
+            loadedState.state,
+          ),
+        };
+        applyVisibleLibrary(filtered, token);
         return;
       }
       const loaded = loadLibraryResult(principal);
-      if (loaded.status === "corrupt") {
+      if (loaded.status === "corrupt" || loaded.status === "recovery") {
+        persistenceBlocks.current.block(libraryKey);
         setPersistenceIssue({
           message:
             "Another tab wrote damaged browser library data. Phrasa left the current library visible and preserved the raw data for recovery.",
@@ -604,11 +1101,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return;
       }
       if (loaded.status === "unavailable") {
+        persistenceBlocks.current.block(libraryKey);
         setPersistenceIssue({
           message: `Browser storage could not be read after another-tab update: ${loaded.error}`,
         });
         return;
       }
+      persistenceBlocks.current.resolve(libraryKey);
       applyPeerSnapshot(loaded.library, token);
     };
 
@@ -658,7 +1157,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
             });
             return;
           }
-          blockedPersistenceKey.current = null;
+          const clearedPrincipal = principalFromUserId(message.userId);
+          persistenceBlocks.current.resolve(
+            libraryStorageKey(clearedPrincipal),
+          );
+          persistenceBlocks.current.resolve(
+            syncStateStorageKey(clearedPrincipal),
+          );
           setPersistenceIssue(null);
           // A shared Supabase sign-out event may arrive before this channel
           // message. Clear the named cache regardless; reset visible state only
@@ -764,7 +1269,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
 
       if (nextUser) {
-        const guest = guestLibraryForImport(loadGuestLibrary());
+        const guest = guestLibraryForImport(loadGuestLibraryForImport());
         if (guest) {
           setGuestImportPending(guest);
         }
@@ -796,7 +1301,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       if (nextUser.id !== prevUserId) {
         const token = switchPrincipal(nextUser, nextSession);
-        const guest = guestLibraryForImport(loadGuestLibrary());
+        const guest = guestLibraryForImport(loadGuestLibraryForImport());
         if (guest) {
           setGuestImportPending(guest);
         }
@@ -919,7 +1424,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       });
       return;
     }
-    blockedPersistenceKey.current = null;
+    persistenceBlocks.current.resolve(libraryStorageKey(principal));
+    persistenceBlocks.current.resolve(syncStateStorageKey(principal));
     setPersistenceIssue(null);
     setGuestImportPending(null);
     const client = getSupabaseBrowserClient();
@@ -980,9 +1486,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const deleteScript = useCallback(
     (id: string) => {
       const existing = libraryRef.current.scripts.find((s) => s.id === id);
+      if (!existing) return;
       const nextScripts = libraryRef.current.scripts.filter((s) => s.id !== id);
       const userId = userRef.current?.id ?? null;
-      const token = principalGuard.current.current();
+      const principal = principalFromUserId(userId);
+      const nextSyncState = upsertScriptTombstone(
+        loadSyncState(principal),
+        {
+          scriptId: id,
+          deletedAt: new Date().toISOString(),
+          expectedRemoteContentFingerprint:
+            existing.remoteContentFingerprint ??
+            synchronizedContentFingerprint(existing),
+        },
+      );
+      // Save destructive intent before hiding the row. If the browser cannot
+      // durably record it, leave the script visible instead of risking a
+      // reload resurrection or unsafe cloud delete.
+      if (!persistSyncStateCache(nextSyncState, userId)) return;
       crossTabDeletedScriptIDs.current.add(id);
       persistVisibleLibrary(
         { scripts: nextScripts, folders: libraryRef.current.folders },
@@ -993,38 +1514,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
         userId,
         scriptId: id,
       } satisfies CrossTabLibraryMessage);
-      if (userId && existing) {
-        const client = getSupabaseBrowserClient();
-        if (client) {
-          void deleteRemoteScript(client, userId, existing).then((result) => {
-            if (result.ok) return;
-            // Restore account A's cache even if the visible principal changed.
-            // Only applying to the screen remains generation-guarded.
-            const latest = loadLibrary(userPrincipal(userId));
-            const restored = latest.scripts.some(
-              (script) => script.id === existing.id,
-            )
-              ? latest
-              : {
-                  scripts: [existing, ...latest.scripts],
-                  folders: latest.folders,
-            };
-            const cached = persistLibraryCache(restored, userId);
-            crossTabChannel.current?.postMessage({
-              kind: "restore-script",
-              userId,
-              script: existing,
-            } satisfies CrossTabLibraryMessage);
-            if (principalGuard.current.isCurrent(token)) {
-              crossTabDeletedScriptIDs.current.delete(existing.id);
-              setSyncError(result.error);
-              applyVisibleLibrary(cached, token);
-            }
-          });
-        }
-      }
+      if (userId) schedulePush(userId);
     },
-    [applyVisibleLibrary, persistLibraryCache, persistVisibleLibrary],
+    [
+      persistSyncStateCache,
+      persistVisibleLibrary,
+      schedulePush,
+    ],
   );
 
   const duplicateScript = useCallback(
@@ -1133,14 +1629,44 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setSyncError(null);
       const succeeded: string[] = [];
       try {
+        const accountPrincipal = userPrincipal(userId);
+        if (
+          persistenceBlocks.current.isBlocked(
+            libraryStorageKey(accountPrincipal),
+          ) ||
+          persistenceBlocks.current.isBlocked(
+            syncStateStorageKey(accountPrincipal),
+          )
+        ) {
+          setSyncError(
+            "Guest import is paused until this account's protected recovery data is downloaded or cleared.",
+          );
+          return;
+        }
+        let accountSyncState = loadSyncState(accountPrincipal);
         // Folders first for FK safety.
         for (const folder of pending.folders) {
           if (!principalGuard.current.isCurrent(token)) return;
-          const result = await upsertRemoteFolder(client, userId, folder);
+          const result = await writeRemoteFolder(
+            client,
+            userId,
+            folder,
+            null,
+          );
           if (!result.ok) {
             if (principalGuard.current.isCurrent(token)) {
               setSyncError(result.error);
             }
+            return;
+          }
+          accountSyncState = acknowledgeFolderWrite(
+            accountSyncState,
+            result.data,
+          );
+          if (!persistSyncStateCache(accountSyncState, userId)) {
+            setSyncError(
+              "The folder imported, but its safe cloud baseline could not be saved. Import is paused.",
+            );
             return;
           }
         }
@@ -1210,7 +1736,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
         }
       }
     });
-  }, [applyVisibleLibrary, guestImportPending, persistLibraryCache]);
+  }, [
+    applyVisibleLibrary,
+    guestImportPending,
+    persistLibraryCache,
+    persistSyncStateCache,
+  ]);
 
   const skipGuestImport = useCallback(() => {
     setGuestImportPending(null);

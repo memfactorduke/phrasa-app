@@ -162,4 +162,82 @@ test.describe("web companion guest flows", () => {
     ).toHaveCount(0);
     await expect(peer.getByText("Welcome to Phrasa")).toBeVisible();
   });
+
+  test("a durable deletion survives a stale snapshot and full reload", async ({
+    page,
+  }) => {
+    await openApp(page);
+    await page.getByTestId("new-script").click();
+    await page.getByTestId("script-title").fill("Durable delete sentinel");
+    await page.getByRole("button", { name: "Library" }).click();
+    await expect(page.getByText("Durable delete sentinel")).toBeVisible();
+
+    const staleLibrary = await page.evaluate(() =>
+      window.localStorage.getItem("phrasa.v1.guest.library"),
+    );
+    expect(staleLibrary).toBeTruthy();
+
+    page.once("dialog", (dialog) => dialog.accept());
+    await page
+      .getByRole("listitem")
+      .filter({ hasText: "Durable delete sentinel" })
+      .getByRole("button", { name: "Delete" })
+      .click();
+    await expect(page.getByText("Durable delete sentinel")).toHaveCount(0);
+
+    const durableState = await page.evaluate(() =>
+      window.localStorage.getItem("phrasa.v1.guest.syncState"),
+    );
+    expect(durableState).toContain('"scriptTombstones"');
+
+    // Model a stale peer restoring its old full-library snapshot after the
+    // delete message. The durable marker must still win after a cold reload.
+    await page.evaluate((raw) => {
+      window.localStorage.setItem("phrasa.v1.guest.library", raw!);
+    }, staleLibrary);
+    await page.reload();
+    await expect(page.getByRole("heading", { name: "Library" })).toBeVisible();
+    await expect(page.getByText("Durable delete sentinel")).toHaveCount(0);
+  });
+
+  test("corrupt browser data remains protected across edits and reloads", async ({
+    page,
+  }) => {
+    await openApp(page);
+    const corruptRaw = "{damaged-library-json";
+    await page.evaluate((raw) => {
+      window.localStorage.setItem("phrasa.v1.guest.library", raw);
+    }, corruptRaw);
+    await page.reload();
+
+    await expect(
+      page.getByRole("alert").filter({ hasText: /damaged browser library/i }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Download recovery copy" }),
+    ).toBeVisible();
+
+    await page.getByTestId("new-script").click();
+    await page.getByTestId("script-title").fill("Visible but blocked");
+    expect(
+      await page.evaluate(() =>
+        window.localStorage.getItem("phrasa.v1.guest.library"),
+      ),
+    ).toBe(corruptRaw);
+    expect(
+      await page.evaluate(() =>
+        window.localStorage.getItem("phrasa.v1.guest.library.recovery"),
+      ),
+    ).toBe(corruptRaw);
+
+    await page.reload();
+    await expect(
+      page.getByRole("alert").filter({ hasText: /damaged browser library/i }),
+    ).toBeVisible();
+    expect(
+      await page.evaluate(() =>
+        window.localStorage.getItem("phrasa.v1.guest.library"),
+      ),
+    ).toBe(corruptRaw);
+  });
 });
